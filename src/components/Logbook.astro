@@ -1,0 +1,51 @@
+---
+import { logbook } from '../data/site';
+const now = new Date();
+const months = (from: string, to: string | null) => {
+  const [fy, fm] = from.split('-').map(Number);
+  const [ty, tm] = to ? to.split('-').map(Number) : [now.getFullYear(), now.getMonth() + 1];
+  return Math.max(1, (ty - fy) * 12 + (tm - fm) + (to ? 0 : 1));
+};
+const fmt = (ym: string | null) => {
+  if (!ym) return 'Present';
+  const [y, m] = ym.split('-').map(Number);
+  return new Date(y, m - 1).toLocaleString('en-GB', { month: 'short', year: 'numeric' });
+};
+const dur = (m: number) => {
+  const y = Math.floor(m / 12);
+  const r = m % 12;
+  return [y ? `${y} yr` : '', r ? `${r} mo` : ''].filter(Boolean).join(' ');
+};
+const total = logbook.reduce((s, e) => s + months(e.from, e.to), 0);
+---
+<div class="logbook-wrap">
+  <table class="logbook">
+    <caption class="visually-hidden">Work history</caption>
+    <thead>
+      <tr>
+        <th scope="col">Dates</th>
+        <th scope="col">Operator</th>
+        <th scope="col">Role</th>
+        <th scope="col">Remarks</th>
+        <th scope="col" class="num">Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      {logbook.map((e) => (
+        <tr>
+          <td class="date">{fmt(e.from)} to {fmt(e.to)}</td>
+          <td><span class="op">{e.logo && <img src={e.logo} alt="" width="26" height="26" loading="lazy" />}{e.operator}</span></td>
+          <td>{e.role}</td>
+          <td class="remarks">{e.remarks}</td>
+          <td class="num">{dur(months(e.from, e.to))}</td>
+        </tr>
+      ))}
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="4">Total time logged</td>
+        <td class="num">{dur(total)}</td>
+      </tr>
+    </tfoot>
+  </table>
+</div>

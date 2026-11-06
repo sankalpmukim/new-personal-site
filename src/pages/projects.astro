@@ -1,0 +1,36 @@
+---
+import Base from '../layouts/Base.astro';
+import ChartBand from '../components/ChartBand.astro';
+import FlightStrip from '../components/FlightStrip.astro';
+import StripKey from '../components/StripKey.astro';
+import { projects, kindLabels, type StripKind } from '../data/site';
+const order: StripKind[] = ['tool', 'learning', 'client', 'upstream'];
+const blurbs: Record<StripKind, string> = {
+  tool: 'Things I shipped and maintain. Some have a few hundred users; some have exactly one.',
+  learning: 'Rebuilding things from scratch until they stop being magic.',
+  client: 'Paid freelance work, all live.',
+  upstream: 'Pull requests to other people’s projects.',
+};
+const says: Record<StripKind, string> = {
+  tool: 'Can any of these catch fish?',
+  learning: 'I also learn by building. Mostly bicycles.',
+  client: 'Varanasi! I know a guy there.',
+  upstream: 'Merged. Like my legs.',
+};
+---
+<Base title="Projects" description="Tools, experiments, client sites and open-source contributions by Sankalp Mukim.">
+  <ChartBand slot="header" title="Projects" intro="Everything on the board, filed as flight strips. The colour on the left says what kind of work it is." seed={9}>
+  </ChartBand>
+  {order.map((k, i) => (
+    <section class="section wrap" data-pelican={i % 2 ? 'peek' : 'cross'} data-pelican-says={says[k]} aria-labelledby={`h-${k}`}>
+      <div class="section-head">
+        <h2 id={`h-${k}`}>{kindLabels[k]}</h2>
+        <p>{blurbs[k]}</p>
+      </div>
+      {i === 0 && <StripKey />}
+      <ul class="strip-board">
+        {projects.filter((p) => p.kind === k).map((p) => <FlightStrip p={p} />)}
+      </ul>
+    </section>
+  ))}
+</Base>

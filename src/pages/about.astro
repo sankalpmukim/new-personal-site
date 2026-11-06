@@ -1,0 +1,51 @@
+---
+import Base from '../layouts/Base.astro';
+import ChartBand from '../components/ChartBand.astro';
+import Logbook from '../components/Logbook.astro';
+import { links, person } from '../data/site';
+---
+<Base title="About" description="Who Sankalp Mukim is, how he got here, and where he works now.">
+  <ChartBand slot="header" title="About" intro="Engineer, would-be pilot, trekker. Based in Delhi NCR." seed={5} />
+
+  <section class="section wrap" data-pelican="peek" data-pelican-says="Is this the about page? About me?">
+    <div class="about-grid">
+      <div class="prose">
+        <p>I’m a generalist full-stack engineer at IBM Cloud. Most days I build AI agents that solve operational problems, including agents that triage and resolve incidents in IBM Cloud before a human has to. I’m a nerd at heart: I like taking a concept apart until it stops feeling like magic, and I keep picking up new agent tricks to make myself faster.</p>
+
+        <h2>The beginning</h2>
+        <p>I wrote my first program around age 12, in QBasic, in my school’s computer lab. The joy of compiling and running something I wrote myself was unlike anything I’d felt. At 15 I was building robots after school, and represented my school at international robotics competitions in Singapore, writing drag-and-drop programs that compiled to C and ran on microcontrollers.</p>
+
+        <h2>Why I build</h2>
+        <p>At university I made a small app that turned students’ timetables into Google Calendar events, because I wanted that for myself and the process didn’t need to be manual. Watching the Heroku logs fill up with other people using it changed how I thought about software. Later I published a React Native app that logged students into campus Wi-Fi with one tap. The rush when it went live on the Play Store made the motivation obvious: I like making things other people actually use.</p>
+
+        <h2>The path here</h2>
+        <p>I studied at VIT Vellore, started with Python and Django, fell for JavaScript while wiring up DOM logic, then React, Next.js, and eventually TypeScript on the backend. Internships took me through IoT dashboards, a trekking company (Indiahikes, whose treks I also go on), backend work and a YC startup, then ION, and now IBM.</p>
+        <p>These days the work is agents, MCP servers and infrastructure. On the side I ship small tools with real users, like <a href="https://github.com/sankalpmukim/aws-accounts-manager">AWS Accounts Manager</a>, and I like learning by rebuilding things from scratch: an <a href="https://github.com/sankalpmukim/httpfromtcp">HTTP server on raw TCP</a> that still serves one of my domains, and <a href="https://github.com/sankalpmukim/my-react">my own React</a>.</p>
+
+        <h2>Off the clock</h2>
+        <p>Airplanes have fascinated me since I was a kid. For now that means X-Plane with a joystick and real-world procedures, flying on VATSIM, and <a href="/articles/aspiring-pilots-journal">a journal</a> about working towards flying for real. I also love the mountains and have done a lot of treks across the Indian Himalaya. And cricket, with a <a href="https://viratkohlicenturytracker.vercel.app">Kohli century tracker</a> to prove it.</p>
+      </div>
+      <aside class="about-aside">
+        <figure class="portrait">
+          <img src="/portrait.jpg" alt="Portrait of Sankalp Mukim" width="400" height="400" />
+          <figcaption>Placeholder portrait. Swap for a recent one.</figcaption>
+        </figure>
+        <div class="facts">
+          <h3>Contact</h3>
+          <dl>
+            <dt>Email</dt><dd><a href={links.email}>{person.email}</a></dd>
+            <dt>GitHub</dt><dd><a href={links.github}>sankalpmukim</a></dd>
+            <dt>LinkedIn</dt><dd><a href={links.linkedin}>sankalpmukim</a></dd>
+            <dt>Twitter</dt><dd><a href={links.twitter}>IceCreamChai</a></dd>
+          </dl>
+          <div class="links"><a href={links.resume}>Download résumé (PDF)</a></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section wrap" data-pelican="cross" aria-labelledby="log-title">
+    <div class="section-head"><h2 id="log-title">Logbook</h2></div>
+    <Logbook />
+  </section>
+</Base>

@@ -1,0 +1,17 @@
+---
+import type { CollectionEntry } from 'astro:content';
+interface Props { articles: CollectionEntry<'articles'>[]; level?: 'h2' | 'h3' }
+const { articles } = Astro.props;
+const fmt = (d: Date) => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+---
+<ol class="article-list" reversed>
+  {articles.map((a) => (
+    <li>
+      <time datetime={a.data.date.toISOString()}>{fmt(a.data.date)}</time>
+      <div>
+        <h3><a href={`/articles/${a.id}`}>{a.data.title}</a></h3>
+        <p>{a.data.description}</p>
+      </div>
+    </li>
+  ))}
+</ol>

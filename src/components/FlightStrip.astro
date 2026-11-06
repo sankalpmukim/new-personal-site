@@ -1,0 +1,28 @@
+---
+import type { Project } from '../data/site';
+interface Props { p: Project }
+const { p } = Astro.props;
+const ext = (h: string) => h.startsWith('http');
+---
+<li class="strip" data-kind={p.kind}>
+  <div class="strip-call">{p.callsign}<small>{p.type}</small></div>
+  <div class="strip-main">
+    <h3><a href={p.href} target={ext(p.href) ? '_blank' : undefined} rel={ext(p.href) ? 'noopener' : undefined}>{p.name}</a></h3>
+    <p>{p.remarks}</p>
+    {p.links && p.links.length > 0 && (
+      <div class="strip-extra">
+        {p.links.map((l) => <a href={l.href} target="_blank" rel="noopener">{l.label}</a>)}
+      </div>
+    )}
+  </div>
+  <div class="strip-route"><span>Runs on</span>{p.route}</div>
+  <div class="strip-metric">
+    {p.status ? (
+      <><span>Pull request</span><b class={`status-${p.status}`}>{p.status === 'merged' ? 'Merged' : 'Open'}</b></>
+    ) : p.metric ? (
+      <><span>Traffic</span><b>{p.metric}</b></>
+    ) : (
+      <><span>Status</span><b>Live</b></>
+    )}
+  </div>
+</li>

@@ -1,0 +1,39 @@
+---
+import { aiObstacles, links, person } from '../data/site';
+---
+<footer class="site-footer">
+  <section class="run wrap" data-run data-obstacles={JSON.stringify(aiObstacles)} aria-labelledby="run-title">
+    <div class="run-head">
+      <div>
+        <h2 id="run-title">Pelican Run</h2>
+        <p>You reached the bottom, so here is a pelican on a bicycle. Jump the AI company logos with space, the up arrow, or a tap.</p>
+      </div>
+    </div>
+  </section>
+  <div class="run-stage" data-run-stage>
+    <canvas data-run-canvas tabindex="0" role="img" aria-label="Pelican Run game. Press space or tap to jump."></canvas>
+    <p class="visually-hidden" aria-live="polite" data-run-live></p>
+  </div>
+  <div class="wrap footer-links">
+    <ul>
+      <li><a href={links.email}>{person.email}</a></li>
+      <li><a href={links.github}>GitHub</a></li>
+      <li><a href={links.linkedin}>LinkedIn</a></li>
+      <li><a href={links.twitter}>Twitter</a></li>
+      <li><a href={links.instagram}>Instagram</a></li>
+      <li><a href={links.resume}>Résumé (PDF)</a></li>
+      <li><a href={links.rss}>RSS</a></li>
+    </ul>
+    <div class="footer-note">
+      <p>No pelicans were harmed. Several were drawn badly, on purpose. Built by {person.name} in {person.home}.</p>
+      <button class="btn btn--ghost" type="button" data-pelican-toggle aria-pressed="true">Fewer pelicans</button>
+    </div>
+  </div>
+</footer>
+
+<script>
+  import { initPelicanRun } from '../scripts/pelican-run';
+  const root = document.querySelector<HTMLElement>('[data-run]');
+  const stage = document.querySelector<HTMLElement>('[data-run-stage]');
+  if (root && stage) initPelicanRun(stage, JSON.parse(root.dataset.obstacles || '[]'));
+</script>

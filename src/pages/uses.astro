@@ -1,0 +1,23 @@
+---
+import Base from '../layouts/Base.astro';
+import ChartBand from '../components/ChartBand.astro';
+import { uses } from '../data/site';
+---
+<Base title="Uses" description="The tools, agents and gear Sankalp Mukim uses every day.">
+  <ChartBand slot="header" title="Uses" intro="Agents, terminals, a flight-sim joystick, and whatever else is on the desk." seed={33} />
+  <section class="section wrap" data-pelican="tumble">
+    {uses.map((g) => (
+      <div class="uses-group">
+        <h2>{g.group}</h2>
+        <dl>
+          {g.items.map((i) => (
+            <div>
+              <dt>{i.href ? <a href={i.href}>{i.name}</a> : i.name}</dt>
+              <dd>{i.note}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    ))}
+  </section>
+</Base>

@@ -1,0 +1,47 @@
+---
+import '../styles/global.css';
+import Footer from '../components/Footer.astro';
+import { person } from '../data/site';
+interface Props { title?: string; description?: string }
+const { title, description = person.intro } = Astro.props;
+const fullTitle = title ? `${title} | ${person.name}` : `${person.name}, software engineer`;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title={`${person.name}, articles`} href="/rss.xml" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta name="theme-color" content="#e3ecd9" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f1d35" media="(prefers-color-scheme: dark)" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet" />
+    <script is:inline>
+      try { if (localStorage.getItem('pelicans') === 'off') document.documentElement.dataset.pelicans = 'off'; } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <slot name="header" />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <div id="pelican-layer" aria-hidden="true">
+      <div class="pelican-rider" data-rider>
+        <div class="pelican-bubble"></div>
+        <canvas></canvas>
+      </div>
+    </div>
+    <script>
+      import { initScrollPelicans } from '../scripts/pelicans-scroll';
+      initScrollPelicans();
+    </script>
+  </body>
+</html>

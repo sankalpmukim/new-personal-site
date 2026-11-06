@@ -1,0 +1,472 @@
+// Everything content-ish lives here so it can be edited without touching layout.
+
+export const person = {
+  name: 'Sankalp Mukim',
+  role: 'Software engineer at IBM Cloud',
+  home: 'Delhi NCR',
+  homeIcao: 'VIDP',
+  email: 'sankalpmukim@gmail.com',
+  intro:
+    'I build AI agents at IBM Cloud that triage and resolve incidents before a human has to wake up. Off the clock I chase mountains, airplanes and the occasional very silly side project.',
+};
+
+export const links = {
+  github: 'https://github.com/sankalpmukim',
+  linkedin: 'https://www.linkedin.com/in/sankalpmukim/',
+  twitter: 'https://twitter.com/IceCreamChai',
+  instagram: 'https://www.instagram.com/sankalpmukim/',
+  email: 'mailto:sankalpmukim@gmail.com',
+  resume: '/resume.pdf',
+  rss: '/rss.xml',
+};
+
+export const nav = [
+  { href: '/about', label: 'About' },
+  { href: '/projects', label: 'Projects' },
+  { href: '/articles', label: 'Articles' },
+  { href: '/certifications', label: 'Certifications' },
+  { href: '/uses', label: 'Uses' },
+  { href: '/gallery', label: 'Gallery' },
+];
+
+// Work history, rendered as a pilot's logbook.
+export type LogEntry = {
+  operator: string;
+  role: string;
+  from: string; // YYYY-MM
+  to: string | null; // null = present
+  remarks: string;
+  logo?: string;
+};
+
+export const logbook: LogEntry[] = [
+  {
+    operator: 'IBM',
+    role: 'Software Engineer',
+    from: '2025-03',
+    to: null,
+    remarks: 'IBM Cloud. AI agents that triage and resolve production incidents; MCP servers for internal docs.',
+    logo: '/logos/IBM.png',
+  },
+  {
+    operator: 'ION',
+    role: 'Software Engineer',
+    from: '2024-01',
+    to: '2025-03',
+    remarks: 'Full-stack engineering on trading-domain products.',
+    logo: '/logos/iongroup_logo.jpeg',
+  },
+  {
+    operator: 'Streak (YC W22)',
+    role: 'Software Engineer',
+    from: '2023-10',
+    to: '2023-11',
+    remarks: 'Short stint at a YC fintech startup.',
+    logo: '/logos/streakcard_logo.jpeg',
+  },
+  {
+    operator: 'North of Zero',
+    role: 'Backend Developer',
+    from: '2023-06',
+    to: '2023-08',
+    remarks: 'Backend services and APIs.',
+    logo: '/logos/northOfZero.jpeg',
+  },
+  {
+    operator: 'Indiahikes',
+    role: 'Full Stack Engineer',
+    from: '2022-10',
+    to: '2023-01',
+    remarks: 'Built software for the trekking company whose treks I go on.',
+    logo: '/logos/indiahikes.jpeg',
+  },
+  {
+    operator: 'IotReady',
+    role: 'React Engineer',
+    from: '2021-01',
+    to: '2021-03',
+    remarks: 'First internship. React dashboards for IoT devices.',
+    logo: '/logos/iotReady.jpeg',
+  },
+];
+
+// Projects, rendered as ATC flight progress strips.
+export type StripKind = 'tool' | 'learning' | 'client' | 'upstream';
+
+export type Project = {
+  callsign: string; // short ident shown on the strip
+  name: string;
+  kind: StripKind;
+  type: string; // language / platform
+  route: string; // where it runs
+  remarks: string;
+  metric?: string;
+  href: string;
+  links?: { label: string; href: string }[];
+  featured?: boolean;
+  status?: 'merged' | 'open';
+};
+
+export const kindLabels: Record<StripKind, string> = {
+  tool: 'Tools I built',
+  learning: 'Learning by building',
+  client: 'Client sites',
+  upstream: 'Contributions to other projects',
+};
+
+export const projects: Project[] = [
+  {
+    callsign: 'AWSAM',
+    name: 'AWS Accounts Manager',
+    kind: 'tool',
+    type: 'TypeScript',
+    route: 'Chrome, Edge, Firefox',
+    remarks: 'Client-side browser extension for securely managing and switching between AWS accounts. CI auto-publishes to all three stores.',
+    metric: '250+ active users',
+    href: 'https://github.com/sankalpmukim/aws-accounts-manager',
+    links: [{ label: 'Chrome Web Store', href: 'https://chromewebstore.google.com/detail/aws-accounts-manager/hkcpaihoknnbgfaehgcihpidbkhmfacj' }],
+    featured: true,
+  },
+  {
+    callsign: 'ICDMCP',
+    name: 'IBM Cloud Docs MCP Server',
+    kind: 'tool',
+    type: 'JavaScript',
+    route: 'Any MCP client',
+    remarks: 'Lets AI clients search IBM Cloud documentation. Upstreamed into IBM’s official MCP collection.',
+    metric: 'Merged into IBM/mcp',
+    href: 'https://github.com/sankalpmukim/ibm-cloud-docs-mcp-server',
+    featured: true,
+  },
+  {
+    callsign: 'OCNTF2',
+    name: 'OpenCode Notifier v2',
+    kind: 'tool',
+    type: 'TypeScript',
+    route: 'OpenCode plugin',
+    remarks: 'Plays a sound and sends a desktop notification when an agent needs permission, finishes, or errors.',
+    href: 'https://github.com/sankalpmukim/opencode-notifier-v2',
+    featured: true,
+  },
+  {
+    callsign: 'TOTP',
+    name: 'Simple TOTP Manager',
+    kind: 'tool',
+    type: 'TypeScript',
+    route: 'Chrome, Firefox',
+    remarks: 'Minimal authenticator with local secret storage, a live countdown and CSV export and import.',
+    href: 'https://github.com/sankalpmukim/simple-totp-manager',
+    links: [{ label: 'Chrome Web Store', href: 'https://chromewebstore.google.com/detail/simple-totp-manager/fbldnilamcajffalfgnfgbliedfpnofk' }],
+  },
+  {
+    callsign: 'ZAIKEY',
+    name: 'oc-zai-key-manager',
+    kind: 'tool',
+    type: 'TypeScript',
+    route: 'OpenCode plugin',
+    remarks: 'Round-robins several z.ai coding-plan keys, detects quota exhaustion and retries automatically.',
+    href: 'https://github.com/sankalpmukim/oc-zai-key-manager',
+  },
+  {
+    callsign: 'HADLSP',
+    name: 'Hadolint LSP',
+    kind: 'tool',
+    type: 'JavaScript',
+    route: 'Any LSP editor',
+    remarks: 'Language server for Hadolint, so Dockerfile linting works in any LSP-capable editor.',
+    href: 'https://github.com/sankalpmukim/hadolint-lsp',
+  },
+  {
+    callsign: 'CTJSON',
+    name: 'forgot-content-type-json-header',
+    kind: 'tool',
+    type: 'TypeScript',
+    route: 'VS Code',
+    remarks: 'Catches the one header everyone forgets when POSTing JSON.',
+    href: 'https://marketplace.visualstudio.com/items?itemName=SankalpMukim.forgot-content-type-json-header',
+  },
+  {
+    callsign: 'RSSCRD',
+    name: 'RSS Card API',
+    kind: 'tool',
+    type: 'Cloudflare Worker',
+    route: 'Edge',
+    remarks: 'Turns any RSS feed into a themeable SVG card for a README or website.',
+    href: 'https://github.com/sankalpmukim/cf-rss-parser-readme',
+  },
+  {
+    callsign: 'YTLDGR',
+    name: 'YT Ledger',
+    kind: 'tool',
+    type: 'TypeScript',
+    route: 'Browser extension',
+    remarks: 'Tracks YouTube watch time like an expense manager: categories, auto-rules, insights, and budgets that can hide over-budget videos.',
+    href: 'https://github.com/sankalpmukim/yt-history-poc',
+    featured: true,
+  },
+  {
+    callsign: 'NGXREF',
+    name: 'NGINX Reference',
+    kind: 'tool',
+    type: 'nginx',
+    route: 'Your VPS',
+    remarks: 'A curated cookbook of production nginx configurations, organised by use case.',
+    href: 'https://github.com/sankalpmukim/nginx-reference',
+  },
+  {
+    callsign: 'VK100',
+    name: 'Kohli Hundreds',
+    kind: 'tool',
+    type: 'Next.js',
+    route: 'Vercel',
+    remarks: 'A live tracker for Virat Kohli’s international hundreds and his status in any ongoing India ODI.',
+    href: 'https://viratkohlicenturytracker.vercel.app',
+  },
+  {
+    callsign: 'HTTPTCP',
+    name: 'HTTP from TCP',
+    kind: 'learning',
+    type: 'Go',
+    route: 'VPS, in production',
+    remarks: 'An HTTP/1.1 server written from scratch on raw TCP sockets. It still serves http.sankalpmukim.dev.',
+    href: 'https://github.com/sankalpmukim/httpfromtcp',
+    links: [{ label: 'Live', href: 'http://http.sankalpmukim.dev' }],
+    featured: true,
+  },
+  {
+    callsign: 'MYRCT',
+    name: 'my-react',
+    kind: 'learning',
+    type: 'TypeScript',
+    route: 'Browser',
+    remarks: 'A from-scratch React and JSX API, built to understand what React actually does.',
+    href: 'https://github.com/sankalpmukim/my-react',
+  },
+  {
+    callsign: 'MTSCAM',
+    name: 'MonkeyType Scam',
+    kind: 'learning',
+    type: 'JavaScript',
+    route: 'Browser',
+    remarks: 'One fun evening poking at accessibility tooling and gaming MonkeyType into a record score.',
+    href: 'https://github.com/sankalpmukim/monkeytype-scam',
+  },
+  {
+    callsign: 'NUMPUZ',
+    name: 'Numpuz',
+    kind: 'learning',
+    type: 'React, Firebase',
+    route: 'numpuz.sankalpmukim.dev',
+    remarks: 'Multiplayer number puzzle with a real-time leaderboard. Built to learn React and WebSockets.',
+    href: 'https://numpuz.sankalpmukim.dev',
+    links: [{ label: 'Source', href: 'https://github.com/sankalpmukim/numpuz-with-react' }],
+  },
+  {
+    callsign: 'RODEO',
+    name: 'The Rodeo Lane',
+    kind: 'client',
+    type: 'Site + ERP',
+    route: 'Varanasi',
+    remarks: 'Site and ERP for a high-end car detailing studio: memberships, coupons, GST billing, service reminders.',
+    href: 'https://www.therodeolane.com',
+  },
+  {
+    callsign: 'VARDA',
+    name: 'Vardasustain Consulting',
+    kind: 'client',
+    type: 'Website',
+    route: 'Web',
+    remarks: 'Website for a sustainability consulting practice.',
+    href: 'https://nm-ogss-website-frontend.vercel.app',
+  },
+  {
+    callsign: 'RKSTN',
+    name: 'Rock & Stone',
+    kind: 'client',
+    type: 'Website',
+    route: 'Web',
+    remarks: 'Website for a natural-stone company serving architects, builders and homeowners.',
+    href: 'https://rockandstone-website.vercel.app',
+  },
+  {
+    callsign: 'THNDR',
+    name: 'Thunder Brand Solutions',
+    kind: 'client',
+    type: 'Website',
+    route: 'Web',
+    remarks: 'Website for a branding agency.',
+    href: 'https://thunder-brand-website.vercel.app',
+  },
+  {
+    callsign: 'SONCH',
+    name: 'Son Chiraiya',
+    kind: 'client',
+    type: 'Website',
+    route: 'Varanasi',
+    remarks: 'Website for an Indian restaurant.',
+    href: 'https://sonchiraiya.co',
+  },
+  {
+    callsign: 'CF178',
+    name: 'cloudflare/vinext #178',
+    kind: 'upstream',
+    type: 'TypeScript',
+    route: 'cloudflare/vinext',
+    remarks: 'Standalone self-host output, plus aligned production scripts in init.',
+    href: 'https://github.com/cloudflare/vinext/pull/178',
+    status: 'merged',
+  },
+  {
+    callsign: 'IBM7',
+    name: 'IBM/mcp #7',
+    kind: 'upstream',
+    type: 'JavaScript',
+    route: 'IBM/mcp',
+    remarks: 'Added the IBM Cloud Docs MCP Server to IBM’s official collection.',
+    href: 'https://github.com/IBM/mcp/pull/7',
+    status: 'merged',
+  },
+  {
+    callsign: 'KBN627',
+    name: 'elastic/kibana #221627',
+    kind: 'upstream',
+    type: 'TypeScript',
+    route: 'elastic/kibana',
+    remarks: 'Fixed a grammar typo in an error message. Every bit counts.',
+    href: 'https://github.com/elastic/kibana/pull/221627',
+    status: 'merged',
+  },
+  {
+    callsign: 'TWIN72',
+    name: 'tailwindcss-intellisense #1572',
+    kind: 'upstream',
+    type: 'TypeScript',
+    route: 'tailwindlabs',
+    remarks: 'A “Fix all auto-fixable problems” command.',
+    href: 'https://github.com/tailwindlabs/tailwindcss-intellisense/pull/1572',
+    status: 'open',
+  },
+  {
+    callsign: 'DRZL58',
+    name: 'drizzle-lab #58',
+    kind: 'upstream',
+    type: 'TypeScript',
+    route: 'rphlmr/drizzle-lab',
+    remarks: 'Bezier edges for the schema visualiser.',
+    href: 'https://github.com/rphlmr/drizzle-lab/pull/58',
+    status: 'open',
+  },
+  {
+    callsign: 'PSDB14',
+    name: 'planetscale/database-skills #14',
+    kind: 'upstream',
+    type: 'Markdown',
+    route: 'planetscale',
+    remarks: 'A SQLite skill, surfaced across the docs and site.',
+    href: 'https://github.com/planetscale/database-skills/pull/14',
+    status: 'open',
+  },
+];
+
+export const certifications = [
+  {
+    title: 'AWS Certified Solutions Architect – Associate',
+    issuer: 'Amazon Web Services',
+    code: 'SAA-C03',
+    group: 'Cloud',
+    description: 'Designing available, cost-efficient, fault-tolerant and scalable distributed systems on AWS.',
+    href: '/certifications/saa-c03.pdf',
+  },
+  {
+    title: 'Fundamentals of Networking',
+    issuer: 'Hussein Nasser, Udemy',
+    code: 'NET-FUND',
+    group: 'Theory',
+    description: 'First principles of networking for building low-latency, high-throughput backends.',
+    href: '/certifications/udemy-networking.pdf',
+  },
+  {
+    title: 'NGINX Fundamentals',
+    issuer: 'Hussein Nasser, Udemy',
+    code: 'NGX-FUND',
+    group: 'Theory',
+    description: 'Layer 4 and layer 7 load balancing, WebSockets, HTTPS, HTTP/2 and TLS 1.3 with NGINX.',
+    href: '/certifications/udemy-nginx.pdf',
+  },
+];
+
+export const uses: { group: string; items: { name: string; href?: string; note: string }[] }[] = [
+  {
+    group: 'Agents and models',
+    items: [
+      { name: 'T3 Code', href: 'https://t3.codes/', note: 'Where most of my agent-driven work happens now. Several providers, one window.' },
+      { name: 'OpenCode', href: 'https://opencode.ai/', note: 'Open-source coding agent. I write plugins for it, which says enough.' },
+      { name: 'GrokBot', href: 'https://x.ai/bot', note: 'A second opinion that argues back.' },
+      { name: 'GLM-5.3, Grok 4.6 and 4.7, local LLMs', note: 'The rotation. Local models for anything I would rather not send anywhere.' },
+      { name: 'Hex', href: 'https://github.com/anomalyco/hex', note: 'Local voice dictation from the OpenCode team. Half of my prompts are spoken.' },
+    ],
+  },
+  {
+    group: 'Terminal and editor',
+    items: [
+      { name: 'Fish', note: 'Sane defaults, great completions, and I have not missed bash syntax once.' },
+      { name: 'GitHub CLI', note: 'Repos, issues and pull requests without leaving the terminal. Also how this site got its content.' },
+      { name: 'Visual Studio Code', note: 'Still the editor I am fastest in, now mostly for reading what agents wrote.' },
+    ],
+  },
+  {
+    group: 'Flight sim',
+    items: [
+      { name: 'X-Plane', note: 'GA flying with an eye on real-world procedures rather than autopilot buttons.' },
+      { name: 'Logitech Extreme 3D Pro', note: 'The joystick. Not a yoke, but it gets the job done.' },
+      { name: 'VATSIM', note: 'Flying online with real (human) air traffic controllers.' },
+    ],
+  },
+  {
+    group: 'Desk',
+    items: [
+      { name: 'Placeholder: laptop', note: 'Replace with your current machine.' },
+      { name: 'BenQ GW2480T, 24 inch', note: 'Height-adjustable, honest panel, no complaints in years.' },
+      { name: 'Placeholder: keyboard and mouse', note: 'Replace with current peripherals.' },
+    ],
+  },
+];
+
+// Gallery. `src` can be any image in /public. Placeholders render as chart tiles.
+export type Photo = { src?: string; alt: string; caption: string; place?: string; tall?: boolean };
+
+export const photos: Photo[] = [
+  { src: '/photos/image-1.jpg', alt: 'View from the left seat of a light aircraft over a coastline', caption: 'Left seat, coastline below', place: 'Somewhere over the water', tall: true },
+  { src: '/photos/image-2.jpg', alt: 'A dog resting in front of parked bicycles near India Gate', caption: 'Bicycle convoy, one very relaxed dog', place: 'India Gate, Delhi' },
+  { src: '/photos/image-5.jpg', alt: 'A laptop lid covered in developer stickers', caption: 'The laptop, fully decorated', place: 'Desk', tall: true },
+  { src: '/photos/image-4.jpg', alt: 'A mountain bike in warm light', caption: 'The bike that inspired the pelicans', place: 'Home', tall: true },
+  { src: '/photos/image-3.jpg', alt: 'A minimal desk setup with a monitor that says do more', caption: 'Desk, aspirational edition', place: 'Desk' },
+  { alt: 'Placeholder for a trek photo', caption: 'Placeholder: summit photo', place: 'Add a trek' },
+  { alt: 'Placeholder for a trek photo', caption: 'Placeholder: campsite at dusk', place: 'Add a trek', tall: true },
+  { alt: 'Placeholder for a travel photo', caption: 'Placeholder: window seat', place: 'Add a flight' },
+  { alt: 'Placeholder for a travel photo', caption: 'Placeholder: airport spotting', place: 'Add a trip' },
+];
+
+// Peaks painted on the chart. Placeholder treks; swap for the ones you have done.
+export const peaks = [
+  { name: 'Kedarkantha', elevation: 3810 },
+  { name: 'Hampta Pass', elevation: 4270 },
+  { name: 'Kuari Pass', elevation: 3640 },
+  { name: 'Brahmatal', elevation: 3734 },
+  { name: 'Roopkund', elevation: 5029 },
+  { name: 'Sar Pass', elevation: 4220 },
+  { name: 'Har Ki Dun', elevation: 3566 },
+];
+
+// Obstacles in the pelican game. Drop a real logo at `img` (e.g. /ai-logos/openai.svg)
+// and it will be drawn instead of the placeholder glyph.
+export const aiObstacles = [
+  { name: 'OpenAI', glyph: 'knot', color: '#142A4C', img: '' },
+  { name: 'Anthropic', glyph: 'asterisk', color: '#A8145F', img: '' },
+  { name: 'DeepMind', glyph: 'sparkle', color: '#2457A6', img: '' },
+  { name: 'Meta', glyph: 'loop', color: '#2457A6', img: '' },
+  { name: 'Mistral', glyph: 'blocks', color: '#C46A12', img: '' },
+  { name: 'xAI', glyph: 'cross', color: '#142A4C', img: '' },
+  { name: 'DeepSeek', glyph: 'wave', color: '#2457A6', img: '' },
+  { name: 'Perplexity', glyph: 'grid', color: '#1E6B5C', img: '' },
+];

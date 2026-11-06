@@ -1,0 +1,8 @@
+---
+import { kindLabels } from '../data/site';
+interface Props { kinds?: (keyof typeof kindLabels)[] }
+const kinds = Astro.props.kinds ?? (Object.keys(kindLabels) as (keyof typeof kindLabels)[]);
+---
+<ul class="strip-key" aria-label="Strip colours">
+  {kinds.map((k) => <li style={`--kind: var(--kind-${k})`}><i aria-hidden="true"></i>{kindLabels[k]}</li>)}
+</ul>
