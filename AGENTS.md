@@ -1,17 +1,18 @@
 # AGENTS.md
 
-Personal site (sankalpmukim.dev): fully static Astro 7 site, TypeScript, pnpm. No UI framework — all interactivity is vanilla TypeScript drawing on `<canvas>`. Deploys via Vercel (project link lives in gitignored `.vercel/`); there are no CI workflows, tests, linter, or formatter in this repo. `CLAUDE.md` carries the same guidance for Claude Code — keep both in sync when changing conventions.
+Personal site (sankalpmukim.dev): fully static Astro 7 site, TypeScript, pnpm. No UI framework — all interactivity is vanilla TypeScript drawing on `<canvas>`. Deploys via Vercel (project link lives in gitignored `.vercel/`); there are no CI workflows, tests, or formatter in this repo. Lint with Oxlint plus the vendored anti-slop plugin. `CLAUDE.md` carries the same guidance for Claude Code — keep both in sync when changing conventions.
 
 ## Commands
 
 - `pnpm install` — setup. Use pnpm, not npm/yarn (lockfile is `pnpm-lock.yaml`).
 - `pnpm dev` — dev server.
 - `pnpm build` — production build to `dist/`.
-- `pnpm check` — `astro check`; typechecks `.astro` and `.ts` files. This is the only verification step — run it after every change.
+- `pnpm check` — `astro check`; typechecks `.astro` and `.ts` files. Run it after every change.
+- `pnpm lint` — `oxlint` with the vendored anti-slop plugin (`oxlint.config.ts`). Run it after every change.
 
 ## Official documentation
 
-No official agent skills exist for the core stack, so consult the makers' docs when unsure about an API instead of improvising: Astro — https://docs.astro.build; TypeScript — https://www.typescriptlang.org/docs/; MDX — https://mdxjs.com; pnpm — https://pnpm.io; Shiki — https://shiki.style; sharp — https://sharp.pixelplumbing.com. (Vercel is covered by the `deploy-to-vercel` and `web-design-guidelines` skills in `.agents/skills/`.)
+No official agent skills exist for the core stack, so consult the makers' docs when unsure about an API instead of improvising: Astro — https://docs.astro.build; TypeScript — https://www.typescriptlang.org/docs/; MDX — https://mdxjs.com; pnpm — https://pnpm.io; Shiki — https://shiki.style; sharp — https://sharp.pixelplumbing.com; Oxlint — https://oxc.rs/docs/guide/usage/linter.html. (Vercel is covered by the `deploy-to-vercel` and `web-design-guidelines` skills in `.agents/skills/`.)
 
 ## Do not "clean up" pnpm-workspace.yaml
 
