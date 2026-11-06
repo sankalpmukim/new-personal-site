@@ -107,8 +107,8 @@ const featured = projects.filter((p) => p.featured);
   const root = document.querySelector<HTMLElement>('[data-atc]');
   if (root) {
     const start = () => initAtc(root, JSON.parse(root.dataset.peaks || '[]'));
-    // wait for Archivo so chart labels render in the right face
-    if (document.fonts?.ready) document.fonts.ready.then(start);
-    else start();
+    // wait briefly for Archivo so chart labels render in the right face, but never block on it
+    const ready = document.fonts?.ready ?? Promise.resolve();
+    Promise.race([ready, new Promise((r) => setTimeout(r, 700))]).then(start);
   }
 </script>

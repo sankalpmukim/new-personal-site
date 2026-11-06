@@ -133,7 +133,7 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
       const lx = rc.x + Math.cos(aw.a) * rLen * 1.5;
       const ly = rc.y + Math.sin(aw.a) * rLen * 1.5;
       b.globalAlpha = 0.85;
-      b.font = '700 11px Archivo, sans-serif';
+      b.font = '700 11px "Archivo Variable", Archivo, sans-serif';
       b.fontStretch = 'condensed';
       const tw = b.measureText(aw.label).width;
       b.fillStyle = colors.paper;
@@ -182,7 +182,7 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
       if (d % 30 === 0) {
         b.save();
         b.rotate(a + Math.PI / 2);
-        b.font = '600 10px Archivo, sans-serif';
+        b.font = '600 10px "Archivo Variable", Archivo, sans-serif';
         b.textAlign = 'center';
         b.fillText(d === 0 ? 'N' : String(d / 10), 0, -R + 24);
         b.restore();
@@ -241,7 +241,7 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
       b.save();
       b.translate(side * (rLen / 2 - 20), 0);
       b.rotate(side > 0 ? -Math.PI / 2 : Math.PI / 2);
-      b.font = `700 ${Math.round(9 * S)}px Archivo, sans-serif`;
+      b.font = `700 ${Math.round(9 * S)}px "Archivo Variable", Archivo, sans-serif`;
       b.textAlign = 'center';
       b.textBaseline = 'middle';
       b.fillText(side < 0 ? designators[0] : designators[1], 0, 0);
@@ -251,13 +251,13 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
 
     // airport data block
     b.save();
-    b.font = '800 13px Archivo, sans-serif';
+    b.font = '800 13px "Archivo Variable", Archivo, sans-serif';
     b.fontStretch = 'condensed';
     b.fillStyle = colors.blue;
     const lx = rc.x + rLen * 0.32;
     const ly = rc.y + rLen * 0.42;
     b.fillText('HOME BASE (VIDP)', lx, ly);
-    b.font = '600 11px Archivo, sans-serif';
+    b.font = '600 11px "Archivo Variable", Archivo, sans-serif';
     b.globalAlpha = 0.85;
     b.fillText(`118.10  ELEV 777  RWY ${designators[0]}/${designators[1]}`, lx, ly + 15);
     b.restore();
@@ -561,13 +561,13 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
       }
       // data block
       ctx.save();
-      ctx.font = '700 10px Archivo, sans-serif';
+      ctx.font = '700 10px "Archivo Variable", Archivo, sans-serif';
       ctx.fontStretch = 'condensed';
       ctx.fillStyle = colors.ink;
       ctx.globalAlpha = 0.85;
       ctx.fillText(p.callsign, p.x + 16 * S, p.y - 12 * S);
       ctx.globalAlpha = 0.55;
-      ctx.font = '600 9px Archivo, sans-serif';
+      ctx.font = '600 9px "Archivo Variable", Archivo, sans-serif';
       ctx.fillText(`${Math.round(p.spd * 3)} kt`, p.x + 16 * S, p.y - 2 * S);
       ctx.restore();
     }
@@ -634,7 +634,7 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
     for (const pp of popups) {
       ctx.save();
       ctx.globalAlpha = 1 - pp.t / 1.6;
-      ctx.font = '800 13px Archivo, sans-serif';
+      ctx.font = '800 13px "Archivo Variable", Archivo, sans-serif';
       ctx.fontStretch = 'condensed';
       ctx.fillStyle = colors.blue;
       ctx.fillText(pp.text, pp.x, pp.y - pp.t * 22);
@@ -759,6 +759,9 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
   ro.observe(canvas);
   matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { paintBackground(); if (!raf) render(); });
   addEventListener('themechange', () => { paintBackground(); if (!raf) render(); });
+
+  // read-only hook for automated checks
+  (root as unknown as { __atc: unknown }).__atc = { planes: () => planes, ends: () => ends, landDir: () => landDir, score: () => score, mode: () => mode };
 
   layout();
   setMode('attract');

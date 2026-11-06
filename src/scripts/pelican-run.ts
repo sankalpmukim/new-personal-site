@@ -247,7 +247,7 @@ export function initPelicanRun(root: HTMLElement, defs: ObstacleDef[]) {
       ctx.stroke();
       ctx.setLineDash([]);
       ctx.fillStyle = colors.ink;
-      ctx.font = '700 10px Archivo, sans-serif';
+      ctx.font = '700 10px "Archivo Variable", Archivo, sans-serif';
       ctx.fontStretch = 'condensed';
       ctx.textAlign = 'center';
       ctx.fillText('2 + 2 = 5', o.x + o.w / 2, top + o.h / 2 + bob + 4);
@@ -269,7 +269,7 @@ export function initPelicanRun(root: HTMLElement, defs: ObstacleDef[]) {
       glyph(o, o.x + o.w / 2, top + (o.h - 10) / 2 + 1, (o.h - 18) / 2);
     }
     ctx.fillStyle = colors.ink;
-    ctx.font = '700 9px Archivo, sans-serif';
+    ctx.font = '700 9px "Archivo Variable", Archivo, sans-serif';
     ctx.fontStretch = 'condensed';
     ctx.textAlign = 'center';
     ctx.fillText(o.def.name, o.x + o.w / 2, top + o.h - 5, o.w - 6);
@@ -342,7 +342,7 @@ export function initPelicanRun(root: HTMLElement, defs: ObstacleDef[]) {
       ctx.save();
       ctx.globalAlpha = 1 - honkT / 0.9;
       ctx.fillStyle = colors.magenta;
-      ctx.font = '800 15px Archivo, sans-serif';
+      ctx.font = '800 15px "Archivo Variable", Archivo, sans-serif';
       ctx.fontStretch = 'condensed';
       ctx.fillText('HONK', px + 48, g - y - 82 - honkT * 20);
       ctx.restore();
@@ -351,7 +351,7 @@ export function initPelicanRun(root: HTMLElement, defs: ObstacleDef[]) {
     // HUD
     ctx.save();
     ctx.fillStyle = colors.ink;
-    ctx.font = '700 13px Archivo, sans-serif';
+    ctx.font = '700 13px "Archivo Variable", Archivo, sans-serif';
     ctx.fontStretch = 'condensed';
     ctx.textAlign = 'right';
     const sc = String(Math.floor(dist / 10)).padStart(5, '0');
@@ -361,13 +361,13 @@ export function initPelicanRun(root: HTMLElement, defs: ObstacleDef[]) {
     ctx.fillText(sc, W - 20, 24);
     ctx.textAlign = 'center';
     if (state === 'idle') {
-      ctx.font = '700 15px Archivo, sans-serif';
+      ctx.font = '700 15px "Archivo Variable", Archivo, sans-serif';
       ctx.fillText('Press space or tap to ride', W / 2, 46);
     }
     if (state === 'over') {
-      ctx.font = '800 18px Archivo, sans-serif';
+      ctx.font = '800 18px "Archivo Variable", Archivo, sans-serif';
       ctx.fillText(overLine, W / 2, 46);
-      ctx.font = '600 13px Archivo, sans-serif';
+      ctx.font = '600 13px "Archivo Variable", Archivo, sans-serif';
       ctx.globalAlpha = 0.75;
       ctx.fillText('Press space or tap to ride again', W / 2, 66);
     }

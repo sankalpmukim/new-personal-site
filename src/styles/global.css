@@ -26,7 +26,7 @@
   --kind-client: var(--beak);
   --kind-upstream: #1e6b5c;
 
-  --font: 'Archivo', ui-sans-serif, system-ui, sans-serif;
+  --font: 'Archivo Variable', 'Archivo', ui-sans-serif, system-ui, sans-serif;
   --fs-xs: 0.8125rem;
   --fs-sm: 0.875rem;
   --fs-base: 1.0625rem;
@@ -381,6 +381,16 @@ p {
 .hero.is-over .hero-copy {
   opacity: 0.12;
   pointer-events: none;
+}
+.hero.is-playing .site-nav {
+  opacity: 0.25;
+  pointer-events: none;
+}
+.hero.is-playing .legend {
+  pointer-events: none;
+}
+.hero.is-playing .legend [data-atc-stop] {
+  pointer-events: auto;
 }
 .hero.is-playing .hero-copy > *,
 .hero.is-over .hero-copy > * {

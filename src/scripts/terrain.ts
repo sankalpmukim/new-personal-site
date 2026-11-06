@@ -248,11 +248,11 @@ export function drawPeaks(ctx: CanvasRenderingContext2D, peaks: Terrain['peaks']
     ctx.closePath();
     ctx.fill();
     if (p.name) {
-      ctx.font = '600 11px Archivo, sans-serif';
+      ctx.font = '600 11px "Archivo Variable", Archivo, sans-serif';
       ctx.fontStretch = 'condensed';
       ctx.globalAlpha = 0.85;
       ctx.fillText(p.name, p.x + 8, p.y + 1);
-      ctx.font = '500 10px Archivo, sans-serif';
+      ctx.font = '500 10px "Archivo Variable", Archivo, sans-serif';
       ctx.globalAlpha = 0.6;
       ctx.fillText(`${p.elevation?.toLocaleString('en-US')} m`, p.x + 8, p.y + 13);
       ctx.globalAlpha = 1;

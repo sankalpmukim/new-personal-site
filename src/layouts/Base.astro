@@ -1,4 +1,5 @@
 ---
+import '@fontsource-variable/archivo/wdth.css';
 import '../styles/global.css';
 import Footer from '../components/Footer.astro';
 import { person } from '../data/site';
@@ -19,9 +20,6 @@ const fullTitle = title ? `${title} | ${person.name}` : `${person.name}, softwar
     <meta property="og:description" content={description} />
     <meta name="theme-color" content="#e3ecd9" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0f1d35" media="(prefers-color-scheme: dark)" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet" />
     <script is:inline>
       try { if (localStorage.getItem('pelicans') === 'off') document.documentElement.dataset.pelicans = 'off'; } catch (e) {}
     </script>
