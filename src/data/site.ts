@@ -440,6 +440,14 @@ export type Photo = { src?: string; alt: string; caption: string; place?: string
 export const photos: Photo[] = [
   { src: '/photos/gallery-kuari-campsite.jpg', alt: 'Tents at the Kuari Pass campsite glowing in golden-hour light', caption: 'Kuari Pass camp at golden hour', place: 'Kuari Pass, Uttarakhand', tall: true },
   { src: '/photos/gallery-kuari-viewpoint.jpg', alt: 'A person looking out at snow-covered Himalayan peaks on the Kuari Pass trek', caption: 'Looking out on the Lord Curzon Trail', place: 'Kuari Pass', tall: true },
+  { src: '/photos/gallery-kuari2-snow-trail.jpg', alt: 'A forest trail under snow on the Kuari Pass trek', caption: 'Forest trail under snow', place: 'Kuari Pass, Uttarakhand' },
+  { src: '/photos/gallery-hampta-done.jpg', alt: 'Trek group holding an IndiaHikes DONE! banner at Hampta Pass, about 14,100 ft', caption: 'DONE! at Hampta Pass', place: 'Hampta Pass, Himachal Pradesh' },
+  { src: '/photos/gallery-hampta-jwara.jpg', alt: 'Jwara campsite sign on the Hampta Pass trek, reading 11,005 ft / 3,354 m', caption: 'Jwara camp, 11,005 ft', place: 'Hampta Pass trek, Himachal Pradesh' },
+  { src: '/photos/gallery-bhrigu-tent.jpg', alt: 'A yellow tent pitched at a mountain camp on the Bhrigu Lake trek', caption: 'Camp on the Bhrigu Lake trek', place: 'Bhrigu Lake trek, Himachal Pradesh' },
+  { src: '/photos/gallery-gaumukh-fox.jpg', alt: 'A fox on the road from Dehradun to Gangotri, near Rawat Restaurant', caption: 'Roadside fox on the way to Gangotri', place: 'Dehradun → Gangotri' },
+  { src: '/photos/gallery-gaumukh-gangotri-arch.jpg', alt: 'The entrance arch at Gangotri, where the walk towards Gaumukh begins', caption: 'Through the arch, the trek begins', place: 'Gangotri, Uttarakhand' },
+  { src: '/photos/gallery-gaumukh-gangotri-sign.jpg', alt: 'IndiaHikes sign at Gangotri reading 10,050 ft / 3,063 m', caption: 'Gangotri, 10,050 ft', place: 'Gangotri, Uttarakhand' },
+  { src: '/photos/gallery-gaumukh-bhagirathi.jpg', alt: 'The Bhagirathi river running through the valley near Uttarkashi on the Gaumukh approach', caption: 'The Bhagirathi, en route to Gaumukh', place: 'Near Uttarkashi, Uttarakhand' },
   { src: '/photos/gallery-train-coding.jpg', alt: 'A laptop open on a train berth, code on screen', caption: 'Building on a 33-hour train', place: 'KSR → NZM, Mar 2026' },
   { src: '/photos/gallery-india-gate-dog.jpg', alt: 'A dog resting in front of parked bicycles near India Gate', caption: 'Bicycle convoy, one very relaxed dog', place: 'India Gate, Delhi' },
   { src: '/photos/gallery-night-bike.jpg', alt: 'A mountain bike after a dusty evening ride', caption: 'The bike, after a dusty ride', place: 'Delhi NCR', tall: true },
@@ -448,14 +456,15 @@ export const photos: Photo[] = [
   { src: '/photos/gallery-train-platform.jpg', alt: 'A train platform at night under the lights', caption: 'Night train somewhere on the map', place: 'Indian Railways' },
 ];
 
-// Labels painted on the hero chart. Kuari Pass is feed-evidenced (Jan 2025); the
-// rest come from Instagram highlight titles. Trek places, not summits logged —
-// and no elevations, because no number here was ever sourced.
+// Labels painted on the hero chart. Names are feed- and highlight-evidenced
+// trek places, not summits logged. The one elevation is taken from the
+// IndiaHikes DONE! banner at Hampta Pass (~14,100 ft / 4,287 m); the rest stay
+// name-only until a sign or banner puts a number on them.
 export type Peak = { name: string; elevation?: number };
 
 export const peaks: Peak[] = [
   { name: 'Kuari Pass' },
-  { name: 'Hampta Pass' },
+  { name: 'Hampta Pass', elevation: 4287 },
   { name: 'Bhrigu Lake' },
   { name: 'Gaumukh Tapovan' },
 ];
