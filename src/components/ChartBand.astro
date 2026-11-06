@@ -1,6 +1,8 @@
 ---
 import Nav from './Nav.astro';
+
 interface Props { title: string; intro?: string; seed?: number; long?: boolean }
+
 const { title, intro, seed = 3, long = false } = Astro.props;
 ---
 <section class="band" data-band data-seed={seed}>
@@ -15,13 +17,16 @@ const { title, intro, seed = 3, long = false } = Astro.props;
 
 <script>
   import { drawTerrain, fitCanvas, readColors } from '../scripts/terrain';
+
   for (const band of document.querySelectorAll<HTMLElement>('[data-band]')) {
     const canvas = band.querySelector('canvas')!;
     const seed = Number(band.dataset.seed) || 3;
+
     const paint = () => {
       const { ctx, w, h } = fitCanvas(canvas);
       drawTerrain(ctx, w, h, readColors(), { seed, relief: 0.8, maxPeaks: 0, valleys: [{ x: w * 0.2, y: h * 0.75, r: Math.max(w * 0.35, 260) }] });
     };
+
     let t = 0;
     new ResizeObserver(() => { clearTimeout(t); t = window.setTimeout(paint, 100); }).observe(canvas);
     matchMedia('(prefers-color-scheme: dark)').addEventListener('change', paint);

@@ -2,7 +2,9 @@
 import { drawPeaks, drawTerrain, fitCanvas, readColors, type ChartColors, type Terrain } from './terrain';
 
 type Pt = { x: number; y: number };
+
 type Kind = 'prop' | 'jet' | 'heavy';
+
 type Plane = {
   id: number;
   x: number;
@@ -20,23 +22,30 @@ type Plane = {
   auto: boolean;
   warn: boolean;
 };
+
 type Pending = { at: number; x: number; y: number; hdg: number; kind: Kind };
+
 type Popup = { x: number; y: number; text: string; t: number };
 
 const PREFIX = ['AIC', 'IGO', 'VTI', 'AKJ', 'SEJ', 'PLC', 'IAD', 'BDA'];
+
 const STORAGE_KEY = 'atc-best';
 
 function storeGet(k: string) {
   try { return localStorage.getItem(k); } catch { return null; }
 }
+
 function storeSet(k: string, v: string) {
   try { localStorage.setItem(k, v); } catch { /* private mode */ }
 }
 
 function angDiff(a: number, b: number) {
   let d = a - b;
+
   while (d > Math.PI) d -= Math.PI * 2;
+
   while (d < -Math.PI) d += Math.PI * 2;
+
   return d;
 }
 
@@ -120,11 +129,13 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
     b.fillStyle = colors.magenta;
     b.globalAlpha = 0.4;
     b.lineWidth = 2;
+
     const airways = [
       { a: -2.4, label: 'W33' },
       { a: 2.55, label: 'A461' },
       { a: 1.2, label: 'G450' },
     ];
+
     for (const aw of airways) {
       b.beginPath();
       b.moveTo(rc.x + Math.cos(aw.a) * rLen * 1.05, rc.y + Math.sin(aw.a) * rLen * 1.05);
@@ -143,6 +154,7 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
       b.fillText(aw.label, lx - tw / 2, ly + 3.5);
       b.globalAlpha = 0.4;
     }
+
     b.restore();
 
     // airspace rings
@@ -172,6 +184,7 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
     b.beginPath();
     b.arc(0, 0, R, 0, Math.PI * 2);
     b.stroke();
+
     for (let d = 0; d < 360; d += 5) {
       const a = (d - 90) * Math.PI / 180;
       const len = d % 30 === 0 ? 12 : d % 10 === 0 ? 7 : 4;
@@ -179,6 +192,7 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
       b.moveTo(Math.cos(a) * R, Math.sin(a) * R);
       b.lineTo(Math.cos(a) * (R - len), Math.sin(a) * (R - len));
       b.stroke();
+
       if (d % 30 === 0) {
         b.save();
         b.rotate(a + Math.PI / 2);
@@ -188,6 +202,7 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
         b.restore();
       }
     }
+
     b.restore();
 
     // extended centrelines (approach guidance)
@@ -196,6 +211,7 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
     b.globalAlpha = 0.35;
     b.setLineDash([3, 7]);
     b.lineWidth = 1.2;
+
     for (let i = 0; i < 2; i++) {
       const e = ends[i];
       const back = landDir[i] + Math.PI;
@@ -216,6 +232,7 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
       b.globalAlpha = 0.35;
       b.setLineDash([3, 7]);
     }
+
     b.restore();
 
     // runway
@@ -229,15 +246,19 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
     b.lineWidth = 1.5;
     b.strokeRect(-rLen / 2, -rw / 2, rLen, rw);
     b.fillStyle = '#F4F6F2';
+
     // centreline
     for (let x = -rLen / 2 + 30; x < rLen / 2 - 30; x += 16) b.fillRect(x, -0.8, 9, 1.6);
+
     // piano keys + designators
     for (const side of [-1, 1]) {
       const x0 = side * (rLen / 2 - 4);
+
       for (let k = -3; k <= 3; k++) {
         if (k === 0) continue;
         b.fillRect(x0 - (side > 0 ? 7 : 0), k * 2 * S - 0.6, 7, 1.2);
       }
+
       b.save();
       b.translate(side * (rLen / 2 - 20), 0);
       b.rotate(side > 0 ? -Math.PI / 2 : Math.PI / 2);
@@ -247,6 +268,7 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
       b.fillText(side < 0 ? designators[0] : designators[1], 0, 0);
       b.restore();
     }
+
     b.restore();
 
     // airport data block
@@ -267,12 +289,18 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
     const edge = Math.floor(Math.random() * 4);
     const m = 30;
     let x = 0, y = 0;
+
     if (edge === 0) { x = Math.random() * W; y = -m; }
+
     if (edge === 1) { x = W + m; y = Math.random() * H; }
+
     if (edge === 2) { x = Math.random() * W; y = H + m; }
+
     if (edge === 3) { x = -m; y = Math.random() * H; }
+
     const tx = W * (0.25 + Math.random() * 0.5);
     const ty = H * (0.25 + Math.random() * 0.5);
+
     return { at: clock + (mode === 'play' ? 1.6 : 0), x, y, hdg: Math.atan2(ty - y, tx - x), kind };
   }
 
@@ -282,6 +310,7 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
 
   function makePlane(p: Pending): Plane {
     const base = p.kind === 'prop' ? 30 : p.kind === 'jet' ? 46 : 38;
+
     const plane: Plane = {
       id: ++idSeq,
       x: p.x,
@@ -299,7 +328,9 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
       auto: mode === 'attract',
       warn: false,
     };
+
     if (plane.auto) autoRoute(plane);
+
     return plane;
   }
 
@@ -307,13 +338,16 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
     // pick the end whose approach is closest to the plane
     let bestI: 0 | 1 = 0;
     let bestD = Infinity;
+
     for (const i of [0, 1] as const) {
       const back = landDir[i] + Math.PI;
       const ax = ends[i].x + Math.cos(back) * rLen * 0.55;
       const ay = ends[i].y + Math.sin(back) * rLen * 0.55;
       const d = Math.hypot(ax - p.x, ay - p.y);
+
       if (d < bestD) { bestD = d; bestI = i; }
     }
+
     const e = ends[bestI];
     const back = landDir[bestI] + Math.PI;
     const ax = e.x + Math.cos(back) * rLen * 0.55;
@@ -321,10 +355,12 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
     const cx = p.x + Math.cos(p.hdg) * bestD * 0.5;
     const cy = p.y + Math.sin(p.hdg) * bestD * 0.5;
     const pts: Pt[] = [];
+
     for (let t = 0.05; t <= 1; t += 0.05) {
       const u = 1 - t;
       pts.push({ x: u * u * p.x + 2 * u * t * cx + t * t * ax, y: u * u * p.y + 2 * u * t * cy + t * t * ay });
     }
+
     pts.push({ x: e.x, y: e.y });
     p.path = pts;
     p.cleared = bestI;
@@ -349,6 +385,7 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
     setMode('play');
     statusEl.textContent = 'Drag each plane onto the runway, lined up with the dashed approach.';
     nextSpawn = clock + 0.3;
+
     if (!raf) loop(performance.now());
   }
 
@@ -366,11 +403,13 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
   function gameOver(a: Plane, b: Plane) {
     crash = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2, t: 0 };
     active = null;
+
     if (score > best) {
       best = score;
       storeSet(STORAGE_KEY, String(best));
       bestEl.textContent = String(best);
     }
+
     finalEl.textContent = `${a.callsign} and ${b.callsign} got too close. You landed ${score} ${score === 1 ? 'plane' : 'planes'}.`;
     setMode('over');
     statusEl.textContent = '';
@@ -390,19 +429,27 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
     // spawning
     const maxPlanes = mode === 'play' ? Math.min(12, 3 + Math.floor(score / 3)) : 3;
     const interval = mode === 'play' ? Math.max(1.4, 5.2 - score * 0.2) : 3.2;
+
     if (mode !== 'over' && clock >= nextSpawn && planes.length + pending.length < maxPlanes) {
       const r = Math.random();
       const kind: Kind = r < 0.4 ? 'prop' : r < 0.8 ? 'jet' : 'heavy';
       pending.push(spawnPoint(kind));
       nextSpawn = clock + interval * (0.75 + Math.random() * 0.5);
     }
+
     pending = pending.filter((p) => {
-      if (clock >= p.at) { planes.push(makePlane(p)); return false; }
+      if (clock >= p.at) {
+        planes.push(makePlane(p));
+
+        return false;
+      }
+
       return true;
     });
 
     if (mode === 'over') {
       if (crash) crash.t += dt;
+
       return;
     }
 
@@ -417,15 +464,20 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
         p.y = e.y + Math.sin(dir) * dist;
         p.hdg = dir;
         p.drawHdg = dir;
+
         if (p.landT >= 1.25) p.state = 'gone';
         continue;
       }
+
       let move = p.spd * dt;
+
       while (p.path.length && move > 0) {
         const t = p.path[0];
         const d = Math.hypot(t.x - p.x, t.y - p.y);
+
         if (d <= move) {
           p.x = t.x; p.y = t.y; move -= d; p.path.shift();
+
           if (d > 0.01) p.hdg = Math.atan2(t.y - p.y + 0.0001, t.x - p.x + 0.0001) || p.hdg;
         } else {
           p.hdg = Math.atan2(t.y - p.y, t.x - p.x);
@@ -434,16 +486,20 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
           move = 0;
         }
       }
+
       if (move > 0) {
         p.x += Math.cos(p.hdg) * move;
         p.y += Math.sin(p.hdg) * move;
       }
+
       p.drawHdg += angDiff(p.hdg, p.drawHdg) * Math.min(1, dt * 8);
 
       if (!p.entered && p.x > 10 && p.x < W - 10 && p.y > 10 && p.y < H - 10) p.entered = true;
+
       if (p.entered && !p.path.length) {
         // bounce off the chart edges with a gentle turn back in
         const m = 14;
+
         if (p.x < m || p.x > W - m || p.y < m || p.y > H - m) {
           const toC = Math.atan2(H / 2 - p.y, W / 2 - p.x);
           p.hdg += angDiff(toC, p.hdg) * Math.min(1, dt * 3);
@@ -453,8 +509,10 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
       // touchdown check
       for (const i of [0, 1] as const) {
         const e = ends[i];
+
         if (Math.hypot(p.x - e.x, p.y - e.y) < 10 * S) {
           const aligned = Math.abs(angDiff(p.drawHdg, landDir[i])) < 0.9;
+
           if (aligned && (p.cleared === i || p.path.length === 0)) {
             p.state = 'land';
             p.cleared = i;
@@ -466,26 +524,37 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
         }
       }
     }
+
     planes = planes.filter((p) => p.state !== 'gone');
 
     // separation
     for (const p of planes) p.warn = false;
+
     if (mode === 'play') {
       for (let i = 0; i < planes.length; i++) {
         for (let j = i + 1; j < planes.length; j++) {
           const a = planes[i], b = planes[j];
+
           if (a.state !== 'fly' || b.state !== 'fly' || !a.entered || !b.entered) continue;
           const d = Math.hypot(a.x - b.x, a.y - b.y);
-          if (d < 15 * S) { gameOver(a, b); return; }
+
+          if (d < 15 * S) {
+            gameOver(a, b);
+
+            return;
+          }
+
           if (d < 55 * S) { a.warn = true; b.warn = true; }
         }
       }
     }
+
     popups = popups.filter((pp) => (pp.t += dt) < 1.6);
   }
 
-  function planeShape(c: CanvasRenderingContext2D, kind: Kind) {
+  function tracePlane(c: CanvasRenderingContext2D, kind: Kind) {
     c.beginPath();
+
     if (kind === 'prop') {
       c.moveTo(10, 0);
       c.lineTo(6, -1.6); c.lineTo(3, -1.6); c.lineTo(3, -12); c.lineTo(-1, -12); c.lineTo(-1, -1.6);
@@ -500,6 +569,7 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
       c.lineTo(-8, 13); c.lineTo(-5, 13); c.lineTo(2, 2.2); c.lineTo(6, 2.2);
       c.quadraticCurveTo(11, 2.2, 13, 0);
     }
+
     c.closePath();
   }
 
@@ -519,7 +589,7 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
     ctx.translate(p.x + sh, p.y + sh * 1.2);
     ctx.rotate(p.drawHdg);
     ctx.scale(scale, scale);
-    planeShape(ctx, p.kind);
+    tracePlane(ctx, p.kind);
     ctx.fillStyle = colors.ink;
     ctx.globalAlpha = 0.18 * alpha;
     ctx.fill();
@@ -528,7 +598,7 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
     ctx.translate(p.x, p.y);
     ctx.rotate(p.drawHdg);
     ctx.scale(scale, scale);
-    planeShape(ctx, p.kind);
+    tracePlane(ctx, p.kind);
     ctx.fillStyle = '#FFFFFF';
     ctx.fill();
     ctx.lineWidth = 1.4 / scale;
@@ -536,10 +606,13 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
     ctx.stroke();
     ctx.fillStyle = accent;
     ctx.fillRect(-14, -1.1, 10, 2.2);
+
     if (p.kind === 'heavy') {
       ctx.fillStyle = colors.ink;
+
       for (const [x, y] of [[-1, -6], [-3, -9.5], [-1, 6], [-3, 9.5]]) ctx.fillRect(x, y - 1, 3, 2);
     }
+
     if (p.kind === 'prop') {
       ctx.strokeStyle = colors.ink;
       ctx.lineWidth = 1;
@@ -549,6 +622,7 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
       ctx.lineTo(11, -Math.sin(a) * 5);
       ctx.stroke();
     }
+
     ctx.restore();
 
     if (p.state === 'fly') {
@@ -562,6 +636,7 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
         ctx.stroke();
         ctx.restore();
       }
+
       // data block
       ctx.save();
       ctx.font = '700 10px "Archivo Variable", Archivo, sans-serif';
@@ -585,6 +660,7 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
     ctx.setLineDash([6, 5]);
     ctx.beginPath();
     ctx.moveTo(p.x, p.y);
+
     for (const pt of p.path) ctx.lineTo(pt.x, pt.y);
     ctx.stroke();
     const end = p.path[p.path.length - 1];
@@ -631,7 +707,9 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
     }
 
     for (const p of planes) drawPath(p);
+
     for (const p of planes) if (p.state === 'land') drawPlane(p);
+
     for (const p of planes) if (p.state === 'fly') drawPlane(p);
 
     for (const pp of popups) {
@@ -660,41 +738,52 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
   function loop(now: number) {
     const dt = Math.min(0.05, (now - last) / 1000 || 0);
     last = now;
+
     if (visible && !document.hidden) {
       step(dt);
       render();
     }
+
     raf = requestAnimationFrame(loop);
   }
 
   // input
   function local(e: PointerEvent): Pt {
     const r = canvas.getBoundingClientRect();
+
     return { x: e.clientX - r.left, y: e.clientY - r.top };
   }
 
   function tryClear(p: Plane, pt: Pt): boolean {
     for (const i of [0, 1] as const) {
       const e = ends[i];
+
       if (Math.hypot(pt.x - e.x, pt.y - e.y) < 24 * S) {
         // direction of the drawn approach over the last ~40px
         let k = p.path.length - 1;
         let from: Pt = { x: p.x, y: p.y };
         let acc = 0;
+
         while (k > 0) {
           acc += Math.hypot(p.path[k].x - p.path[k - 1].x, p.path[k].y - p.path[k - 1].y);
+
           if (acc > 40) { from = p.path[k - 1]; break; }
+
           k--;
         }
+
         if (k <= 0) from = { x: p.x, y: p.y };
         const dir = Math.atan2(e.y - from.y, e.x - from.x);
+
         if (Math.abs(angDiff(dir, landDir[i])) < 0.85) {
           p.path.push({ x: e.x, y: e.y });
           p.cleared = i;
+
           return true;
         }
       }
     }
+
     return false;
   }
 
@@ -703,18 +792,23 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
     const pt = local(e);
     let hit: Plane | null = null;
     let hd = 30 * S;
+
     for (const p of planes) {
       if (p.state !== 'fly') continue;
       const d = Math.hypot(p.x - pt.x, p.y - pt.y);
+
       if (d < hd) { hd = d; hit = p; }
     }
+
     if (!hit) return;
+
     if (mode === 'attract') {
       if (e.pointerType !== 'mouse') return; // on touch, use the button so the page can still scroll
       start();
       planes = [hit];
       hit.auto = false;
     }
+
     e.preventDefault();
     active = hit;
     hit.path = [];
@@ -725,17 +819,28 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
 
   canvas.addEventListener('pointermove', (e) => {
     const pt = local(e);
+
     if (!active) {
       const over = mode !== 'over' && planes.some((p) => p.state === 'fly' && Math.hypot(p.x - pt.x, p.y - pt.y) < 30 * S);
       canvas.style.cursor = over ? 'grab' : '';
+
       return;
     }
+
     canvas.style.cursor = 'grabbing';
     const p = active;
-    if (p.state !== 'fly' || mode !== 'play') { active = null; return; }
+
+    if (p.state !== 'fly' || mode !== 'play') {
+      active = null;
+
+      return;
+    }
+
     const lastPt = p.path[p.path.length - 1] ?? { x: p.x, y: p.y };
+
     if (Math.hypot(pt.x - lastPt.x, pt.y - lastPt.y) < 7) return;
     p.path.push({ x: Math.max(4, Math.min(W - 4, pt.x)), y: Math.max(4, Math.min(H - 4, pt.y)) });
+
     if (tryClear(p, pt)) active = null;
   });
 
@@ -743,6 +848,7 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
     active = null;
     canvas.style.cursor = '';
   };
+
   canvas.addEventListener('pointerup', endDrag);
   canvas.addEventListener('pointercancel', endDrag);
 
@@ -755,19 +861,33 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
   new IntersectionObserver(([en]) => { visible = en.isIntersecting; }, { threshold: 0.05 }).observe(root);
 
   let resizeT = 0;
+
   const ro = new ResizeObserver(() => {
     clearTimeout(resizeT);
-    resizeT = window.setTimeout(() => { layout(); if (!raf) render(); }, 120);
+    resizeT = window.setTimeout(() => {
+      layout();
+
+      if (!raf) render();
+    }, 120);
   });
+
   ro.observe(canvas);
-  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { paintBackground(); if (!raf) render(); });
-  addEventListener('themechange', () => { paintBackground(); if (!raf) render(); });
+
+  const repaint = () => {
+    paintBackground();
+
+    if (!raf) render();
+  };
+
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', repaint);
+  addEventListener('themechange', repaint);
 
   // read-only hook for automated checks
-  (root as unknown as { __atc: unknown }).__atc = { planes: () => planes, ends: () => ends, landDir: () => landDir, score: () => score, mode: () => mode };
+  Object.assign(root, { __atc: { planes: () => planes, ends: () => ends, landDir: () => landDir, score: () => score, mode: () => mode } });
 
   layout();
   setMode('attract');
+
   if (reduced) {
     // one still frame: a few planes on approach, no motion until the player starts
     for (let i = 0; i < 3; i++) {
@@ -779,6 +899,7 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
       p.path = p.path.slice(k);
       planes.push(p);
     }
+
     render();
   } else {
     // pre-roll so the sky is busy on first paint
@@ -787,6 +908,7 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
       const p = makePlane(pd);
       planes.push(p);
     }
+
     for (let i = 0; i < 240; i++) step(1 / 30);
     last = performance.now();
     loop(last);

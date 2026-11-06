@@ -14,6 +14,7 @@ export type ChartColors = {
 export function readColors(el: Element = document.documentElement): ChartColors {
   const cs = getComputedStyle(el);
   const v = (n: string) => cs.getPropertyValue(n).trim();
+
   return {
     paper: v('--paper'),
     paper2: v('--paper-2'),
@@ -28,10 +29,12 @@ export function readColors(el: Element = document.documentElement): ChartColors 
 
 export function rng(seed: number) {
   let s = seed >>> 0 || 1;
+
   return () => {
     s ^= s << 13;
     s ^= s >>> 17;
     s ^= s << 5;
+
     return ((s >>> 0) % 100000) / 100000;
   };
 }
@@ -40,16 +43,22 @@ function makeNoise(seed: number) {
   const r = rng(seed);
   const perm = new Uint8Array(512);
   const p = Array.from({ length: 256 }, (_, i) => i);
+
   for (let i = 255; i > 0; i--) {
     const j = Math.floor(r() * (i + 1));
     [p[i], p[j]] = [p[j], p[i]];
   }
+
   for (let i = 0; i < 512; i++) perm[i] = p[i & 255];
+
   const grad = (h: number, x: number, y: number) => {
     const a = (h / 256) * Math.PI * 2;
+
     return Math.cos(a) * x + Math.sin(a) * y;
   };
+
   const fade = (t: number) => t * t * t * (t * (t * 6 - 15) + 10);
+
   return (x: number, y: number) => {
     const xi = Math.floor(x) & 255;
     const yi = Math.floor(y) & 255;
@@ -63,6 +72,7 @@ function makeNoise(seed: number) {
     const bb = perm[perm[xi + 1] + yi + 1];
     const x1 = grad(aa, xf, yf) + u * (grad(ba, xf - 1, yf) - grad(aa, xf, yf));
     const x2 = grad(ab, xf, yf - 1) + u * (grad(bb, xf - 1, yf - 1) - grad(ab, xf, yf - 1));
+
     return x1 + v * (x2 - x1);
   };
 }
@@ -106,36 +116,46 @@ export function drawTerrain(
       let e = 0;
       let amp = 1;
       let f = scale;
+
       for (let o = 0; o < 5; o++) {
         e += amp * noise(x * f + seed * 3.1, y * f - seed * 1.7);
         amp *= 0.5;
         f *= 2.03;
       }
+
       // ridged component for mountain feel
       const ridge = 1 - Math.abs(noise(x * scale * 0.7 + 50, y * scale * 0.7 + 20));
       e = e * 0.75 + (ridge * ridge - 0.45) * 0.9 * relief;
       // northern edge is more mountainous (the Himalaya are up there)
       e += (1 - y / h) * 0.35 * relief - 0.1;
+
       // flatten valleys (e.g. around an airfield) to dry lowland, never water
       for (const v of opts.valleys ?? []) {
         const d = Math.hypot(x - v.x, y - v.y) / v.r;
+
         if (d < 1.5) {
           const k = Math.min(1, (1.5 - d) / 0.9);
           const s = k * k * (3 - 2 * k);
           e = e * (1 - s) + -0.02 * s;
         }
       }
+
       field[j * cols + i] = e;
     }
   }
 
   // hypsometric bands
   const levels = [-0.32, -0.12, 0.05, 0.2, 0.34, 0.48, 0.62, 0.76, 0.9];
+
   const bandColor = (e: number) => {
     if (e < levels[0]) return colors.water;
+
     if (e < levels[2]) return colors.paper;
+
     if (e < levels[4]) return colors.paper2;
+
     if (e < levels[6]) return colors.tan;
+
     return colors.tan2;
   };
 
@@ -152,6 +172,7 @@ export function drawTerrain(
       const d = field[(j + 1) * cols + i];
       const avg = (a + b + c + d) / 4;
       const col = bandColor(avg);
+
       if (col === colors.paper) continue;
       ctx.fillStyle = col;
       ctx.fillRect(i * cell - 0.5, j * cell - 0.5, cell + 1, cell + 1);
@@ -163,6 +184,7 @@ export function drawTerrain(
   levels.forEach((lv, li) => {
     const index = li % 4 === 2;
     ctx.beginPath();
+
     for (let j = 0; j < rows - 1; j++) {
       for (let i = 0; i < cols - 1; i++) {
         const a = field[j * cols + i];
@@ -170,10 +192,15 @@ export function drawTerrain(
         const c = field[(j + 1) * cols + i + 1];
         const d = field[(j + 1) * cols + i];
         let code = 0;
+
         if (a > lv) code |= 8;
+
         if (b > lv) code |= 4;
+
         if (c > lv) code |= 2;
+
         if (d > lv) code |= 1;
+
         if (code === 0 || code === 15) continue;
         const x = i * cell;
         const y = j * cell;
@@ -181,10 +208,12 @@ export function drawTerrain(
         const right = [x + cell, y + cell * lerp(b, c, lv)];
         const bottom = [x + cell * lerp(d, c, lv), y + cell];
         const left = [x, y + cell * lerp(a, d, lv)];
+
         const seg = (p: number[], q: number[]) => {
           ctx.moveTo(p[0], p[1]);
           ctx.lineTo(q[0], q[1]);
         };
+
         switch (code) {
           case 1: case 14: seg(left, bottom); break;
           case 2: case 13: seg(bottom, right); break;
@@ -197,6 +226,7 @@ export function drawTerrain(
         }
       }
     }
+
     if (li === 0) {
       ctx.strokeStyle = colors.blue;
       ctx.globalAlpha = 0.55;
@@ -206,6 +236,7 @@ export function drawTerrain(
       ctx.globalAlpha = index ? 0.32 : 0.16;
       ctx.lineWidth = index ? 1.1 : 0.7;
     }
+
     ctx.stroke();
   });
   ctx.globalAlpha = 1;
@@ -213,32 +244,43 @@ export function drawTerrain(
   // peaks: local maxima above a level
   const candidates: { x: number; y: number; h: number }[] = [];
   const R = 3;
+
   for (let j = R; j < rows - R; j++) {
     for (let i = R; i < cols - R; i++) {
       const v = field[j * cols + i];
+
       if (v < levels[5]) continue;
       let isMax = true;
+
       for (let dj = -R; dj <= R && isMax; dj++)
         for (let di = -R; di <= R; di++)
           if ((di || dj) && field[(j + dj) * cols + i + di] > v) { isMax = false; break; }
+
       if (isMax) candidates.push({ x: i * cell, y: j * cell, h: v });
     }
   }
+
   candidates.sort((a, b) => b.h - a.h);
   const peaks: Terrain['peaks'] = [];
+
   for (const c of candidates) {
     if (peaks.length >= (opts.maxPeaks ?? 6)) break;
+
     if (c.x < 40 || c.x > w - 120 || c.y < 50 || c.y > h - 30) continue;
+
     if (peaks.some((p) => Math.hypot(p.x - c.x, p.y - c.y) < 180)) continue;
     const named = opts.peakNames?.[peaks.length];
     peaks.push({ ...c, name: named?.name, elevation: named?.elevation });
   }
+
   ctx.restore();
+
   return { peaks };
 }
 
 export function drawPeaks(ctx: CanvasRenderingContext2D, peaks: Terrain['peaks'], colors: ChartColors) {
   ctx.save();
+
   for (const p of peaks) {
     ctx.fillStyle = colors.ink;
     ctx.beginPath();
@@ -247,6 +289,7 @@ export function drawPeaks(ctx: CanvasRenderingContext2D, peaks: Terrain['peaks']
     ctx.lineTo(p.x - 4.5, p.y + 3);
     ctx.closePath();
     ctx.fill();
+
     if (p.name) {
       ctx.font = '600 11px "Archivo Variable", Archivo, sans-serif';
       ctx.fontStretch = 'condensed';
@@ -258,6 +301,7 @@ export function drawPeaks(ctx: CanvasRenderingContext2D, peaks: Terrain['peaks']
       ctx.globalAlpha = 1;
     }
   }
+
   ctx.restore();
 }
 
@@ -271,5 +315,6 @@ export function fitCanvas(canvas: HTMLCanvasElement) {
   canvas.height = Math.round(h * dpr);
   const ctx = canvas.getContext('2d')!;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
   return { ctx, w, h, dpr };
 }

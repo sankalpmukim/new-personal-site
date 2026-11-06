@@ -4,6 +4,7 @@ import type { APIContext } from 'astro';
 
 export async function GET(context: APIContext) {
   const articles = (await getCollection('articles', (a) => !a.data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
   return rss({
     title: 'Sankalp Mukim',
     description: 'Articles by Sankalp Mukim',

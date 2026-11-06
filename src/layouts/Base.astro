@@ -11,17 +11,30 @@ interface Props {
   type?: 'website' | 'article' | 'profile';
   published?: Date;
   noindex?: boolean;
-  jsonLd?: Record<string, unknown>;
+  jsonLd?: JsonLdNode;
 }
+
+type JsonLdValue = string | number | boolean | JsonLdValue[] | { [key: string]: JsonLdValue };
+
+type JsonLdNode = { '@type': string; [key: string]: JsonLdValue };
+
 const { title, description = person.intro, image = '/og/default.png', type = 'website', published, noindex = false, jsonLd } = Astro.props;
+
 const siteName = person.name;
+
 const fullTitle = title ? `${title} | ${siteName}` : `${siteName}, software engineer`;
+
 // keep meta descriptions inside what search results display
 const metaDescription = description.length > 160 ? description.slice(0, 157).replace(/\s+\S*$/, '') + '…' : description;
+
 const canonical = new URL(Astro.url.pathname.replace(/\/$/, '') || '/', Astro.site).href;
+
 const imageUrl = new URL(image, Astro.site).href;
+
 const imageAlt = image === '/og/default.png' ? `${siteName}, software engineer, over a topographic aeronautical chart` : `${title}, an article by ${siteName}`;
+
 const sameAs = [links.github, links.linkedin, links.twitter, links.instagram];
+
 const personLd = {
   '@type': 'Person',
   '@id': new URL('/#person', Astro.site).href,
@@ -34,6 +47,7 @@ const personLd = {
   image: new URL('/portrait.jpg', Astro.site).href,
   sameAs,
 };
+
 const graph = [
   { '@type': 'WebSite', '@id': new URL('/#website', Astro.site).href, url: Astro.site?.href, name: siteName, publisher: { '@id': personLd['@id'] } },
   personLd,
@@ -96,6 +110,7 @@ const graph = [
     </div>
     <script>
       import { initScrollPelicans } from '../scripts/pelicans-scroll';
+
       initScrollPelicans();
     </script>
   </body>

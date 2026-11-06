@@ -25,6 +25,7 @@ export type PelicanPalette = {
 export function pelicanPalette(): PelicanPalette {
   const cs = getComputedStyle(document.documentElement);
   const v = (n: string, f: string) => cs.getPropertyValue(n).trim() || f;
+
   return {
     ink: v('--pel-ink', '#142A4C'),
     body: v('--pel-body', '#FFFFFF'),
@@ -37,12 +38,19 @@ export function pelicanPalette(): PelicanPalette {
 }
 
 const R_WHEEL = 17;
+
 const REAR = { x: -33, y: -R_WHEEL };
+
 const FRONT = { x: 37, y: -R_WHEEL };
+
 const BB = { x: 0, y: -15 };
+
 const SEAT = { x: -10, y: -50 };
+
 const HEAD = { x: 27, y: -46 };
+
 const BAR = { x: 31, y: -58 };
+
 const CRANK = 7.5;
 
 function wheel(ctx: CanvasRenderingContext2D, cx: number, cy: number, rot: number, p: PelicanPalette) {
@@ -56,11 +64,13 @@ function wheel(ctx: CanvasRenderingContext2D, cx: number, cy: number, rot: numbe
   ctx.lineWidth = 0.8;
   ctx.globalAlpha = 0.7;
   ctx.beginPath();
+
   for (let i = 0; i < 6; i++) {
     const a = rot + (i * Math.PI) / 3;
     ctx.moveTo(0, 0);
     ctx.lineTo(Math.cos(a) * R_WHEEL, Math.sin(a) * R_WHEEL);
   }
+
   ctx.stroke();
   ctx.globalAlpha = 1;
   ctx.fillStyle = p.ink;
@@ -81,6 +91,7 @@ function ik(hip: { x: number; y: number }, foot: { x: number; y: number }, l1: n
   // knee forward (towards +x): pick the solution with larger x
   const k1 = { x: hip.x + Math.cos(a - alpha) * l1, y: hip.y + Math.sin(a - alpha) * l1 };
   const k2 = { x: hip.x + Math.cos(a + alpha) * l1, y: hip.y + Math.sin(a + alpha) * l1 };
+
   return k1.x > k2.x ? k1 : k2;
 }
 
@@ -239,6 +250,7 @@ export function drawPelican(ctx: CanvasRenderingContext2D, pose: PelicanPose, p:
 
   // eye
   const eye = pose.eye ?? 'normal';
+
   if (eye === 'x') {
     ctx.lineWidth = 1.6;
     ctx.beginPath();
@@ -268,6 +280,7 @@ export function drawPelican(ctx: CanvasRenderingContext2D, pose: PelicanPose, p:
   ctx.lineWidth = 1.8;
   ctx.beginPath();
   ctx.moveTo(-18, -70);
+
   if (pose.noHands || flap > 0) {
     // wing flung up and back, flailing
     const lift = 10 + flap * 16;
@@ -281,6 +294,7 @@ export function drawPelican(ctx: CanvasRenderingContext2D, pose: PelicanPose, p:
     ctx.lineTo(BAR.x + 1, BAR.y - bob + 7);
     ctx.quadraticCurveTo(6, -62, -10, -60);
   }
+
   ctx.closePath();
   ctx.fill();
   ctx.stroke();
@@ -305,6 +319,7 @@ export function drawPelican(ctx: CanvasRenderingContext2D, pose: PelicanPose, p:
 /** Pose helper for a riding pelican at a given travelled distance. */
 export function ridingPose(distance: number, t: number, speed: number): PelicanPose {
   const crank = distance / 9;
+
   return {
     crank,
     wheel: distance / R_WHEEL,

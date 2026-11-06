@@ -4,13 +4,16 @@ import ChartBand from '../components/ChartBand.astro';
 import FlightStrip from '../components/FlightStrip.astro';
 import StripKey from '../components/StripKey.astro';
 import { projects, kindLabels, type StripKind } from '../data/site';
+
 const order: StripKind[] = ['tool', 'learning', 'client', 'upstream'];
+
 const blurbs: Record<StripKind, string> = {
   tool: 'Things I shipped and maintain. Some have a few hundred users; some have exactly one.',
   learning: 'Rebuilding things from scratch until they stop being magic.',
   client: 'Paid freelance work, all live.',
   upstream: 'Pull requests to other people’s projects.',
 };
+
 const says: Record<StripKind, string> = {
   tool: 'Can any of these catch fish?',
   learning: 'I also learn by building. Mostly bicycles.',

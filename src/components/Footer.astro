@@ -33,7 +33,10 @@ import { aiObstacles, links, person } from '../data/site';
 
 <script>
   import { initPelicanRun } from '../scripts/pelican-run';
+
   const root = document.querySelector<HTMLElement>('[data-run]');
+
   const stage = document.querySelector<HTMLElement>('[data-run-stage]');
+
   if (root && stage) initPelicanRun(stage, JSON.parse(root.dataset.obstacles || '[]'));
 </script>

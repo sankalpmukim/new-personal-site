@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import ChartBand from '../../components/ChartBand.astro';
 import ArticleList from '../../components/ArticleList.astro';
+
 const articles = (await getCollection('articles', (a) => !a.data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 <Base title="Articles" description="Writing on infrastructure, TypeScript, AWS costs, aviation, and one very thorough sitcom analysis.">

@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import ChartBand from '../components/ChartBand.astro';
 import { certifications } from '../data/site';
+
 const groups = [...new Set(certifications.map((c) => c.group))];
 ---
 <Base title="Certifications" description="Sankalp Mukim’s certifications: AWS Certified Solutions Architect – Associate (SAA-C03), networking fundamentals and NGINX fundamentals.">

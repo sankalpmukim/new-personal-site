@@ -1,7 +1,10 @@
 ---
 import type { Project } from '../data/site';
+
 interface Props { p: Project }
+
 const { p } = Astro.props;
+
 const ext = (h: string) => h.startsWith('http');
 ---
 <li class="strip" data-kind={p.kind}>

@@ -11,14 +11,16 @@ Package manager is **pnpm**.
 - `pnpm preview`: serve the built `dist/`
 - `pnpm check`: `astro check`, which type-checks `.astro` and `.ts` files with the strict tsconfig
 - `pnpm lint`: `oxlint` with the vendored anti-slop plugin (`oxlint.config.ts`)
+- `pnpm fmt`: write Oxfmt output (`oxfmt.config.ts`)
+- `pnpm fmt:check`: detect files that are not formatted
 
-The repo has no test suite and no formatter. `pnpm check`, `pnpm lint`, plus a build are the verification step. The site deploys to Vercel (`.vercel/` is linked to the `new-personal-site` project).
+The repo has no test suite. `pnpm check`, `pnpm lint`, `pnpm fmt:check`, plus a build are the verification step. The site deploys to Vercel (`.vercel/` is linked to the `new-personal-site` project).
 
 `pnpm-workspace.yaml` pins `@emnapi/runtime` to 1.11.3 because the 2.0 betas crash `astro check` on Node 26. Leave that override in place when you bump dependencies. Dependency versions are pinned exactly on purpose, and `minimumReleaseAgeExclude` lists the packages that are allowed to bypass pnpm's release-age gate.
 
 ## Official documentation
 
-No official agent skills exist for the core stack, so consult the makers' docs when unsure about an API instead of improvising: Astro — https://docs.astro.build; TypeScript — https://www.typescriptlang.org/docs/; MDX — https://mdxjs.com; pnpm — https://pnpm.io; Shiki — https://shiki.style; sharp — https://sharp.pixelplumbing.com; Oxlint — https://oxc.rs/docs/guide/usage/linter.html. (Vercel is covered by the `deploy-to-vercel` and `web-design-guidelines` skills in `.agents/skills/`.)
+No official agent skills exist for the core stack, so consult the makers' docs when unsure about an API instead of improvising: Astro — https://docs.astro.build; TypeScript — https://www.typescriptlang.org/docs/; MDX — https://mdxjs.com; pnpm — https://pnpm.io; Shiki — https://shiki.style; sharp — https://sharp.pixelplumbing.com; Oxlint — https://oxc.rs/docs/guide/usage/linter.html; Oxfmt — https://oxc.rs/docs/guide/usage/formatter.html. (Vercel is covered by the `deploy-to-vercel` and `web-design-guidelines` skills in `.agents/skills/`.)
 
 ## Architecture
 

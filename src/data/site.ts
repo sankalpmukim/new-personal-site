@@ -91,7 +91,9 @@ export const logbook: LogEntry[] = [
 ];
 
 // Projects, rendered as ATC flight progress strips.
-export type StripKind = 'tool' | 'learning' | 'client' | 'upstream';
+export const stripKinds = ['tool', 'learning', 'client', 'upstream'] as const;
+
+export type StripKind = (typeof stripKinds)[number];
 
 export type Project = {
   callsign: string; // short ident shown on the strip

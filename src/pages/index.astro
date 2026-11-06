@@ -11,6 +11,7 @@ import { person, links, projects, peaks } from '../data/site';
 const articles = (await getCollection('articles', (a) => !a.data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 4);
+
 const featured = projects.filter((p) => p.featured);
 ---
 <Base>
@@ -104,7 +105,9 @@ const featured = projects.filter((p) => p.featured);
 
 <script>
   import { initAtc } from '../scripts/atc';
+
   const root = document.querySelector<HTMLElement>('[data-atc]');
+
   if (root) {
     const start = () => initAtc(root, JSON.parse(root.dataset.peaks || '[]'));
     // wait briefly for Archivo so chart labels render in the right face, but never block on it
