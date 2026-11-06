@@ -4,7 +4,7 @@ import ChartBand from '../components/ChartBand.astro';
 import { certifications } from '../data/site';
 const groups = [...new Set(certifications.map((c) => c.group))];
 ---
-<Base title="Certifications" description="Professional certifications held by Sankalp Mukim.">
+<Base title="Certifications" description="Sankalp Mukim’s certifications: AWS Certified Solutions Architect – Associate (SAA-C03), networking fundamentals and NGINX fundamentals.">
   <ChartBand slot="header" title="Certifications" intro="The paperwork. Pilot licence still pending." seed={21} />
   <section class="section wrap" data-pelican="wheelie" data-pelican-says="I am certified. Certified pelican.">
     {groups.map((g) => (

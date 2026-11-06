@@ -8,6 +8,6 @@ export async function GET(context: APIContext) {
     title: 'Sankalp Mukim',
     description: 'Articles by Sankalp Mukim',
     site: context.site!,
-    items: articles.map((a) => ({ title: a.data.title, description: a.data.description, pubDate: a.data.date, link: `/articles/${a.id}/` })),
+    items: articles.map((a) => ({ title: a.data.title, description: a.data.description, pubDate: a.data.date, link: `/articles/${a.id}` })),
   });
 }

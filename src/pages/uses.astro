@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import ChartBand from '../components/ChartBand.astro';
 import { uses } from '../data/site';
 ---
-<Base title="Uses" description="The tools, agents and gear Sankalp Mukim uses every day.">
+<Base title="Uses" description="The AI coding agents, models, terminal tools, flight-sim gear and desk setup Sankalp Mukim uses every day.">
   <ChartBand slot="header" title="Uses" intro="Agents, terminals, a flight-sim joystick, and whatever else is on the desk." seed={33} />
   <section class="section wrap" data-pelican="tumble">
     {uses.map((g) => (

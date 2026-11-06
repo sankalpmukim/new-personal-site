@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import ChartBand from '../../components/ChartBand.astro';
+import fs from 'node:fs';
 
 export async function getStaticPaths() {
   const articles = await getCollection('articles');
@@ -11,9 +12,25 @@ const { article } = Astro.props;
 const { Content } = await render(article);
 const words = article.body?.split(/\s+/).length ?? 0;
 const minutes = Math.max(1, Math.round(words / 230));
+const ogPath = `/og/${article.id}.png`;
+const image = fs.existsSync(`public${ogPath}`) ? ogPath : '/og/default.png';
+const url = new URL(`/articles/${article.id}`, Astro.site).href;
+const jsonLd = {
+  '@type': 'BlogPosting',
+  '@id': `${url}#article`,
+  headline: article.data.title,
+  description: article.data.description,
+  datePublished: article.data.date.toISOString(),
+  url,
+  mainEntityOfPage: url,
+  image: new URL(image, Astro.site).href,
+  wordCount: words,
+  author: { '@id': new URL('/#person', Astro.site).href },
+  publisher: { '@id': new URL('/#person', Astro.site).href },
+};
 const date = article.data.date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 ---
-<Base title={article.data.title} description={article.data.description}>
+<Base title={article.data.title} description={article.data.description} type="article" published={article.data.date} image={image} jsonLd={jsonLd}>
   <ChartBand slot="header" title={article.data.title} seed={article.id.length * 7} long>
     <p class="article-meta"><a href="/articles"><span class="halo">All articles</span></a><time datetime={article.data.date.toISOString()}><span class="halo">{date}</span></time><span class="halo">{minutes} min read</span></p>
   </ChartBand>
