@@ -85,7 +85,7 @@ function ik(hip: { x: number; y: number }, foot: { x: number; y: number }, l1: n
 }
 
 function leg(ctx: CanvasRenderingContext2D, hip: { x: number; y: number }, pedal: { x: number; y: number }, p: PelicanPalette, far: boolean) {
-  const knee = ik(hip, pedal, 19, 21);
+  const knee = ik(hip, pedal, 23, 25);
   ctx.save();
   ctx.globalAlpha = far ? 0.55 : 1;
   ctx.strokeStyle = p.leg;
@@ -269,11 +269,12 @@ export function drawPelican(ctx: CanvasRenderingContext2D, pose: PelicanPose, p:
   ctx.beginPath();
   ctx.moveTo(-18, -70);
   if (pose.noHands || flap > 0) {
-    const lift = 18 + flap * 22;
-    ctx.quadraticCurveTo(0, -78 - lift, 22, -84 - lift * 0.8);
-    ctx.lineTo(16, -76 - lift * 0.5);
-    ctx.lineTo(19, -72 - lift * 0.4);
-    ctx.quadraticCurveTo(4, -66, -10, -60);
+    // wing flung up and back, flailing
+    const lift = 10 + flap * 16;
+    ctx.quadraticCurveTo(-30, -82 - lift * 0.4, -34, -92 - lift);
+    ctx.lineTo(-26, -88 - lift * 0.7);
+    ctx.lineTo(-24, -94 - lift * 0.8);
+    ctx.quadraticCurveTo(-14, -80, -2, -72);
   } else {
     ctx.quadraticCurveTo(6, -76, BAR.x + 4, BAR.y - bob + 1);
     ctx.lineTo(BAR.x - 1, BAR.y - bob + 5);

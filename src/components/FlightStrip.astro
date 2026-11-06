@@ -22,7 +22,7 @@ const ext = (h: string) => h.startsWith('http');
     ) : p.metric ? (
       <><span>Traffic</span><b>{p.metric}</b></>
     ) : (
-      <><span>Status</span><b>Live</b></>
+      <><span>Status</span><b>{p.href.includes('github.com') ? 'Open source' : 'Live'}</b></>
     )}
   </div>
 </li>
