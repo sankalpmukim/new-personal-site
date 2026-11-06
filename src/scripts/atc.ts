@@ -356,6 +356,9 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation:
     setMode('attract');
     planes = [];
     pending = [];
+    popups = [];
+    crash = null;
+    active = null;
     statusEl.textContent = '';
     nextSpawn = clock;
   }

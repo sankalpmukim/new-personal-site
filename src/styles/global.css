@@ -460,11 +460,14 @@ p {
   place-items: center;
   z-index: 5;
   padding: var(--gutter);
+  /* let clicks reach the legend's "Hand back controls" button behind it */
+  pointer-events: none;
 }
 .atc-over[hidden] {
   display: none;
 }
 .atc-over-card {
+  pointer-events: auto;
   background: var(--strip);
   border: 2px solid var(--ink);
   padding: 1.5rem 1.75rem;
