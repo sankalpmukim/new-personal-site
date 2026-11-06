@@ -439,7 +439,7 @@ export type Photo = { src?: string; alt: string; caption: string; place?: string
 
 export const photos: Photo[] = [
   { src: '/photos/gallery-kuari-campsite.jpg', alt: 'Tents at the Kuari Pass campsite glowing in golden-hour light', caption: 'Kuari Pass camp at golden hour', place: 'Kuari Pass, Uttarakhand', tall: true },
-  { src: '/photos/gallery-kuari-viewpoint.jpg', alt: 'Looking out over the Lord Curzon Trail from the Kuari Pass viewpoint', caption: 'Looking out on the Lord Curzon Trail', place: 'Kuari Pass', tall: true },
+  { src: '/photos/gallery-kuari-viewpoint.jpg', alt: 'A person looking out at snow-covered Himalayan peaks on the Kuari Pass trek', caption: 'Looking out on the Lord Curzon Trail', place: 'Kuari Pass', tall: true },
   { src: '/photos/gallery-train-coding.jpg', alt: 'A laptop open on a train berth, code on screen', caption: 'Building on a 33-hour train', place: 'KSR → NZM, Mar 2026' },
   { src: '/photos/gallery-india-gate-dog.jpg', alt: 'A dog resting in front of parked bicycles near India Gate', caption: 'Bicycle convoy, one very relaxed dog', place: 'India Gate, Delhi' },
   { src: '/photos/gallery-night-bike.jpg', alt: 'A mountain bike after a dusty evening ride', caption: 'The bike, after a dusty ride', place: 'Delhi NCR', tall: true },
@@ -448,16 +448,16 @@ export const photos: Photo[] = [
   { src: '/photos/gallery-train-platform.jpg', alt: 'A train platform at night under the lights', caption: 'Night train somewhere on the map', place: 'Indian Railways' },
 ];
 
-// Peaks painted on the chart. Only Kuari Pass (Jan 2025) is confirmed done —
-// the rest are a mix of done and aspirational, not a checklist. No invented entries.
-export const peaks = [
-  { name: 'Kuari Pass', elevation: 4270 },
-  { name: 'Kedarkantha', elevation: 3810 },
-  { name: 'Hampta Pass', elevation: 4270 },
-  { name: 'Brahmatal', elevation: 3734 },
-  { name: 'Roopkund', elevation: 5029 },
-  { name: 'Sar Pass', elevation: 4220 },
-  { name: 'Har Ki Dun', elevation: 3566 },
+// Labels painted on the hero chart. Kuari Pass is feed-evidenced (Jan 2025); the
+// rest come from Instagram highlight titles. Trek places, not summits logged —
+// and no elevations, because no number here was ever sourced.
+export type Peak = { name: string; elevation?: number };
+
+export const peaks: Peak[] = [
+  { name: 'Kuari Pass' },
+  { name: 'Hampta Pass' },
+  { name: 'Bhrigu Lake' },
+  { name: 'Gaumukh Tapovan' },
 ];
 
 // Obstacles in the pelican game. Drop a real logo at `img` (e.g. /ai-logos/openai.svg)

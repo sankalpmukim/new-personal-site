@@ -83,7 +83,7 @@ export type TerrainOptions = {
   valleys?: { x: number; y: number; r: number }[];
   /** 0..1 how mountainous */
   relief?: number;
-  peakNames?: { name: string; elevation: number }[];
+  peakNames?: { name: string; elevation?: number }[];
   maxPeaks?: number;
   cell?: number;
 };
@@ -295,9 +295,13 @@ export function drawPeaks(ctx: CanvasRenderingContext2D, peaks: Terrain['peaks']
       ctx.fontStretch = 'condensed';
       ctx.globalAlpha = 0.85;
       ctx.fillText(p.name, p.x + 8, p.y + 1);
+      ctx.globalAlpha = 1;
+    }
+
+    if (p.elevation != null) {
       ctx.font = '500 10px "Archivo Variable", Archivo, sans-serif';
       ctx.globalAlpha = 0.6;
-      ctx.fillText(`${p.elevation?.toLocaleString('en-US')} m`, p.x + 8, p.y + 13);
+      ctx.fillText(`${p.elevation.toLocaleString('en-US')} m`, p.x + 8, p.y + 13);
       ctx.globalAlpha = 1;
     }
   }

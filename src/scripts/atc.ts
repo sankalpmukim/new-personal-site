@@ -49,7 +49,7 @@ function angDiff(a: number, b: number) {
   return d;
 }
 
-export function initAtc(root: HTMLElement, peakNames: { name: string; elevation: number }[]) {
+export function initAtc(root: HTMLElement, peakNames: { name: string; elevation?: number }[]) {
   const canvas = root.querySelector<HTMLCanvasElement>('[data-atc-canvas]')!;
   const scoreEl = root.querySelector<HTMLElement>('[data-atc-score]')!;
   const bestEl = root.querySelector<HTMLElement>('[data-atc-best]')!;
