@@ -441,6 +441,7 @@ export const photos: Photo[] = [
   { src: '/photos/gallery-kuari-campsite.jpg', alt: 'Tents at the Kuari Pass campsite glowing in golden-hour light', caption: 'Kuari Pass camp at golden hour', place: 'Kuari Pass, Uttarakhand', tall: true },
   { src: '/photos/gallery-kuari-viewpoint.jpg', alt: 'A person looking out at snow-covered Himalayan peaks on the Kuari Pass trek', caption: 'Looking out on the Lord Curzon Trail', place: 'Kuari Pass', tall: true },
   { src: '/photos/gallery-kuari2-snow-trail.jpg', alt: 'A forest trail under snow on the Kuari Pass trek', caption: 'Forest trail under snow', place: 'Kuari Pass, Uttarakhand' },
+  { src: '/photos/gallery-kuari-summit-day.jpg', alt: 'A trekker ascending an alpine meadow on the Kuari Pass trek; on-frame story text reads “Day 4 - Summit day.”', caption: 'The frame the story called summit day', place: 'Kuari Pass, Uttarakhand' },
   { src: '/photos/gallery-hampta-done.jpg', alt: 'Trek group holding an IndiaHikes DONE! banner at Hampta Pass, about 14,100 ft', caption: 'DONE! at Hampta Pass', place: 'Hampta Pass, Himachal Pradesh' },
   { src: '/photos/gallery-hampta-jwara.jpg', alt: 'Jwara campsite sign on the Hampta Pass trek, reading 11,005 ft / 3,354 m', caption: 'Jwara camp, 11,005 ft', place: 'Hampta Pass trek, Himachal Pradesh' },
   { src: '/photos/gallery-bhrigu-tent.jpg', alt: 'A yellow tent pitched at a mountain camp on the Bhrigu Lake trek', caption: 'Camp on the Bhrigu Lake trek', place: 'Bhrigu Lake trek, Himachal Pradesh' },
