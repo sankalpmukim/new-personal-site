@@ -438,22 +438,22 @@ export const uses: { group: string; items: { name: string; href?: string; note: 
 export type Photo = { src?: string; alt: string; caption: string; place?: string; tall?: boolean };
 
 export const photos: Photo[] = [
-  { src: '/photos/image-1.jpg', alt: 'View from the left seat of a light aircraft over a coastline', caption: 'Left seat, coastline below', place: 'Somewhere over the water', tall: true },
-  { src: '/photos/image-2.jpg', alt: 'A dog resting in front of parked bicycles near India Gate', caption: 'Bicycle convoy, one very relaxed dog', place: 'India Gate, Delhi' },
-  { src: '/photos/image-5.jpg', alt: 'A laptop lid covered in developer stickers', caption: 'The laptop, fully decorated', place: 'Desk', tall: true },
-  { src: '/photos/image-4.jpg', alt: 'A mountain bike in warm light', caption: 'The bike that inspired the pelicans', place: 'Home', tall: true },
-  { src: '/photos/image-3.jpg', alt: 'A minimal desk setup with a monitor that says do more', caption: 'Desk, aspirational edition', place: 'Desk' },
-  { alt: 'Placeholder for a trek photo', caption: 'Placeholder: summit photo', place: 'Add a trek' },
-  { alt: 'Placeholder for a trek photo', caption: 'Placeholder: campsite at dusk', place: 'Add a trek', tall: true },
-  { alt: 'Placeholder for a travel photo', caption: 'Placeholder: window seat', place: 'Add a flight' },
-  { alt: 'Placeholder for a travel photo', caption: 'Placeholder: airport spotting', place: 'Add a trip' },
+  { src: '/photos/gallery-kuari-campsite.jpg', alt: 'Tents at the Kuari Pass campsite glowing in golden-hour light', caption: 'Kuari Pass camp at golden hour', place: 'Kuari Pass, Uttarakhand', tall: true },
+  { src: '/photos/gallery-kuari-viewpoint.jpg', alt: 'Looking out over the Lord Curzon Trail from the Kuari Pass viewpoint', caption: 'Looking out on the Lord Curzon Trail', place: 'Kuari Pass', tall: true },
+  { src: '/photos/gallery-train-coding.jpg', alt: 'A laptop open on a train berth, code on screen', caption: 'Building on a 33-hour train', place: 'KSR → NZM, Mar 2026' },
+  { src: '/photos/gallery-india-gate-dog.jpg', alt: 'A dog resting in front of parked bicycles near India Gate', caption: 'Bicycle convoy, one very relaxed dog', place: 'India Gate, Delhi' },
+  { src: '/photos/gallery-night-bike.jpg', alt: 'A mountain bike after a dusty evening ride', caption: 'The bike, after a dusty ride', place: 'Delhi NCR', tall: true },
+  { src: '/photos/gallery-kuari-book.jpg', alt: 'A paperback of The Hundred-Year-Old Man resting against mountain scenery at Kuari Pass', caption: 'Hundred-Year-Old Man, mountain edition', place: 'Kuari Pass', tall: true },
+  { src: '/photos/gallery-graduation.jpg', alt: 'Graduation day at VIT Vellore', caption: 'VIT graduation, 2024', place: 'Vellore' },
+  { src: '/photos/gallery-train-platform.jpg', alt: 'A train platform at night under the lights', caption: 'Night train somewhere on the map', place: 'Indian Railways' },
 ];
 
-// Peaks painted on the chart. Placeholder treks; swap for the ones you have done.
+// Peaks painted on the chart. Only Kuari Pass (Jan 2025) is confirmed done —
+// the rest are a mix of done and aspirational, not a checklist. No invented entries.
 export const peaks = [
+  { name: 'Kuari Pass', elevation: 4270 },
   { name: 'Kedarkantha', elevation: 3810 },
   { name: 'Hampta Pass', elevation: 4270 },
-  { name: 'Kuari Pass', elevation: 3640 },
   { name: 'Brahmatal', elevation: 3734 },
   { name: 'Roopkund', elevation: 5029 },
   { name: 'Sar Pass', elevation: 4220 },
