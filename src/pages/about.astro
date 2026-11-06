@@ -4,13 +4,13 @@ import ChartBand from '../components/ChartBand.astro';
 import Logbook from '../components/Logbook.astro';
 import { links, person } from '../data/site';
 ---
-<Base title="About" description="Sankalp Mukim is a full-stack software engineer at IBM Cloud building AI agents for incident triage. Background, work history and contact." type="profile">
+<Base title="About" description="Sankalp Mukim is a mostly-TypeScript full-stack generalist and software engineer at IBM Cloud, main author of its AI Ops agent platform. Background, work history and contact." type="profile">
   <ChartBand slot="header" title="About" intro="Engineer, would-be pilot, trekker. Based in Delhi NCR." seed={5} />
 
   <section class="section wrap" data-pelican="peek" data-pelican-says="Is this the about page? About me?">
     <div class="about-grid">
       <div class="prose">
-        <p>I’m a generalist full-stack engineer at IBM Cloud. Most days I build AI agents that solve operational problems, including agents that triage and resolve incidents in IBM Cloud before a human has to. I’m a nerd at heart: I like taking a concept apart until it stops feeling like magic, and I keep picking up new agent tricks to make myself faster.</p>
+        <p>I’m a mostly-TypeScript full-stack generalist at IBM Cloud. My main work is the AIOps Bot Platform — harness, inference, observability and analytics — which production IBM Cloud AI Ops agents run on, to the tune of roughly 1.5M LLM calls and 176k agent conversations a month. I also build ask-iaas, a chatbot L1 support engineers use to debug IaaS incidents, and BobOps, a VS Code extension that puts support engineers’ logs, tickets and cases in one place. I’m a nerd at heart: I like taking a concept apart until it stops feeling like magic, and I keep picking up new agent tricks to make myself faster.</p>
 
         <h2>The beginning</h2>
         <p>I wrote my first program around age 12, in QBasic, in my school’s computer lab. The joy of compiling and running something I wrote myself was unlike anything I’d felt. At 15 I was building robots after school, and represented my school at international robotics competitions in Singapore, writing drag-and-drop programs that compiled to C and ran on microcontrollers.</p>
@@ -20,7 +20,7 @@ import { links, person } from '../data/site';
 
         <h2>The path here</h2>
         <p>I studied at VIT Vellore, started with Python and Django, fell for JavaScript while wiring up DOM logic, then React, Next.js, and eventually TypeScript on the backend. Internships took me through IoT dashboards, a trekking company (Indiahikes, whose treks I also go on), backend work and a YC startup, then ION, and now IBM.</p>
-        <p>These days the work is agents, MCP servers and infrastructure. On the side I ship small tools with real users, like <a href="https://github.com/sankalpmukim/aws-accounts-manager">AWS Accounts Manager</a>, and I like learning by rebuilding things from scratch: an <a href="https://github.com/sankalpmukim/httpfromtcp">HTTP server on raw TCP</a> that still serves one of my domains, and <a href="https://github.com/sankalpmukim/my-react">my own React</a>.</p>
+        <p>These days the work is agents, and the plumbing around them: a drag-and-drop agent builder I author and maintain, runbook and knowledge-base search over MCP for incident workflows, a Go load balancer for LLM inference, Vulcan (a self-hostable PaaS for apps and databases), and a public open-source contribution to IBM’s MCP registry. On the side I ship small tools with real users, like <a href="https://github.com/sankalpmukim/aws-accounts-manager">AWS Accounts Manager</a>, and I like learning by rebuilding things from scratch: an <a href="https://github.com/sankalpmukim/httpfromtcp">HTTP server on raw TCP</a> that still serves one of my domains, and <a href="https://github.com/sankalpmukim/my-react">my own React</a>.</p>
 
         <h2>Off the clock</h2>
         <p>Airplanes have fascinated me since I was a kid. For now that means X-Plane with a joystick and real-world procedures, flying on VATSIM, and <a href="/articles/aspiring-pilots-journal">a journal</a> about working towards flying for real. I also love the mountains and have done a lot of treks across the Indian Himalaya. And cricket, with a <a href="https://viratkohlicenturytracker.vercel.app">Kohli century tracker</a> to prove it.</p>
@@ -28,7 +28,6 @@ import { links, person } from '../data/site';
       <aside class="about-aside">
         <figure class="portrait">
           <img src="/portrait.jpg" alt="Portrait of Sankalp Mukim" width="400" height="400" />
-          <figcaption>Placeholder portrait. Swap for a recent one.</figcaption>
         </figure>
         <div class="facts">
           <h3>Contact</h3>

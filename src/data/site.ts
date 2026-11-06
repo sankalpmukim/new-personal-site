@@ -7,7 +7,7 @@ export const person = {
   homeIcao: 'VIDP',
   email: 'sankalpmukim@gmail.com',
   intro:
-    'I build AI agents at IBM Cloud that triage and resolve incidents before a human has to wake up. Off the clock I chase mountains, airplanes and the occasional very silly side project.',
+    'Mostly-TypeScript full-stack generalist. At IBM Cloud I’m the main author of the agent platform that production AI Ops agents run on. Off the clock I chase mountains, airplanes and the occasional very silly side project.',
 };
 
 export const links = {
@@ -45,7 +45,8 @@ export const logbook: LogEntry[] = [
     role: 'Software Engineer',
     from: '2025-03',
     to: null,
-    remarks: 'IBM Cloud. AI agents that triage and resolve production incidents; MCP servers for internal docs.',
+    remarks:
+      'IBM Cloud AI Ops. Main author of the agent platform behind production incident agents (~1.5M LLM calls, ~176k conversations a month); ask-iaas for L1 support; the BobOps VS Code extension.',
     logo: '/logos/IBM.png',
   },
   {
@@ -53,7 +54,8 @@ export const logbook: LogEntry[] = [
     role: 'Software Engineer',
     from: '2024-01',
     to: '2025-03',
-    remarks: 'Full-stack engineering on trading-domain products.',
+    remarks:
+      'Full-stack engineering on trading-domain products. Cut AWS spend by about half and owned IaC, CI/CD, database migrations and the monitoring suite.',
     logo: '/logos/iongroup_logo.jpeg',
   },
   {
@@ -136,7 +138,7 @@ export const projects: Project[] = [
     type: 'JavaScript',
     route: 'Any MCP client',
     remarks: 'Lets AI clients search IBM Cloud documentation. Upstreamed into IBM’s official MCP collection.',
-    metric: 'Merged into IBM/mcp',
+    metric: 'In IBM’s official MCP registry',
     href: 'https://github.com/sankalpmukim/ibm-cloud-docs-mcp-server',
     featured: true,
   },
@@ -232,7 +234,7 @@ export const projects: Project[] = [
     route: 'VPS, in production',
     remarks: 'An HTTP/1.1 server written from scratch on raw TCP sockets. It still serves http.sankalpmukim.dev.',
     href: 'https://github.com/sankalpmukim/httpfromtcp',
-    links: [{ label: 'Live', href: 'http://http.sankalpmukim.dev' }],
+    links: [{ label: 'Live', href: 'https://http.sankalpmukim.dev' }],
     featured: true,
   },
   {
@@ -319,12 +321,12 @@ export const projects: Project[] = [
     status: 'merged',
   },
   {
-    callsign: 'IBM7',
-    name: 'IBM/mcp #7',
+    callsign: 'IBMREG',
+    name: 'IBM MCP registry',
     kind: 'upstream',
     type: 'JavaScript',
     route: 'IBM/mcp',
-    remarks: 'Added the IBM Cloud Docs MCP Server to IBM’s official collection.',
+    remarks: 'Public open-source contribution: the IBM Cloud Docs MCP server, added to IBM’s official registry.',
     href: 'https://github.com/IBM/mcp/pull/7',
     status: 'merged',
   },
@@ -427,9 +429,7 @@ export const uses: { group: string; items: { name: string; href?: string; note: 
   {
     group: 'Desk',
     items: [
-      { name: 'Placeholder: laptop', note: 'Replace with your current machine.' },
       { name: 'BenQ GW2480T, 24 inch', note: 'Height-adjustable, honest panel, no complaints in years.' },
-      { name: 'Placeholder: keyboard and mouse', note: 'Replace with current peripherals.' },
     ],
   },
 ];
