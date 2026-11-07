@@ -215,8 +215,10 @@ p {
   align-items: center;
   gap: 1.5rem;
   padding: 1.1rem var(--gutter);
+  width: 100%;
   max-width: calc(var(--max) + 8rem);
   margin-inline: auto;
+  min-width: 0;
 }
 .brand {
   display: inline-flex;
@@ -301,13 +303,26 @@ p {
     flex-wrap: wrap;
     gap: 0.5rem 1rem;
   }
+  .brand {
+    min-width: 0;
+    font-size: var(--fs-sm);
+  }
   .site-nav nav {
     order: 3;
-    width: 100%;
+    flex: 1 1 100%;
+    min-width: 0;
+    width: auto;
     margin-inline: calc(var(--gutter) * -1);
+  }
+  .route {
     padding-inline: var(--gutter);
-    width: calc(100% + var(--gutter) * 2);
-    overflow: hidden;
+    overscroll-behavior-x: contain;
+  }
+}
+
+@media (max-width: 400px) {
+  .resume-fmt {
+    display: none;
   }
 }
 
