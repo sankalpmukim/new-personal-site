@@ -7,7 +7,7 @@ const { p } = Astro.props;
 
 const ext = (h: string) => h.startsWith('http');
 ---
-<li class="strip" data-kind={p.kind}>
+<li class="strip" data-kind={p.kind} data-project={p.name}>
   <div class="strip-call">{p.callsign}<small>{p.type}</small></div>
   <div class="strip-main">
     <h3><a href={p.href} target={ext(p.href) ? '_blank' : undefined} rel={ext(p.href) ? 'noopener' : undefined}>{p.name}</a></h3>

@@ -2,7 +2,7 @@
 import '@fontsource-variable/archivo/wdth.css';
 import '../styles/global.css';
 import Footer from '../components/Footer.astro';
-import PostHog from '../components/posthog.astro';
+import PostHog from '../components/PostHog.astro';
 import { person, links } from '../data/site';
 
 interface Props {
@@ -111,7 +111,10 @@ const graph = [
       </div>
     </div>
     <script>
+      import { initLinkTracking } from '../scripts/analytics';
       import { initScrollPelicans } from '../scripts/pelicans-scroll';
+
+      initLinkTracking();
 
       initScrollPelicans();
     </script>

@@ -1,4 +1,5 @@
 // Pelican Run: a pelican on a bicycle jumping over AI company logos.
+import { secondsSince, track } from './analytics';
 import { drawPelican, pelicanPalette, ridingPose, type PelicanPalette } from './pelican';
 import { fitCanvas, readColors, type ChartColors } from './terrain';
 
@@ -56,6 +57,8 @@ export function initPelicanRun(root: HTMLElement, defs: ObstacleDef[]) {
   let crashT = 0;
   let overLine = OVER_LINES[0];
   let honkT = -1;
+  let runStartedAt = 0;
+  let attempts = 0;
   let inView = false;
   let raf = 0;
   let last = 0;
@@ -72,9 +75,12 @@ export function initPelicanRun(root: HTMLElement, defs: ObstacleDef[]) {
     if (state !== 'run') draw();
   }
 
-  function reset() {
-    window.posthog?.capture('pelican_run_started');
-    window.posthog?.logger?.info('pelican run started');
+  type Input = 'pointer' | 'keyboard';
+
+  function reset(input: Input) {
+    attempts++;
+    runStartedAt = performance.now();
+    track('pelican_run_started', { input, attempt: attempts, best_score: best, is_retry: state === 'over' });
     state = 'run';
     speed = 330;
     dist = 0;
@@ -86,9 +92,9 @@ export function initPelicanRun(root: HTMLElement, defs: ObstacleDef[]) {
     live.textContent = 'Riding. Press space or tap to jump.';
   }
 
-  function jump() {
+  function jump(input: Input) {
     if (state === 'idle' || (state === 'over' && (crashT > 0.5 || reduced))) {
-      reset();
+      reset(input);
 
       return;
     }
@@ -169,16 +175,18 @@ export function initPelicanRun(root: HTMLElement, defs: ObstacleDef[]) {
         const sc = Math.floor(dist / 10);
 
         const isNewBest = sc > best;
+        const previousBest = best;
 
         if (isNewBest) { best = sc; storeSet(BEST_KEY, String(best)); }
 
-        window.posthog?.capture('pelican_run_ended', {
+        track('pelican_run_ended', {
           score: sc,
           is_new_best: isNewBest,
-        });
-        window.posthog?.logger?.warn('pelican run ended', {
-          score: sc,
-          is_new_best: isNewBest,
+          previous_best: previousBest,
+          attempt: attempts,
+          duration_s: secondsSince(runStartedAt),
+          // which logo got the pelican
+          obstacle: o.def.name,
         });
         live.textContent = `${overLine} Score ${sc}. Press space or tap to ride again.`;
         break;
@@ -465,7 +473,7 @@ export function initPelicanRun(root: HTMLElement, defs: ObstacleDef[]) {
 
   canvas.addEventListener('pointerdown', (e) => {
     e.preventDefault();
-    jump();
+    jump('pointer');
     kick();
   });
   addEventListener('keydown', (e) => {
@@ -476,7 +484,7 @@ export function initPelicanRun(root: HTMLElement, defs: ObstacleDef[]) {
 
     if (!inView && document.activeElement !== canvas) return;
     e.preventDefault();
-    jump();
+    jump('keyboard');
     kick();
   });
 

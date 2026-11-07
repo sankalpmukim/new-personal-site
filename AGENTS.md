@@ -45,6 +45,13 @@ The whole site imitates an aeronautical sectional chart — new pages and sectio
 - `pelican.ts` / `pelican-run.ts` / `pelicans-scroll.ts` — the pelican art and the footer game (`Footer.astro`); scroll cameos trigger on any element with `data-pelican="cross|peek|wheelie|tumble|drop"` and optional `data-pelican-says="..."`.
 - Patterns every script keeps, and new code must too: honor `prefers-reduced-motion`, wrap every `localStorage` access in try/catch, and read the pelicans off-switch (`localStorage.pelicans === 'off'`, applied as `html[data-pelicans="off"]` by an inline script in `Base.astro` before first paint).
 
+## Analytics (PostHog)
+
+- `src/components/PostHog.astro` holds the official inline snippet and `posthog.init` config, rendered in the `<head>` of `Base.astro`. It covers product and web analytics, session replay (canvas recording on, because most of the site is canvas), heatmaps, dead clicks, web vitals, copy events and exception autocapture. Super properties `color_scheme`, `reduced_motion` and `pelicans` are registered in `loaded`, so they are on every event, including the first `$pageview`.
+- Env vars: `PUBLIC_POSTHOG_PROJECT_TOKEN`, `PUBLIC_POSTHOG_HOST` and the optional `PUBLIC_POSTHOG_UI_HOST` (see `.env.example`). With no token the snippet is skipped and nothing is sent. Vercel sets them for **Production only**, so preview deploys do not track.
+- `vercel.json` proxies `/relay/*` to PostHog US so tracker blockers leave it alone, and production uses `PUBLIC_POSTHOG_HOST=/relay`. The rewrites use the regex `(.*)` form on purpose: `:path*` does not match the trailing-slash endpoints (`/e/`, `/flags/`, `/s/`) that posthog-js calls.
+- Custom events go through `track()` / `registerProps()` in `src/scripts/analytics.ts`, never `window.posthog` directly. The wrappers are no-ops without PostHog and swallow errors. Event names are snake_case `object_verb`: `atc_game_started|stopped|ended`, `pelican_run_started|ended`, `pelican_display_toggled`, `article_finished`, `page_not_found`, and the delegated link events `resume_downloaded`, `contact_link_clicked`, `project_link_clicked`, `outbound_link_clicked`, `rss_link_clicked`. When you add a feature, add its event the same way.
+
 ## Conventions
 
 - Conventional commits (`feat:`, `fix:`, `chore:`, `perf:`) directly on `main`.

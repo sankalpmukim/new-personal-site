@@ -1,0 +1,69 @@
+---
+// PostHog: product analytics, web analytics, session replay and error tracking.
+// Every variable is optional. With no token the snippet is skipped, window.posthog stays
+// undefined and the track() helpers in scripts/analytics.ts do nothing.
+const token = import.meta.env.PUBLIC_POSTHOG_PROJECT_TOKEN;
+
+// In production this is the same-origin proxy path from vercel.json (/relay), so tracker
+// blockers leave it alone. Locally it is https://us.i.posthog.com, because vercel.json
+// rewrites do not run under astro dev or preview.
+const apiHost = import.meta.env.PUBLIC_POSTHOG_HOST;
+
+// The PostHog app itself, used for toolbar and replay links when apiHost is a proxy path.
+const uiHost = import.meta.env.PUBLIC_POSTHOG_UI_HOST || 'https://us.posthog.com';
+
+const isDevelopment = import.meta.env.DEV;
+---
+<script is:inline define:vars={{ token, apiHost, uiHost, isDevelopment }}>
+  if (!token || !apiHost) {
+    const missingVariable = !token ? 'PUBLIC_POSTHOG_PROJECT_TOKEN' : 'PUBLIC_POSTHOG_HOST';
+
+    if (isDevelopment) {
+      console.error(new Error(`${missingVariable} variable required by PostHog is missing or un-configured, this causes events to be silently missed. This error stops appearing once ${missingVariable} is configured`));
+    }
+  } else {
+    // official PostHog web snippet: a queueing stub, then the SDK loads async from api_host
+    // oxlint-disable-next-line -- vendor-minified snippet
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split('.');2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement('script')).type='text/javascript',p.crossOrigin='anonymous',p.async=!0,p.src=s.api_host+'/static/array.js',(r=t.getElementsByTagName('script')[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a='posthog',u.people=u.people||[],Object.defineProperty(u,'toString',{configurable:!0,enumerable:!0,writable:!0,value:function(t){var e='posthog';return'posthog'!==a&&(e+='.'+a),t||(e+=' (stub)'),e}}),Object.defineProperty(u.people,'toString',{configurable:!0,enumerable:!0,writable:!0,value:function(){return u.toString(1)+'.people (stub)'}}),o='capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys getNextSurveyStep onSessionId'.split(' '),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+
+    const darkQuery = matchMedia('(prefers-color-scheme: dark)');
+
+    posthog.init(token, {
+      api_host: apiHost,
+      ui_host: uiHost,
+      defaults: '2026-08-30',
+      // copy events show which snippets readers lift out of articles
+      autocapture: { capture_copied_text: true },
+      capture_dead_clicks: true,
+      capture_heatmaps: true,
+      capture_performance: { web_vitals: true, network_timing: true },
+      enable_recording_console_log: true,
+      // surveys are unused; skipping them saves a script download on every page
+      disable_surveys: true,
+      session_recording: {
+        // The hero, header bands and both games are canvases. Without this, replays show empty
+        // boxes. A few low-quality frames a second keep the cost small.
+        captureCanvas: { recordCanvas: true, canvasFps: 3, canvasQuality: '0.4' },
+      },
+      capture_exceptions: {
+        capture_unhandled_errors: true,
+        capture_unhandled_rejections: true,
+        capture_console_errors: false,
+      },
+      // runs before the initial $pageview, so these properties land on every event
+      loaded: (ph) => {
+        let pelicans = 'on';
+
+        try { if (localStorage.getItem('pelicans') === 'off') pelicans = 'off'; } catch (e) {}
+
+        ph.register({
+          color_scheme: darkQuery.matches ? 'dark' : 'light',
+          reduced_motion: matchMedia('(prefers-reduced-motion: reduce)').matches,
+          pelicans,
+        });
+      },
+    });
+
+    darkQuery.addEventListener('change', (e) => posthog.register({ color_scheme: e.matches ? 'dark' : 'light' }));
+  }
+</script>
