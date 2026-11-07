@@ -254,7 +254,7 @@ p {
   align-items: center;
   flex: none;
 }
-.route li + li::before {
+.route li:not(:last-child)::after {
   content: '';
   width: clamp(0.75rem, 2.2vw, 2rem);
   height: 2px;
@@ -311,12 +311,18 @@ p {
     order: 3;
     flex: 1 1 100%;
     min-width: 0;
-    width: auto;
-    margin-inline: calc(var(--gutter) * -1);
+    width: 100%;
   }
   .route {
-    padding-inline: var(--gutter);
-    overscroll-behavior-x: contain;
+    flex-wrap: wrap;
+    overflow: visible;
+    row-gap: 0.15rem;
+  }
+  .route a {
+    font-size: var(--fs-sm);
+  }
+  .route li:not(:last-child)::after {
+    width: 0.75rem;
   }
 }
 
