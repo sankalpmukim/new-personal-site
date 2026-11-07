@@ -1,6 +1,18 @@
 // Approach control: drag planes onto the runway. Lives on the landing page chart.
 import { drawPeaks, drawTerrain, fitCanvas, readColors, type ChartColors, type Terrain } from './terrain';
 
+declare global {
+  interface Window {
+    posthog?: {
+      capture(event: string, properties?: Record<string, unknown>): void;
+      logger?: {
+        info(message: string, properties?: Record<string, unknown>): void;
+        warn(message: string, properties?: Record<string, unknown>): void;
+      };
+    };
+  }
+}
+
 type Pt = { x: number; y: number };
 
 type Kind = 'prop' | 'jet' | 'heavy';
@@ -376,6 +388,8 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation?
   }
 
   function start() {
+    window.posthog?.capture('atc_game_started');
+    window.posthog?.logger?.info('atc game started');
     planes = [];
     pending = [];
     popups = [];
@@ -390,6 +404,10 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation?
   }
 
   function stop() {
+    if (mode === 'play') {
+      window.posthog?.capture('atc_game_stopped', { landed_planes: score });
+      window.posthog?.logger?.info('atc game stopped', { landed_planes: score });
+    }
     setMode('attract');
     planes = [];
     pending = [];
@@ -404,12 +422,22 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation?
     crash = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2, t: 0 };
     active = null;
 
-    if (score > best) {
+    const isNewBest = score > best;
+
+    if (isNewBest) {
       best = score;
       storeSet(STORAGE_KEY, String(best));
       bestEl.textContent = String(best);
     }
 
+    window.posthog?.capture('atc_game_ended', {
+      landed_planes: score,
+      is_new_best: isNewBest,
+    });
+    window.posthog?.logger?.warn('atc game ended', {
+      landed_planes: score,
+      is_new_best: isNewBest,
+    });
     finalEl.textContent = `${a.callsign} and ${b.callsign} got too close. You landed ${score} ${score === 1 ? 'plane' : 'planes'}.`;
     setMode('over');
     statusEl.textContent = '';

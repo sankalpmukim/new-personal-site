@@ -403,6 +403,7 @@ export function initScrollPelicans() {
 
   toggles.forEach((b) => b.addEventListener('click', () => {
     enabled = !enabled;
+    window.posthog?.capture('pelican_display_toggled', { is_enabled: enabled });
     storeSet('pelicans', enabled ? 'on' : 'off');
     applyEnabled();
   }));

@@ -73,6 +73,8 @@ export function initPelicanRun(root: HTMLElement, defs: ObstacleDef[]) {
   }
 
   function reset() {
+    window.posthog?.capture('pelican_run_started');
+    window.posthog?.logger?.info('pelican run started');
     state = 'run';
     speed = 330;
     dist = 0;
@@ -166,8 +168,18 @@ export function initPelicanRun(root: HTMLElement, defs: ObstacleDef[]) {
         overLine = OVER_LINES[Math.floor(Math.random() * OVER_LINES.length)];
         const sc = Math.floor(dist / 10);
 
-        if (sc > best) { best = sc; storeSet(BEST_KEY, String(best)); }
+        const isNewBest = sc > best;
 
+        if (isNewBest) { best = sc; storeSet(BEST_KEY, String(best)); }
+
+        window.posthog?.capture('pelican_run_ended', {
+          score: sc,
+          is_new_best: isNewBest,
+        });
+        window.posthog?.logger?.warn('pelican run ended', {
+          score: sc,
+          is_new_best: isNewBest,
+        });
         live.textContent = `${overLine} Score ${sc}. Press space or tap to ride again.`;
         break;
       }
