@@ -11,3 +11,10 @@ import ChartBand from '../components/ChartBand.astro';
   </ChartBand>
   <section class="section wrap" data-pelican="tumble" data-pelican-says="I also got lost. I blame the map."></section>
 </Base>
+
+<script>
+  import { track } from '../scripts/analytics';
+
+  // a broken inbound or internal link; $referrer on the event says where it came from
+  track('page_not_found', { path: location.pathname });
+</script>

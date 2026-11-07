@@ -2,6 +2,7 @@
 import '@fontsource-variable/archivo/wdth.css';
 import '../styles/global.css';
 import Footer from '../components/Footer.astro';
+import PostHog from '../components/PostHog.astro';
 import { person, links } from '../data/site';
 
 interface Props {
@@ -91,6 +92,7 @@ const graph = [
     <meta name="theme-color" content="#e3ecd9" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0f1d35" media="(prefers-color-scheme: dark)" />
     <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@graph': graph })} />
+    <PostHog />
     <script is:inline>
       try { if (localStorage.getItem('pelicans') === 'off') document.documentElement.dataset.pelicans = 'off'; } catch (e) {}
     </script>
@@ -109,7 +111,10 @@ const graph = [
       </div>
     </div>
     <script>
+      import { initLinkTracking } from '../scripts/analytics';
       import { initScrollPelicans } from '../scripts/pelicans-scroll';
+
+      initLinkTracking();
 
       initScrollPelicans();
     </script>

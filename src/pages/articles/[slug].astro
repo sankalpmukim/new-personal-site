@@ -44,9 +44,43 @@ const date = article.data.date.toLocaleDateString('en-GB', { day: 'numeric', mon
   <ChartBand slot="header" title={article.data.title} seed={article.id.length * 7} long>
     <p class="article-meta"><a href="/articles"><span class="halo">All articles</span></a><time datetime={article.data.date.toISOString()}><span class="halo">{date}</span></time><span class="halo">{minutes} min read</span></p>
   </ChartBand>
-  <article class="section wrap" data-pelican="peek" data-pelican-says="I read it. Well, I looked at it.">
+  <article class="section wrap" data-pelican="peek" data-pelican-says="I read it. Well, I looked at it." data-article={article.id} data-article-minutes={minutes} data-article-words={words}>
     <div class="prose">
       <Content />
     </div>
+    <div data-article-end aria-hidden="true"></div>
   </article>
 </Base>
+
+<script>
+  import { secondsSince, track } from '../../scripts/analytics';
+
+  const article = document.querySelector<HTMLElement>('[data-article]');
+
+  const end = document.querySelector('[data-article-end]');
+
+  if (article && end) {
+    const opened = performance.now();
+
+    // fires once, when the reader reaches the end of the text
+    const io = new IntersectionObserver(([en]) => {
+      if (!en.isIntersecting) return;
+
+      io.disconnect();
+
+      const seconds = secondsSince(opened);
+      const minutes = Number(article.dataset.articleMinutes) || 1;
+
+      track('article_finished', {
+        article: article.dataset.article ?? null,
+        word_count: Number(article.dataset.articleWords) || 0,
+        estimated_minutes: minutes,
+        seconds_on_page: seconds,
+        // skimmers who jump straight to the bottom versus people who actually read it
+        read_ratio: Math.round((seconds / (minutes * 60)) * 100) / 100,
+      });
+    });
+
+    io.observe(end);
+  }
+</script>

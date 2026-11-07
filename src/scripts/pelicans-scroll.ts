@@ -1,4 +1,5 @@
 // Pelicans that live in the page: a scroll-progress rider and cameo appearances.
+import { registerProps, track } from './analytics';
 import { drawPelican, pelicanPalette, ridingPose, type PelicanPalette, type PelicanPose } from './pelican';
 
 const LINES = [
@@ -403,6 +404,8 @@ export function initScrollPelicans() {
 
   toggles.forEach((b) => b.addEventListener('click', () => {
     enabled = !enabled;
+    track('pelican_display_toggled', { is_enabled: enabled });
+    registerProps({ pelicans: enabled ? 'on' : 'off' });
     storeSet('pelicans', enabled ? 'on' : 'off');
     applyEnabled();
   }));

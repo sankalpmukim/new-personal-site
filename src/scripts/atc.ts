@@ -1,4 +1,5 @@
 // Approach control: drag planes onto the runway. Lives on the landing page chart.
+import { secondsSince, track } from './analytics';
 import { drawPeaks, drawTerrain, fitCanvas, readColors, type ChartColors, type Terrain } from './terrain';
 
 type Pt = { x: number; y: number };
@@ -85,6 +86,8 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation?
   let idSeq = 0;
   let active: Plane | null = null;
   let crash: { x: number; y: number; t: number } | null = null;
+  let playStartedAt = 0;
+  let gamesThisVisit = 0;
   let visible = true;
   let raf = 0;
   let last = 0;
@@ -375,7 +378,11 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation?
     stopBtn.hidden = m === 'attract';
   }
 
-  function start() {
+  // how play began: the hero button, the retry button after a crash, or grabbing a plane
+  function start(trigger: 'button' | 'retry' | 'drag') {
+    gamesThisVisit++;
+    playStartedAt = performance.now();
+    track('atc_game_started', { trigger, game_number: gamesThisVisit, best_score: best });
     planes = [];
     pending = [];
     popups = [];
@@ -389,7 +396,9 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation?
     if (!raf) loop(performance.now());
   }
 
-  function stop() {
+  function stop(method: 'button' | 'escape') {
+    if (mode === 'play') track('atc_game_stopped', { method, landed_planes: score, duration_s: secondsSince(playStartedAt) });
+
     setMode('attract');
     planes = [];
     pending = [];
@@ -404,12 +413,23 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation?
     crash = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2, t: 0 };
     active = null;
 
-    if (score > best) {
+    const isNewBest = score > best;
+    const previousBest = best;
+
+    if (isNewBest) {
       best = score;
       storeSet(STORAGE_KEY, String(best));
       bestEl.textContent = String(best);
     }
 
+    track('atc_game_ended', {
+      landed_planes: score,
+      is_new_best: isNewBest,
+      previous_best: previousBest,
+      duration_s: secondsSince(playStartedAt),
+      planes_in_air: planes.filter((p) => p.state === 'fly').length,
+      collision: [a.kind, b.kind].sort().join('+'),
+    });
     finalEl.textContent = `${a.callsign} and ${b.callsign} got too close. You landed ${score} ${score === 1 ? 'plane' : 'planes'}.`;
     setMode('over');
     statusEl.textContent = '';
@@ -804,7 +824,7 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation?
 
     if (mode === 'attract') {
       if (e.pointerType !== 'mouse') return; // on touch, use the button so the page can still scroll
-      start();
+      start('drag');
       planes = [hit];
       hit.auto = false;
     }
@@ -852,10 +872,10 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation?
   canvas.addEventListener('pointerup', endDrag);
   canvas.addEventListener('pointercancel', endDrag);
 
-  startBtns.forEach((b) => b.addEventListener('click', start));
-  stopBtn.addEventListener('click', stop);
+  startBtns.forEach((b) => b.addEventListener('click', () => start(mode === 'over' ? 'retry' : 'button')));
+  stopBtn.addEventListener('click', () => stop('button'));
   addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && mode !== 'attract') stop();
+    if (e.key === 'Escape' && mode !== 'attract') stop('escape');
   });
 
   new IntersectionObserver(([en]) => { visible = en.isIntersecting; }, { threshold: 0.05 }).observe(root);
