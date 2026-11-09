@@ -55,5 +55,5 @@ The whole site imitates an aeronautical sectional chart — new pages and sectio
 ## Conventions
 
 - Conventional commits (`feat:`, `fix:`, `chore:`, `perf:`) directly on `main`.
-- `astro.config.mjs` sets `trailingSlash: 'never'` — link to pages without trailing slashes. RSS is at `/rss.xml`, sitemap via the sitemap integration.
+- `astro.config.mjs` sets `trailingSlash: 'never'` — link to pages without trailing slashes. RSS is at `/rss.xml` (also `/rss/feed.xml`), sitemap via the sitemap integration.
 - Code blocks use Shiki dual themes (github-light/github-dark) configured globally; plain fenced blocks render both modes automatically, don't hand-style syntax highlighting.

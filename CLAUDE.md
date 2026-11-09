@@ -24,7 +24,7 @@ No official agent skills exist for the core stack, so consult the makers' docs w
 
 ## Architecture
 
-This is a static Astro 7 site (MDX, RSS and sitemap integrations), deployed at `https://sankalpmukim.dev` with `trailingSlash: 'never'`. It has no UI framework. All interactivity is vanilla TypeScript drawing on `<canvas>`, loaded from `<script>` blocks in `.astro` files.
+This is a static Astro 7 site (MDX, RSS and sitemap integrations), deployed at `https://sankalpmukim.dev` with `trailingSlash: 'never'`. RSS is at `/rss.xml` and equivalently at `/rss/feed.xml`. It has no UI framework. All interactivity is vanilla TypeScript drawing on `<canvas>`, loaded from `<script>` blocks in `.astro` files.
 
 ### Content vs. layout
 
