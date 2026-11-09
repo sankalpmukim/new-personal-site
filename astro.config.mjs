@@ -13,4 +13,11 @@ export default defineConfig({
       wrap: false,
     },
   },
+  // Client bundles are minified. PostHog error tracking fetches these maps from the
+  // live site (the source is already public on GitHub) so stack traces unminify.
+  vite: {
+    build: {
+      sourcemap: true,
+    },
+  },
 });

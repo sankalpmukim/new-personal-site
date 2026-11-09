@@ -13,9 +13,12 @@ const apiHost = import.meta.env.PUBLIC_POSTHOG_HOST;
 const uiHost = import.meta.env.PUBLIC_POSTHOG_UI_HOST || "https://us.posthog.com";
 
 const isDevelopment = import.meta.env.DEV;
+
+// Vercel sets this at build time. Local and preview builds leave it empty.
+const release = import.meta.env.VERCEL_GIT_COMMIT_SHA || "";
 ---
 
-<script is:inline define:vars={{ token, apiHost, uiHost, isDevelopment }}>
+<script is:inline define:vars={{ token, apiHost, uiHost, isDevelopment, release }}>
   if (!token || !apiHost) {
     const missingVariable = !token ? "PUBLIC_POSTHOG_PROJECT_TOKEN" : "PUBLIC_POSTHOG_HOST";
 
@@ -69,7 +72,7 @@ const isDevelopment = import.meta.env.DEV;
                 },
               }),
               o =
-                "capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys getNextSurveyStep onSessionId".split(
+                "capture captureException addExceptionStep identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys getNextSurveyStep onSessionId".split(
                   " ",
                 ),
               n = 0;
@@ -107,6 +110,9 @@ const isDevelopment = import.meta.env.DEV;
         capture_unhandled_rejections: true,
         capture_console_errors: false,
       },
+      error_tracking: {
+        exception_steps: { enabled: true },
+      },
       // runs before the initial $pageview, so these properties land on every event
       loaded: (ph) => {
         let pelicans = "on";
@@ -120,6 +126,8 @@ const isDevelopment = import.meta.env.DEV;
           reduced_motion: matchMedia("(prefers-reduced-motion: reduce)").matches,
           pelicans,
         });
+
+        if (release) ph.register({ app_release: release });
       },
     });
 

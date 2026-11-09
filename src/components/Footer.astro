@@ -65,11 +65,16 @@ import { aiObstacles, links, person } from "../data/site";
 </footer>
 
 <script>
+  import { runGuarded } from "../scripts/analytics";
   import { initPelicanRun } from "../scripts/pelican-run";
 
   const root = document.querySelector<HTMLElement>("[data-run]");
 
   const stage = document.querySelector<HTMLElement>("[data-run-stage]");
 
-  if (root && stage) initPelicanRun(stage, JSON.parse(root.dataset.obstacles || "[]"));
+  if (root && stage) {
+    runGuarded("pelican_run", () =>
+      initPelicanRun(stage, JSON.parse(root.dataset.obstacles || "[]")),
+    );
+  }
 </script>

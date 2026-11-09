@@ -1,5 +1,5 @@
 // Pelican Run: a pelican on a bicycle jumping over AI company logos.
-import { secondsSince, track } from "./analytics";
+import { addExceptionStep, secondsSince, track } from "./analytics";
 import { drawPelican, pelicanPalette, ridingPose, type PelicanPalette } from "./pelican";
 import { fitCanvas, readColors, type ChartColors } from "./terrain";
 
@@ -99,6 +99,7 @@ export function initPelicanRun(root: HTMLElement, defs: ObstacleDef[]) {
       best_score: best,
       is_retry: state === "over",
     });
+    addExceptionStep("pelican_run_started");
     state = "run";
     speed = 330;
     dist = 0;

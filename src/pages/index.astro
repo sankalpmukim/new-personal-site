@@ -172,12 +172,15 @@ const featured = projects.filter((p) => p.featured);
 </Base>
 
 <script>
+  import { runGuarded } from "../scripts/analytics";
   import { initAtc } from "../scripts/atc";
 
   const root = document.querySelector<HTMLElement>("[data-atc]");
 
   if (root) {
-    const start = () => initAtc(root, JSON.parse(root.dataset.peaks || "[]"));
+    const start = () =>
+      runGuarded("atc", () => initAtc(root, JSON.parse(root.dataset.peaks || "[]")));
+
     // wait briefly for Archivo so chart labels render in the right face, but never block on it
     const ready = document.fonts?.ready ?? Promise.resolve();
     Promise.race([ready, new Promise((r) => setTimeout(r, 700))]).then(start);

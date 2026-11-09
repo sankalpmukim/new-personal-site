@@ -8,6 +8,8 @@ export type EventProps = Record<string, string | number | boolean | null>;
 type PostHogClient = {
   capture(event: string, properties?: EventProps): void;
   register(properties: EventProps): void;
+  captureException?(error: Error, properties?: EventProps): void;
+  addExceptionStep?(message: string): void;
 };
 
 declare global {
@@ -21,6 +23,31 @@ export function track(event: string, properties?: EventProps) {
     window.posthog?.capture(event, properties);
   } catch {
     /* never let analytics break the page */
+  }
+}
+
+export function captureException(error: Error, properties?: EventProps) {
+  try {
+    window.posthog?.captureException?.(error, properties);
+  } catch {
+    /* never let analytics break the page */
+  }
+}
+
+// breadcrumbs on the next exception (game start, boot). kept tiny on purpose.
+export function addExceptionStep(message: string) {
+  try {
+    window.posthog?.addExceptionStep?.(message);
+  } catch {
+    /* never let analytics break the page */
+  }
+}
+
+export function runGuarded(surface: string, work: () => void) {
+  try {
+    work();
+  } catch (err) {
+    if (err instanceof Error) captureException(err, { surface });
   }
 }
 

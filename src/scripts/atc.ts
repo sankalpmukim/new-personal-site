@@ -1,10 +1,11 @@
 // Approach control: drag planes onto the runway. Lives on the landing page chart.
-import { secondsSince, track } from "./analytics";
+import { addExceptionStep, secondsSince, track } from "./analytics";
 import {
   drawPeaks,
   drawTerrain,
   fitCanvas,
   readColors,
+  require2d,
   type ChartColors,
   type Terrain,
 } from "./terrain";
@@ -151,7 +152,7 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation?
     colors = readColors();
     bg.width = Math.round(W * DPR);
     bg.height = Math.round(H * DPR);
-    const b = bg.getContext("2d")!;
+    const b = require2d(bg);
     b.setTransform(DPR, 0, 0, DPR, 0, 0);
     terrain = drawTerrain(b, W, H, colors, {
       seed: 11,
@@ -439,6 +440,7 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevation?
     gamesThisVisit++;
     playStartedAt = performance.now();
     track("atc_game_started", { trigger, game_number: gamesThisVisit, best_score: best });
+    addExceptionStep("atc_game_started");
     planes = [];
     pending = [];
     popups = [];

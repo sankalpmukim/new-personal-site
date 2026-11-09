@@ -7,6 +7,7 @@ import {
   type PelicanPalette,
   type PelicanPose,
 } from "./pelican";
+import { require2d } from "./terrain";
 
 const LINES = [
   "Is this the projects page?",
@@ -93,9 +94,8 @@ export function initScrollPelicans() {
     c.height = CH * dpr;
     c.style.width = `${CW}px`;
     c.style.height = `${CH}px`;
-    const ctx = c.getContext("2d")!;
 
-    return ctx;
+    return require2d(c);
   }
 
   function paint(ctx: CanvasRenderingContext2D, pose: PelicanPose, dir: number) {

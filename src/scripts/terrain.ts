@@ -340,6 +340,14 @@ export function drawPeaks(
   ctx.restore();
 }
 
+export function require2d(canvas: HTMLCanvasElement) {
+  const ctx = canvas.getContext("2d");
+
+  if (!ctx) throw new Error("canvas 2d context unavailable");
+
+  return ctx;
+}
+
 /** Sizes a canvas to its CSS box with DPR; returns css width/height and ctx. */
 export function fitCanvas(canvas: HTMLCanvasElement) {
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -348,7 +356,7 @@ export function fitCanvas(canvas: HTMLCanvasElement) {
   const h = Math.max(1, Math.round(rect.height));
   canvas.width = Math.round(w * dpr);
   canvas.height = Math.round(h * dpr);
-  const ctx = canvas.getContext("2d")!;
+  const ctx = require2d(canvas);
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
   return { ctx, w, h, dpr };

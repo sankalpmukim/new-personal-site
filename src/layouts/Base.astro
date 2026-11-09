@@ -145,12 +145,12 @@ const graph = [
       </div>
     </div>
     <script>
-      import { initLinkTracking } from "../scripts/analytics";
+      import { initLinkTracking, runGuarded } from "../scripts/analytics";
       import { initScrollPelicans } from "../scripts/pelicans-scroll";
 
-      initLinkTracking();
+      runGuarded("link_tracking", () => initLinkTracking());
 
-      initScrollPelicans();
+      runGuarded("scroll_pelicans", () => initScrollPelicans());
     </script>
   </body>
 </html>
