@@ -1,13 +1,22 @@
 ---
-import { nav, links, person } from '../data/site';
+import { nav, links, person } from "../data/site";
 
-const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const path = Astro.url.pathname.replace(/\/$/, "") || "/";
 ---
+
 <header class="site-nav">
   <a class="brand" href="/" aria-label={`${person.name}, home`}>
     <svg viewBox="0 0 32 32" aria-hidden="true">
       <circle cx="16" cy="16" r="10.5" fill="none" stroke="var(--blue)" stroke-width="2.5" />
-      <rect x="6" y="14.6" width="20" height="2.8" rx="1" fill="var(--blue)" transform="rotate(-18 16 16)" />
+      <rect
+        x="6"
+        y="14.6"
+        width="20"
+        height="2.8"
+        rx="1"
+        fill="var(--blue)"
+        transform="rotate(-18 16 16)"
+      />
       <g stroke="var(--blue)" stroke-width="2.4" stroke-linecap="round">
         <path d="M16 1.5v3M16 27.5v3M1.5 16h3M27.5 16h3" />
       </g>
@@ -18,7 +27,10 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
     <ol class="route">
       {nav.map((n) => (
         <li>
-          <a href={n.href} aria-current={path === n.href || path.startsWith(n.href + '/') ? 'page' : undefined}>
+          <a
+            href={n.href}
+            aria-current={path === n.href || path.startsWith(n.href + "/") ? "page" : undefined}
+          >
             <span class="halo">{n.label}</span>
           </a>
         </li>
@@ -26,6 +38,8 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
     </ol>
   </nav>
   <div class="nav-end">
-    <a class="btn btn--ghost" href={links.resume}>Résumé<span class="resume-fmt"> (PDF)</span></a>
+    <a class="btn btn--ghost" href={links.resume}>
+      Résumé<span class="resume-fmt"> (PDF)</span>
+    </a>
   </div>
 </header>

@@ -22,7 +22,7 @@ export function fitCanvas(canvas: HTMLCanvasElement) {
   const h = Math.max(1, Math.round(rect.height));
   canvas.width = Math.round(w * dpr);
   canvas.height = Math.round(h * dpr);
-  const ctx = canvas.getContext('2d')!;
+  const ctx = canvas.getContext("2d")!;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   return { ctx, w, h, dpr };
 }
@@ -63,7 +63,7 @@ That's 8 seconds of gameplay executed before the first frame, so the very first 
 
 Planes don't have a steering AI in the usual sense. A plane is a short list of waypoints plus a constant speed. Each tick, it consumes its path: walk toward the next waypoint, spend distance, drop waypoints it reaches. Its drawn heading eases toward the direction of travel (`drawHdg += angDiff(hdg, drawHdg) * min(1, dt * 8)`), which is what produces the smooth banked turns — the physics position turns instantly, but the sprite rotation lags on a spring.
 
-When *you* drag a plane, your pointer appends waypoints to that same list (spaced at least 7 px apart, clamped to the canvas). The drag isn't teleporting the plane; it's authoring the flight plan the plane then flies. That single design decision is what makes the game feel like vectoring traffic instead of dragging sprites.
+When _you_ drag a plane, your pointer appends waypoints to that same list (spaced at least 7 px apart, clamped to the canvas). The drag isn't teleporting the plane; it's authoring the flight plan the plane then flies. That single design decision is what makes the game feel like vectoring traffic instead of dragging sprites.
 
 ### Clearances and landings
 
@@ -101,8 +101,8 @@ export type PelicanPose = {
   wheel: number; // wheel rotation in radians
   pouch: number; // pouch sag, -1..1 wobble
   flap?: number; // 0..1 how far the free wing is raised
-  bob?: number;  // body bob in px
-  eye?: 'normal' | 'wide' | 'x';
+  bob?: number; // body bob in px
+  eye?: "normal" | "wide" | "x";
   noHands?: boolean;
 };
 ```
@@ -117,7 +117,7 @@ const alpha = Math.acos(Math.max(-1, Math.min(1, cosA)));
 // two mirror solutions; pick the one with the knee forward
 ```
 
-A two-bone chain has two valid knee positions; the pelican always picks knee-forward, which is why it pedals like a cyclist instead of a grasshopper. And because the feet are anchored to the pedals, the pedaling animation is *derived*, not authored — rotate the crank and the legs have no choice but to follow.
+A two-bone chain has two valid knee positions; the pelican always picks knee-forward, which is why it pedals like a cyclist instead of a grasshopper. And because the feet are anchored to the pedals, the pedaling animation is _derived_, not authored — rotate the crank and the legs have no choice but to follow.
 
 The pose helper couples everything to distance travelled: `crank = distance / 9` and `wheel = distance / R_WHEEL`, so the wheel rolls without slipping and the pedals turn at a fixed gear ratio. Scroll the page and the same math makes the scroll-rider's legs match its ground speed.
 
@@ -128,13 +128,18 @@ The game loop is classic semi-implicit Euler: gravity 2300 px/s², jump impulse 
 Input is where the browser knowledge shows. Pointer events unify mouse and touch, and `pointerdown` handles both. The keyboard path guards against the classic bug where pressing space to jump also scrolls the page or activates a focused button:
 
 ```ts
-addEventListener('keydown', (e) => {
-  if (e.code !== 'Space' && e.code !== 'ArrowUp') return;
+addEventListener("keydown", (e) => {
+  if (e.code !== "Space" && e.code !== "ArrowUp") return;
   const tgt = e.target;
-  if (tgt instanceof Element && tgt.closest('input, textarea, select, button, a, [contenteditable]') && tgt !== canvas) return;
+  if (
+    tgt instanceof Element &&
+    tgt.closest("input, textarea, select, button, a, [contenteditable]") &&
+    tgt !== canvas
+  )
+    return;
   if (!inView && document.activeElement !== canvas) return;
   e.preventDefault();
-  jump('keyboard');
+  jump("keyboard");
   kick();
 });
 ```
@@ -145,7 +150,7 @@ The game only claims the space bar while its canvas is actually in view — scro
 
 Both games stand on a handful of browser APIs that everyday app development rarely touches. Individually they're small; together they're an entire engine.
 
-- **`requestAnimationFrame`** drives both loops, synced to the display's vsync and automatically paused in background tabs. Two subtleties: the timestep is clamped (`Math.min(0.05, ...)`) so a tab resuming after minutes doesn't teleport everything across the screen in one giant frame, and both loops *self-cancel* when there's nothing to do — Pelican Run's loop ends with `raf = inView && !document.hidden && !idleStill ? requestAnimationFrame(loop) : 0`, and a `kick()` helper restarts it on input, scroll, or visibility. An animation loop that stops when nothing animates costs zero.
+- **`requestAnimationFrame`** drives both loops, synced to the display's vsync and automatically paused in background tabs. Two subtleties: the timestep is clamped (`Math.min(0.05, ...)`) so a tab resuming after minutes doesn't teleport everything across the screen in one giant frame, and both loops _self-cancel_ when there's nothing to do — Pelican Run's loop ends with `raf = inView && !document.hidden && !idleStill ? requestAnimationFrame(loop) : 0`, and a `kick()` helper restarts it on input, scroll, or visibility. An animation loop that stops when nothing animates costs zero.
 - **`IntersectionObserver`** does three jobs across the site: pausing the hero game when it's scrolled away, pausing the footer game until 35% visible, and triggering pelican cameos when a section marked `data-pelican` scrolls into view (with a `WeakSet` so each section fires once). Hit-testing "is this visible" is done by the browser, off your main thread.
 - **`ResizeObserver`** fires per-element, after layout, before paint — catching resizes from flex rebalancing and font swaps that `window.resize` never sees. The ATC game debounces it by 120 ms because a resize means regenerating terrain and repainting the whole background layer.
 - **Pointer Events with `setPointerCapture`**: once a drag is captured, every subsequent pointer event is retargeted to the canvas, even outside the element or the window — without it, dragging off the canvas edge means the plane stays glued to your cursor forever. `touch-action: none` is applied to the canvas only during play, so the page still scrolls normally otherwise, and touch drags in attract mode are ignored entirely so mobile users don't get ambushed by a game while trying to scroll.
@@ -159,11 +164,11 @@ Stepping back from games, the principles this codebase follows apply to any mode
 
 **The platform is a bigger standard library than most developers think.** Before you install a dependency, check what the browser already ships: the observers above, `<dialog>` and the Popover API, `structuredClone`, `Intl` for formatting, view transitions, container queries, `:has()`, Web Animations, `scrollend`. A surprising amount of "we need a library for that" dissolved over the last five years. The games here needed zero.
 
-**Don't run what nobody sees.** The single biggest performance win in any animated page is not *faster* code, it's *less running* code. Gate every loop on visibility, cancel rAF chains when idle, stop entirely in hidden tabs. The pelican scroll rider stops 0.4 seconds after it has nothing to do and wakes on the next scroll event — at rest, it costs nothing.
+**Don't run what nobody sees.** The single biggest performance win in any animated page is not _faster_ code, it's _less running_ code. Gate every loop on visibility, cancel rAF chains when idle, stop entirely in hidden tabs. The pelican scroll rider stops 0.4 seconds after it has nothing to do and wakes on the next scroll event — at rest, it costs nothing.
 
-**Respect user settings as inputs, not as edge cases.** `prefers-reduced-motion` isn't a corner case to bolt on at the end — here it decides the whole architecture of motion: the ATC game renders one static frame of planes on final approach and animates nothing until the player opts in; Pelican Run skips its idle animation. The color-scheme query themes the canvases live. And when the pelicans have an off switch, the choice is stored *and applied before first paint* by an inline script, so a returning visitor who turned them off never sees a flash of pelican. Preferences your code reads after the fact are suggestions; preferences baked into first paint are respect.
+**Respect user settings as inputs, not as edge cases.** `prefers-reduced-motion` isn't a corner case to bolt on at the end — here it decides the whole architecture of motion: the ATC game renders one static frame of planes on final approach and animates nothing until the player opts in; Pelican Run skips its idle animation. The color-scheme query themes the canvases live. And when the pelicans have an off switch, the choice is stored _and applied before first paint_ by an inline script, so a returning visitor who turned them off never sees a flash of pelican. Preferences your code reads after the fact are suggestions; preferences baked into first paint are respect.
 
-**Keep state in one place and the DOM dumb.** Each game is a single closure holding plain variables — no state library, no reactive graph. The DOM elements around the canvas (score, status line, game-over card) are toggled with `hidden` attributes and text updates; the canvas is repainted wholesale. This is heresy to framework-brain and completely correct for a bounded, frame-driven surface: the render loop *is* the reactivity.
+**Keep state in one place and the DOM dumb.** Each game is a single closure holding plain variables — no state library, no reactive graph. The DOM elements around the canvas (score, status line, game-over card) are toggled with `hidden` attributes and text updates; the canvas is repainted wholesale. This is heresy to framework-brain and completely correct for a bounded, frame-driven surface: the render loop _is_ the reactivity.
 
 **Accessibility is part of the engine, not a coat of paint.** Each canvas carries `role="img"` and a label describing what it is; score and status changes go through `aria-live` regions so screen readers hear the game state; every game has full keyboard parity with the pointer path; and the space-bar guard means the game never hijacks the keyboard while you're typing elsewhere. Canvas is invisible to assistive tech by default — the surrounding DOM has to say everything the pixels say.
 

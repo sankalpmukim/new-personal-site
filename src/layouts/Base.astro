@@ -1,15 +1,15 @@
 ---
-import '@fontsource-variable/archivo/wdth.css';
-import '../styles/global.css';
-import Footer from '../components/Footer.astro';
-import PostHog from '../components/PostHog.astro';
-import { person, links } from '../data/site';
+import "@fontsource-variable/archivo/wdth.css";
+import "../styles/global.css";
+import Footer from "../components/Footer.astro";
+import PostHog from "../components/PostHog.astro";
+import { person, links } from "../data/site";
 
 interface Props {
   title?: string;
   description?: string;
   image?: string; // path under /public or absolute URL
-  type?: 'website' | 'article' | 'profile';
+  type?: "website" | "article" | "profile";
   published?: Date;
   noindex?: boolean;
   jsonLd?: JsonLdNode;
@@ -17,44 +17,63 @@ interface Props {
 
 type JsonLdValue = string | number | boolean | JsonLdValue[] | { [key: string]: JsonLdValue };
 
-type JsonLdNode = { '@type': string; [key: string]: JsonLdValue };
+type JsonLdNode = { "@type": string; [key: string]: JsonLdValue };
 
-const { title, description = person.intro, image = '/og/default.png', type = 'website', published, noindex = false, jsonLd } = Astro.props;
+const {
+  title,
+  description = person.intro,
+  image = "/og/default.png",
+  type = "website",
+  published,
+  noindex = false,
+  jsonLd,
+} = Astro.props;
 
 const siteName = person.name;
 
 const fullTitle = title ? `${title} | ${siteName}` : `${siteName}, software engineer`;
 
 // keep meta descriptions inside what search results display
-const metaDescription = description.length > 160 ? description.slice(0, 157).replace(/\s+\S*$/, '') + '…' : description;
+const metaDescription =
+  description.length > 160 ? description.slice(0, 157).replace(/\s+\S*$/, "") + "…" : description;
 
-const canonical = new URL(Astro.url.pathname.replace(/\/$/, '') || '/', Astro.site).href;
+const canonical = new URL(Astro.url.pathname.replace(/\/$/, "") || "/", Astro.site).href;
 
 const imageUrl = new URL(image, Astro.site).href;
 
-const imageAlt = image === '/og/default.png' ? `${siteName}, software engineer, over a topographic aeronautical chart` : `${title}, an article by ${siteName}`;
+const imageAlt =
+  image === "/og/default.png"
+    ? `${siteName}, software engineer, over a topographic aeronautical chart`
+    : `${title}, an article by ${siteName}`;
 
 const sameAs = [links.github, links.linkedin, links.twitter, links.instagram];
 
 const personLd = {
-  '@type': 'Person',
-  '@id': new URL('/#person', Astro.site).href,
+  "@type": "Person",
+  "@id": new URL("/#person", Astro.site).href,
   name: person.name,
   url: Astro.site?.href,
-  jobTitle: 'Software Engineer',
-  worksFor: { '@type': 'Organization', name: 'IBM' },
-  homeLocation: { '@type': 'Place', name: person.home },
+  jobTitle: "Software Engineer",
+  worksFor: { "@type": "Organization", name: "IBM" },
+  homeLocation: { "@type": "Place", name: person.home },
   email: `mailto:${person.email}`,
-  image: new URL('/portrait.jpg', Astro.site).href,
+  image: new URL("/portrait.jpg", Astro.site).href,
   sameAs,
 };
 
 const graph = [
-  { '@type': 'WebSite', '@id': new URL('/#website', Astro.site).href, url: Astro.site?.href, name: siteName, publisher: { '@id': personLd['@id'] } },
+  {
+    "@type": "WebSite",
+    "@id": new URL("/#website", Astro.site).href,
+    url: Astro.site?.href,
+    name: siteName,
+    publisher: { "@id": personLd["@id"] },
+  },
   personLd,
   ...(jsonLd ? [jsonLd] : []),
 ];
 ---
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -66,7 +85,12 @@ const graph = [
     <meta name="author" content={person.name} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <link rel="alternate" type="application/rss+xml" title={`${person.name}, articles`} href="/rss.xml" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={`${person.name}, articles`}
+      href="/rss.xml"
+    />
 
     <meta property="og:site_name" content={siteName} />
     <meta property="og:type" content={type} />
@@ -79,8 +103,10 @@ const graph = [
     <meta property="og:image:alt" content={imageAlt} />
     <meta name="twitter:image:alt" content={imageAlt} />
     <meta property="og:locale" content="en_IN" />
-    {type === 'article' && published && <meta property="article:published_time" content={published.toISOString()} />}
-    {type === 'article' && <meta property="article:author" content={Astro.site?.href} />}
+    {type === "article" && published && (
+      <meta property="article:published_time" content={published.toISOString()} />
+    )}
+    {type === "article" && <meta property="article:author" content={Astro.site?.href} />}
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@IceCreamChai" />
@@ -91,14 +117,22 @@ const graph = [
 
     <meta name="theme-color" content="#e3ecd9" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0f1d35" media="(prefers-color-scheme: dark)" />
-    <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@graph': graph })} />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({ "@context": "https://schema.org", "@graph": graph })}
+    />
     <PostHog />
     <script is:inline>
-      try { if (localStorage.getItem('pelicans') === 'off') document.documentElement.dataset.pelicans = 'off'; } catch (e) {}
+      try {
+        if (localStorage.getItem("pelicans") === "off")
+          document.documentElement.dataset.pelicans = "off";
+      } catch (e) {}
     </script>
   </head>
   <body>
-    <a class="skip-link" href="#main">Skip to content</a>
+    <a class="skip-link" href="#main">
+      Skip to content
+    </a>
     <slot name="header" />
     <main id="main">
       <slot />
@@ -111,8 +145,8 @@ const graph = [
       </div>
     </div>
     <script>
-      import { initLinkTracking } from '../scripts/analytics';
-      import { initScrollPelicans } from '../scripts/pelicans-scroll';
+      import { initLinkTracking } from "../scripts/analytics";
+      import { initScrollPelicans } from "../scripts/pelicans-scroll";
 
       initLinkTracking();
 

@@ -1,35 +1,55 @@
 ---
-import Nav from './Nav.astro';
+import Nav from "./Nav.astro";
 
-interface Props { title: string; intro?: string; seed?: number; long?: boolean }
+interface Props {
+  title: string;
+  intro?: string;
+  seed?: number;
+  long?: boolean;
+}
 
 const { title, intro, seed = 3, long = false } = Astro.props;
 ---
+
 <section class="band" data-band data-seed={seed}>
   <canvas aria-hidden="true"></canvas>
   <Nav />
   <div class:list={["wrap band-title", { "band-title--long": long }]}>
-    <h1><span class="halo">{title}</span></h1>
-    {intro && <p class="band-intro"><span class="halo">{intro}</span></p>}
+    <h1>
+      <span class="halo">{title}</span>
+    </h1>
+    {intro && (
+      <p class="band-intro">
+        <span class="halo">{intro}</span>
+      </p>
+    )}
     <slot />
   </div>
 </section>
 
 <script>
-  import { drawTerrain, fitCanvas, readColors } from '../scripts/terrain';
+  import { drawTerrain, fitCanvas, readColors } from "../scripts/terrain";
 
-  for (const band of document.querySelectorAll<HTMLElement>('[data-band]')) {
-    const canvas = band.querySelector('canvas')!;
+  for (const band of document.querySelectorAll<HTMLElement>("[data-band]")) {
+    const canvas = band.querySelector("canvas")!;
     const seed = Number(band.dataset.seed) || 3;
 
     const paint = () => {
       const { ctx, w, h } = fitCanvas(canvas);
-      drawTerrain(ctx, w, h, readColors(), { seed, relief: 0.8, maxPeaks: 0, valleys: [{ x: w * 0.2, y: h * 0.75, r: Math.max(w * 0.35, 260) }] });
+      drawTerrain(ctx, w, h, readColors(), {
+        seed,
+        relief: 0.8,
+        maxPeaks: 0,
+        valleys: [{ x: w * 0.2, y: h * 0.75, r: Math.max(w * 0.35, 260) }],
+      });
     };
 
     let t = 0;
-    new ResizeObserver(() => { clearTimeout(t); t = window.setTimeout(paint, 100); }).observe(canvas);
-    matchMedia('(prefers-color-scheme: dark)').addEventListener('change', paint);
+    new ResizeObserver(() => {
+      clearTimeout(t);
+      t = window.setTimeout(paint, 100);
+    }).observe(canvas);
+    matchMedia("(prefers-color-scheme: dark)").addEventListener("change", paint);
     paint();
   }
 </script>

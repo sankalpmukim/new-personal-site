@@ -67,18 +67,18 @@ Imagine you're building a file processing service. Your core API might look like
 
 ```typescript
 interface FileProcessor {
-  process(request: ProcessingRequest): Promise<ProcessingResult>
+  process(request: ProcessingRequest): Promise<ProcessingResult>;
 }
 
 interface ProcessingRequest {
-  input: InputSource
-  output: OutputDestination
-  transformations: Transformation[]
-  validation: ValidationConfig
-  errorHandling: ErrorHandlingStrategy
-  monitoring: MonitoringConfig
-  resourceLimits: ResourceLimits
-  metadata: MetadataConfig
+  input: InputSource;
+  output: OutputDestination;
+  transformations: Transformation[];
+  validation: ValidationConfig;
+  errorHandling: ErrorHandlingStrategy;
+  monitoring: MonitoringConfig;
+  resourceLimits: ResourceLimits;
+  metadata: MetadataConfig;
 }
 ```
 
@@ -92,18 +92,14 @@ Now, let's create an adapter for the most common use case:
 class ImageResizerAdapter {
   constructor(private processor: FileProcessor) {}
 
-  async resize(
-    imageUrl: string,
-    width: number,
-    height: number
-  ): Promise<string> {
+  async resize(imageUrl: string, width: number, height: number): Promise<string> {
     const request: ProcessingRequest = {
-      input: { type: 'url', source: imageUrl },
-      output: { type: 'temp_url', format: 'auto' },
+      input: { type: "url", source: imageUrl },
+      output: { type: "temp_url", format: "auto" },
       transformations: [
         {
-          type: 'resize',
-          parameters: { width, height, mode: 'fit' },
+          type: "resize",
+          parameters: { width, height, mode: "fit" },
         },
       ],
       validation: this.getDefaultValidation(),
@@ -111,18 +107,18 @@ class ImageResizerAdapter {
       monitoring: this.getDefaultMonitoring(),
       resourceLimits: this.getDefaultLimits(),
       metadata: this.getDefaultMetadata(),
-    }
+    };
 
-    const result = await this.processor.process(request)
-    return result.output.url
+    const result = await this.processor.process(request);
+    return result.output.url;
   }
 
   private getDefaultValidation(): ValidationConfig {
     return {
-      maxFileSize: '10MB',
-      allowedFormats: ['jpg', 'png', 'webp'],
+      maxFileSize: "10MB",
+      allowedFormats: ["jpg", "png", "webp"],
       validateDimensions: true,
-    }
+    };
   }
 
   // ... other default configurations
@@ -132,7 +128,7 @@ class ImageResizerAdapter {
 Now developers can accomplish their goal with a single line:
 
 ```typescript
-const resizedUrl = await imageResizer.resize(originalUrl, 800, 600)
+const resizedUrl = await imageResizer.resize(originalUrl, 800, 600);
 ```
 
 ### Intermediate Adapters
@@ -146,7 +142,7 @@ class BatchImageProcessorAdapter {
   async processBatch(
     images: string[],
     operations: ImageOperation[],
-    options?: BatchOptions
+    options?: BatchOptions,
   ): Promise<BatchResult[]> {
     // Converts batch operations to individual ProcessingRequests
     // Handles parallel processing, error aggregation, etc.
@@ -154,8 +150,8 @@ class BatchImageProcessorAdapter {
 }
 
 interface ImageOperation {
-  type: 'resize' | 'crop' | 'filter' | 'format_convert'
-  parameters: Record<string, any>
+  type: "resize" | "crop" | "filter" | "format_convert";
+  parameters: Record<string, any>;
 }
 ```
 
@@ -167,15 +163,15 @@ Create adapters at different levels of abstraction:
 
 ```typescript
 // Level 1: Single-purpose adapters
-const imageResizer = new ImageResizerAdapter(processor)
-const documentConverter = new DocumentConverterAdapter(processor)
+const imageResizer = new ImageResizerAdapter(processor);
+const documentConverter = new DocumentConverterAdapter(processor);
 
 // Level 2: Domain-specific adapters
-const socialMediaProcessor = new SocialMediaAdapter(processor)
-const ecommerceImageProcessor = new EcommerceAdapter(processor)
+const socialMediaProcessor = new SocialMediaAdapter(processor);
+const ecommerceImageProcessor = new EcommerceAdapter(processor);
 
 // Level 3: Workflow adapters
-const contentPipelineAdapter = new ContentPipelineAdapter(processor)
+const contentPipelineAdapter = new ContentPipelineAdapter(processor);
 ```
 
 ### Strategy 2: Configuration-Based Adapters
@@ -186,18 +182,18 @@ Use configuration objects to create specialized adapters:
 class ConfigurableAdapter {
   constructor(
     private processor: FileProcessor,
-    private config: AdapterConfig
+    private config: AdapterConfig,
   ) {}
 
   async process(input: SimpleInput): Promise<SimpleOutput> {
-    const request = this.buildRequest(input, this.config)
-    return this.processor.process(request)
+    const request = this.buildRequest(input, this.config);
+    return this.processor.process(request);
   }
 }
 
 // Pre-configured adapters for common scenarios
-const thumbnailAdapter = new ConfigurableAdapter(processor, THUMBNAIL_CONFIG)
-const watermarkAdapter = new ConfigurableAdapter(processor, WATERMARK_CONFIG)
+const thumbnailAdapter = new ConfigurableAdapter(processor, THUMBNAIL_CONFIG);
+const watermarkAdapter = new ConfigurableAdapter(processor, WATERMARK_CONFIG);
 ```
 
 ### Strategy 3: Builder Pattern Integration
@@ -209,11 +205,11 @@ class ProcessingBuilder {
   constructor(private processor: FileProcessor) {}
 
   image(url: string): ImageBuilder {
-    return new ImageBuilder(this.processor, url)
+    return new ImageBuilder(this.processor, url);
   }
 
   document(path: string): DocumentBuilder {
-    return new DocumentBuilder(this.processor, path)
+    return new DocumentBuilder(this.processor, path);
   }
 }
 
@@ -235,10 +231,10 @@ class ImageBuilder {
 
 // Usage
 const result = await processor
-  .image('https://example.com/photo.jpg')
+  .image("https://example.com/photo.jpg")
   .resize(800, 600)
-  .filter('blur', 0.5)
-  .execute()
+  .filter("blur", 0.5)
+  .execute();
 ```
 
 ## The Long-Term Payoff

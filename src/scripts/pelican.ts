@@ -8,7 +8,7 @@ export type PelicanPose = {
   pouch: number; // pouch sag offset, -1..1 wobble
   flap?: number; // 0..1 how far the free wing is raised
   bob?: number; // body bob in px
-  eye?: 'normal' | 'wide' | 'x';
+  eye?: "normal" | "wide" | "x";
   noHands?: boolean;
 };
 
@@ -27,13 +27,13 @@ export function pelicanPalette(): PelicanPalette {
   const v = (n: string, f: string) => cs.getPropertyValue(n).trim() || f;
 
   return {
-    ink: v('--pel-ink', '#142A4C'),
-    body: v('--pel-body', '#FFFFFF'),
-    shade: v('--pel-shade', '#D9E2EC'),
-    beak: v('--beak', '#F2A11F'),
-    pouch: v('--pel-pouch', '#F7C35C'),
-    frame: v('--magenta', '#A8145F'),
-    leg: v('--pel-leg', '#E2731B'),
+    ink: v("--pel-ink", "#142A4C"),
+    body: v("--pel-body", "#FFFFFF"),
+    shade: v("--pel-shade", "#D9E2EC"),
+    beak: v("--beak", "#F2A11F"),
+    pouch: v("--pel-pouch", "#F7C35C"),
+    frame: v("--magenta", "#A8145F"),
+    leg: v("--pel-leg", "#E2731B"),
   };
 }
 
@@ -53,7 +53,13 @@ const BAR = { x: 31, y: -58 };
 
 const CRANK = 7.5;
 
-function wheel(ctx: CanvasRenderingContext2D, cx: number, cy: number, rot: number, p: PelicanPalette) {
+function wheel(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  rot: number,
+  p: PelicanPalette,
+) {
   ctx.save();
   ctx.translate(cx, cy);
   ctx.lineWidth = 2.6;
@@ -95,13 +101,19 @@ function ik(hip: { x: number; y: number }, foot: { x: number; y: number }, l1: n
   return k1.x > k2.x ? k1 : k2;
 }
 
-function leg(ctx: CanvasRenderingContext2D, hip: { x: number; y: number }, pedal: { x: number; y: number }, p: PelicanPalette, far: boolean) {
+function leg(
+  ctx: CanvasRenderingContext2D,
+  hip: { x: number; y: number },
+  pedal: { x: number; y: number },
+  p: PelicanPalette,
+  far: boolean,
+) {
   const knee = ik(hip, pedal, 23, 25);
   ctx.save();
   ctx.globalAlpha = far ? 0.55 : 1;
   ctx.strokeStyle = p.leg;
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
   ctx.lineWidth = 3.2;
   ctx.beginPath();
   ctx.moveTo(hip.x, hip.y);
@@ -127,8 +139,8 @@ export function drawPelican(ctx: CanvasRenderingContext2D, pose: PelicanPose, p:
   const hip = { x: -6, y: -54 + bob };
 
   ctx.save();
-  ctx.lineJoin = 'round';
-  ctx.lineCap = 'round';
+  ctx.lineJoin = "round";
+  ctx.lineCap = "round";
 
   // far leg sits behind everything
   leg(ctx, hip, farPedal, p, true);
@@ -249,9 +261,9 @@ export function drawPelican(ctx: CanvasRenderingContext2D, pose: PelicanPose, p:
   ctx.stroke();
 
   // eye
-  const eye = pose.eye ?? 'normal';
+  const eye = pose.eye ?? "normal";
 
-  if (eye === 'x') {
+  if (eye === "x") {
     ctx.lineWidth = 1.6;
     ctx.beginPath();
     ctx.moveTo(hx + 1, hy - 4);
@@ -260,8 +272,8 @@ export function drawPelican(ctx: CanvasRenderingContext2D, pose: PelicanPose, p:
     ctx.lineTo(hx + 1, hy + 1);
     ctx.stroke();
   } else {
-    const r = eye === 'wide' ? 3.6 : 2.8;
-    ctx.fillStyle = '#fff';
+    const r = eye === "wide" ? 3.6 : 2.8;
+    ctx.fillStyle = "#fff";
     ctx.beginPath();
     ctx.arc(hx + 3.5, hy - 1.5, r, 0, Math.PI * 2);
     ctx.fill();
@@ -269,7 +281,7 @@ export function drawPelican(ctx: CanvasRenderingContext2D, pose: PelicanPose, p:
     ctx.stroke();
     ctx.fillStyle = p.ink;
     ctx.beginPath();
-    ctx.arc(hx + 4.4, hy - 1.2, eye === 'wide' ? 1.1 : 1.5, 0, Math.PI * 2);
+    ctx.arc(hx + 4.4, hy - 1.2, eye === "wide" ? 1.1 : 1.5, 0, Math.PI * 2);
     ctx.fill();
   }
 

@@ -1,20 +1,34 @@
 ---
-import Base from '../layouts/Base.astro';
-import ChartBand from '../components/ChartBand.astro';
+import Base from "../layouts/Base.astro";
+import ChartBand from "../components/ChartBand.astro";
 ---
+
 <Base title="Page not found" description="This page is off the chart." noindex>
-  <ChartBand slot="header" title="Off the chart" intro="There is no page at this address. It may have moved, or the link has a typo." seed={404}>
+  <ChartBand
+    slot="header"
+    title="Off the chart"
+    intro="There is no page at this address. It may have moved, or the link has a typo."
+    seed={404}
+  >
     <p style="margin-top: 1.5rem; display: flex; gap: 0.75rem; flex-wrap: wrap">
-      <a class="btn" href="/">Back to home base</a>
-      <a class="btn btn--ghost" href="/articles">Browse articles</a>
+      <a class="btn" href="/">
+        Back to home base
+      </a>
+      <a class="btn btn--ghost" href="/articles">
+        Browse articles
+      </a>
     </p>
   </ChartBand>
-  <section class="section wrap" data-pelican="tumble" data-pelican-says="I also got lost. I blame the map."></section>
+  <section
+    class="section wrap"
+    data-pelican="tumble"
+    data-pelican-says="I also got lost. I blame the map."
+  ></section>
 </Base>
 
 <script>
-  import { track } from '../scripts/analytics';
+  import { track } from "../scripts/analytics";
 
   // a broken inbound or internal link; $referrer on the event says where it came from
-  track('page_not_found', { path: location.pathname });
+  track("page_not_found", { path: location.pathname });
 </script>

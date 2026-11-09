@@ -7,15 +7,15 @@ date: 2023-02-25
 port { ArticleLayout } from '@/components/ArticleLayout'
 
 export const meta = {
-  author: 'Sankalp Mukim',
-  date: '2023-02-25',
-  title: 'My Million Dollar Startup Tech Stack in 2023',
-  description:
-    'What is the hot new tech stack for startups in 2023? I will tell you in this article.',
+author: 'Sankalp Mukim',
+date: '2023-02-25',
+title: 'My Million Dollar Startup Tech Stack in 2023',
+description:
+'What is the hot new tech stack for startups in 2023? I will tell you in this article.',
 }
 
 export default function MillionDollarTechStack(props) {
-  return <ArticleLayout meta={meta} {...props} />
+return <ArticleLayout meta={meta} {...props} />
 }
 
 ## Introduction

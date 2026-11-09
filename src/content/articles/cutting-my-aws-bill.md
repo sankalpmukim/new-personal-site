@@ -92,8 +92,8 @@ Everyone's instinct when they see a mystery VPC charge is to blame the **NAT Gat
 
 Two public IPv4 addresses. Since February 2024, AWS charges **$0.005/hour (~$3.60/mo) per public IPv4**. The table looked like this:
 
-| Elastic IP               | Attached to                                    | Necessary? |
-| ------------------------ | ---------------------------------------------- | ---------- |
+| Elastic IP                | Attached to                                    | Necessary? |
+| ------------------------- | ---------------------------------------------- | ---------- |
 | EC2 EIP (`198.51.100.10`) | The EC2 instance                               | Yes        |
 | RDS EIP (`198.51.100.20`) | **RDS** managed ENI (`RequesterManaged: True`) | **No**     |
 
@@ -183,9 +183,9 @@ Once I had breathing room, the real culprits (found via `du -hx --max-depth=1 / 
 
 | Culprit                                         | Size   |
 | ----------------------------------------------- | ------ |
-| `~/.npm/_cacache` — a _cache_                    | 1.9 GB |
-| A stale repo clone with broken build artifacts   | 4.7 GB |
-| Orphaned `node_modules` from abandoned projects  | ~2 GB  |
+| `~/.npm/_cacache` — a _cache_                   | 1.9 GB |
+| A stale repo clone with broken build artifacts  | 4.7 GB |
+| Orphaned `node_modules` from abandoned projects | ~2 GB  |
 
 **Lesson:** on small EBS volumes, treat disk like memory. Audit periodically. **Cache directories are silent killers** — a _cache_ ate 1.9 GB. Also: clear the npm cache _after_ building, not before — it regrew to 873 MB the moment I ran `npm install` again.
 
@@ -292,12 +292,12 @@ That's how one architectural decision (where the app runs) quietly eliminated th
 
 ### Lever 4 — Delete dead resources
 
-| Removed                                                  | Freed        |
-| -------------------------------------------------------- | ------------ |
-| Stale repo clone with broken build artifacts             | 4.7 GB       |
-| Old project + systemd + nginx site + cert                | 1.3 GB + RAM |
-| Another project's `node_modules` (deployed elsewhere)    | 848 MB       |
-| npm cache (`~/.npm`)                                     | 873 MB       |
+| Removed                                               | Freed        |
+| ----------------------------------------------------- | ------------ |
+| Stale repo clone with broken build artifacts          | 4.7 GB       |
+| Old project + systemd + nginx site + cert             | 1.3 GB + RAM |
+| Another project's `node_modules` (deployed elsewhere) | 848 MB       |
+| npm cache (`~/.npm`)                                  | 873 MB       |
 
 Disk went from **100% → 63%**. Not a direct line item, but a full EBS is a ticking bomb — and resizing EBS _costs_ money.
 

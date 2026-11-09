@@ -32,8 +32,8 @@ When dealing with hundreds or thousands of asynchronous operations, running them
 Let's start with a foundation: an async generator that recursively finds files. This pattern is memory-efficient and works well with concurrency control.
 
 ```typescript
-import * as fs from 'fs'
-import * as path from 'path'
+import * as fs from "fs";
+import * as path from "path";
 
 /**
  * Generator that recursively yields all .md files in a directory
@@ -41,25 +41,25 @@ import * as path from 'path'
  * @yields The full path to each .md file found
  */
 export async function* iterateMarkdownFiles(
-  dirPath: string
+  dirPath: string,
 ): AsyncGenerator<string, void, unknown> {
   try {
-    const entries = await fs.promises.readdir(dirPath, { withFileTypes: true })
+    const entries = await fs.promises.readdir(dirPath, { withFileTypes: true });
 
     for (const entry of entries) {
-      const fullPath = path.join(dirPath, entry.name)
+      const fullPath = path.join(dirPath, entry.name);
 
       if (entry.isDirectory()) {
         // Recursively search subdirectories
-        yield* iterateMarkdownFiles(fullPath)
-      } else if (entry.isFile() && entry.name.endsWith('.md')) {
+        yield* iterateMarkdownFiles(fullPath);
+      } else if (entry.isFile() && entry.name.endsWith(".md")) {
         // Yield markdown files
-        yield fullPath
+        yield fullPath;
       }
     }
   } catch (error) {
     // Handle permission errors or other filesystem issues
-    console.warn(`Warning: Could not read directory ${dirPath}:`, error)
+    console.warn(`Warning: Could not read directory ${dirPath}:`, error);
   }
 }
 ```
@@ -85,31 +85,31 @@ The core concept is maintaining a "sliding window" of active operations. When on
 export async function processWithConcurrency<T>(
   generator: AsyncGenerator<T, void, unknown>,
   processFile: (item: T) => Promise<void>,
-  concurrency: number = 10
+  concurrency: number = 10,
 ): Promise<void> {
-  const activePromises = new Set<Promise<void>>()
+  const activePromises = new Set<Promise<void>>();
 
   try {
     for await (const item of generator) {
       // Start processing the current item
       const promise = processFile(item).finally(() => {
-        activePromises.delete(promise)
-      })
+        activePromises.delete(promise);
+      });
 
-      activePromises.add(promise)
+      activePromises.add(promise);
 
       // If we've reached the concurrency limit, wait for at least one to complete
       if (activePromises.size >= concurrency) {
-        await Promise.race(activePromises)
+        await Promise.race(activePromises);
       }
     }
 
     // Wait for all remaining promises to complete
-    await Promise.all(activePromises)
+    await Promise.all(activePromises);
   } catch (error) {
     // Wait for all active promises to complete before throwing
-    await Promise.allSettled(activePromises)
-    throw error
+    await Promise.allSettled(activePromises);
+    throw error;
   }
 }
 ```
@@ -126,22 +126,22 @@ export async function processWithConcurrency<T>(
 ```typescript
 async function processMarkdownFile(filePath: string): Promise<void> {
   try {
-    console.log(`📝 Processing: ${filePath}`)
+    console.log(`📝 Processing: ${filePath}`);
 
-    const content = await fs.promises.readFile(filePath, 'utf8')
+    const content = await fs.promises.readFile(filePath, "utf8");
 
     // Your processing logic here
-    await new Promise((resolve) => setTimeout(resolve, Math.random() * 1000))
+    await new Promise((resolve) => setTimeout(resolve, Math.random() * 1000));
 
-    console.log(`✅ Completed: ${filePath} (${content.length} chars)`)
+    console.log(`✅ Completed: ${filePath} (${content.length} chars)`);
   } catch (error) {
-    console.error(`❌ Error processing ${filePath}:`, error)
+    console.error(`❌ Error processing ${filePath}:`, error);
   }
 }
 
 // Usage
-const generator = iterateMarkdownFiles('./docs')
-await processWithConcurrency(generator, processMarkdownFile, 10)
+const generator = iterateMarkdownFiles("./docs");
+await processWithConcurrency(generator, processMarkdownFile, 10);
 ```
 
 ## Creating Dynamic Concurrency Control
@@ -155,37 +155,37 @@ Real-world applications often need to adjust concurrency based on system conditi
  * Controller for dynamic concurrency management
  */
 export class ConcurrencyController {
-  private _concurrency: number
-  private _checkInterval: number
-  private _onConcurrencyChange?: (oldValue: number, newValue: number) => void
+  private _concurrency: number;
+  private _checkInterval: number;
+  private _onConcurrencyChange?: (oldValue: number, newValue: number) => void;
 
   constructor(
     initialConcurrency: number = 10,
     checkInterval: number = 1000,
-    onConcurrencyChange?: (oldValue: number, newValue: number) => void
+    onConcurrencyChange?: (oldValue: number, newValue: number) => void,
   ) {
-    this._concurrency = initialConcurrency
-    this._checkInterval = checkInterval
-    this._onConcurrencyChange = onConcurrencyChange
+    this._concurrency = initialConcurrency;
+    this._checkInterval = checkInterval;
+    this._onConcurrencyChange = onConcurrencyChange;
   }
 
   get concurrency(): number {
-    return this._concurrency
+    return this._concurrency;
   }
 
   set concurrency(value: number) {
-    if (value < 1) throw new Error('Concurrency must be at least 1')
+    if (value < 1) throw new Error("Concurrency must be at least 1");
 
-    const oldValue = this._concurrency
-    this._concurrency = value
+    const oldValue = this._concurrency;
+    this._concurrency = value;
 
     if (this._onConcurrencyChange && oldValue !== value) {
-      this._onConcurrencyChange(oldValue, value)
+      this._onConcurrencyChange(oldValue, value);
     }
   }
 
   get checkInterval(): number {
-    return this._checkInterval
+    return this._checkInterval;
   }
 }
 ```
@@ -200,62 +200,60 @@ export async function processWithDynamicConcurrency<T>(
   generator: AsyncGenerator<T, void, unknown>,
   processFile: (item: T) => Promise<void>,
   controller: ConcurrencyController,
-  getConcurrency?: () => number | Promise<number>
+  getConcurrency?: () => number | Promise<number>,
 ): Promise<void> {
-  const activePromises = new Set<Promise<void>>()
-  let isRunning = true
+  const activePromises = new Set<Promise<void>>();
+  let isRunning = true;
 
   // Function to start processing an item
   const startProcessing = (item: T) => {
     const promise = processFile(item).finally(() => {
-      activePromises.delete(promise)
-    })
-    activePromises.add(promise)
-    return promise
-  }
+      activePromises.delete(promise);
+    });
+    activePromises.add(promise);
+    return promise;
+  };
 
   // Background task to check and update concurrency
   const concurrencyChecker = async () => {
     while (isRunning) {
       try {
         if (getConcurrency) {
-          const newConcurrency = await getConcurrency()
+          const newConcurrency = await getConcurrency();
           if (newConcurrency !== controller.concurrency) {
-            controller.concurrency = newConcurrency
+            controller.concurrency = newConcurrency;
           }
         }
 
-        await new Promise((resolve) =>
-          setTimeout(resolve, controller.checkInterval)
-        )
+        await new Promise((resolve) => setTimeout(resolve, controller.checkInterval));
       } catch (error) {
-        console.warn('Error in concurrency checker:', error)
+        console.warn("Error in concurrency checker:", error);
       }
     }
-  }
+  };
 
   // Start the background concurrency checker
-  const checkerPromise = concurrencyChecker()
+  const checkerPromise = concurrencyChecker();
 
   try {
     for await (const item of generator) {
       // Start processing the current item
-      startProcessing(item)
+      startProcessing(item);
 
       // If we've exceeded the current concurrency limit, wait for completions
       while (activePromises.size >= controller.concurrency) {
-        await Promise.race(activePromises)
+        await Promise.race(activePromises);
       }
     }
 
     // Wait for all remaining promises to complete
-    await Promise.all(activePromises)
+    await Promise.all(activePromises);
   } catch (error) {
-    await Promise.allSettled(activePromises)
-    throw error
+    await Promise.allSettled(activePromises);
+    throw error;
   } finally {
-    isRunning = false
-    await checkerPromise
+    isRunning = false;
+    await checkerPromise;
   }
 }
 ```
@@ -273,14 +271,14 @@ export async function processWithDynamicConcurrency<T>(
 
 ```typescript
 function timeBased(): number {
-  const hour = new Date().getHours()
+  const hour = new Date().getHours();
 
   // Lower concurrency during business hours
   if (hour >= 9 && hour <= 17) {
-    return 5
+    return 5;
   }
   // Higher concurrency during off-hours
-  return 15
+  return 15;
 }
 ```
 
@@ -289,15 +287,15 @@ function timeBased(): number {
 ```typescript
 async function systemLoadBasedConcurrency(): Promise<number> {
   // This would integrate with actual system monitoring
-  const systemLoad = await getSystemLoad() // Your implementation
-  const memoryUsage = process.memoryUsage().heapUsed / 1024 / 1024 // MB
+  const systemLoad = await getSystemLoad(); // Your implementation
+  const memoryUsage = process.memoryUsage().heapUsed / 1024 / 1024; // MB
 
   if (systemLoad > 0.8 || memoryUsage > 500) {
-    return 3 // High load or memory usage
+    return 3; // High load or memory usage
   } else if (systemLoad > 0.5 || memoryUsage > 200) {
-    return 8 // Medium load
+    return 8; // Medium load
   } else {
-    return 15 // Low load
+    return 15; // Low load
   }
 }
 ```
@@ -305,22 +303,22 @@ async function systemLoadBasedConcurrency(): Promise<number> {
 ### External Signal-Based Control
 
 ```typescript
-let externalConcurrency = 10
+let externalConcurrency = 10;
 
 // Scale up on SIGUSR1
-process.on('SIGUSR1', () => {
-  externalConcurrency = Math.min(50, externalConcurrency * 2)
-  console.log(`Scaled up to ${externalConcurrency}`)
-})
+process.on("SIGUSR1", () => {
+  externalConcurrency = Math.min(50, externalConcurrency * 2);
+  console.log(`Scaled up to ${externalConcurrency}`);
+});
 
 // Scale down on SIGUSR2
-process.on('SIGUSR2', () => {
-  externalConcurrency = Math.max(1, Math.floor(externalConcurrency / 2))
-  console.log(`Scaled down to ${externalConcurrency}`)
-})
+process.on("SIGUSR2", () => {
+  externalConcurrency = Math.max(1, Math.floor(externalConcurrency / 2));
+  console.log(`Scaled down to ${externalConcurrency}`);
+});
 
 function signalBasedConcurrency(): number {
-  return externalConcurrency
+  return externalConcurrency;
 }
 ```
 
@@ -328,24 +326,24 @@ function signalBasedConcurrency(): number {
 
 ```typescript
 async function resilientProcessor(filePath: string): Promise<void> {
-  const maxRetries = 3
-  let attempt = 0
+  const maxRetries = 3;
+  let attempt = 0;
 
   while (attempt < maxRetries) {
     try {
-      await processFile(filePath)
-      return // Success
+      await processFile(filePath);
+      return; // Success
     } catch (error) {
-      attempt++
+      attempt++;
 
       if (attempt >= maxRetries) {
-        console.error(`Failed after ${maxRetries} attempts: ${filePath}`, error)
-        throw error
+        console.error(`Failed after ${maxRetries} attempts: ${filePath}`, error);
+        throw error;
       }
 
       // Exponential backoff
-      const delay = Math.pow(2, attempt) * 1000
-      await new Promise((resolve) => setTimeout(resolve, delay))
+      const delay = Math.pow(2, attempt) * 1000;
+      await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }
 }
@@ -355,35 +353,32 @@ async function resilientProcessor(filePath: string): Promise<void> {
 
 ```typescript
 class ProgressTracker {
-  private processed = 0
-  private errors = 0
-  private startTime = Date.now()
+  private processed = 0;
+  private errors = 0;
+  private startTime = Date.now();
 
   constructor(private total: number) {}
 
   onComplete() {
-    this.processed++
-    this.logProgress()
+    this.processed++;
+    this.logProgress();
   }
 
   onError() {
-    this.errors++
-    this.logProgress()
+    this.errors++;
+    this.logProgress();
   }
 
   private logProgress() {
-    const elapsed = Date.now() - this.startTime
-    const rate = this.processed / (elapsed / 1000)
-    const progress = (
-      ((this.processed + this.errors) / this.total) *
-      100
-    ).toFixed(1)
+    const elapsed = Date.now() - this.startTime;
+    const rate = this.processed / (elapsed / 1000);
+    const progress = (((this.processed + this.errors) / this.total) * 100).toFixed(1);
 
     console.log(
       `Progress: ${progress}% (${this.processed}/${
         this.total
-      }) Rate: ${rate.toFixed(2)}/s Errors: ${this.errors}`
-    )
+      }) Rate: ${rate.toFixed(2)}/s Errors: ${this.errors}`,
+    );
   }
 }
 ```
@@ -394,41 +389,41 @@ class ProgressTracker {
 
 ```typescript
 async function webScrapingExample() {
-  const urls = getUrlsToScrape() // Your URL source
-  const controller = new ConcurrencyController(5) // Start conservative
+  const urls = getUrlsToScrape(); // Your URL source
+  const controller = new ConcurrencyController(5); // Start conservative
 
   // Increase concurrency if no 429 errors for 30 seconds
-  let lastRateLimit = 0
+  let lastRateLimit = 0;
 
   const adaptiveConcurrency = () => {
-    const timeSinceLastRateLimit = Date.now() - lastRateLimit
+    const timeSinceLastRateLimit = Date.now() - lastRateLimit;
 
     if (timeSinceLastRateLimit > 30000) {
       // 30 seconds
-      return Math.min(20, controller.concurrency + 1)
+      return Math.min(20, controller.concurrency + 1);
     } else if (timeSinceLastRateLimit < 10000) {
       // 10 seconds
-      return Math.max(1, controller.concurrency - 1)
+      return Math.max(1, controller.concurrency - 1);
     }
 
-    return controller.concurrency
-  }
+    return controller.concurrency;
+  };
 
   await processWithDynamicConcurrency(
     asyncGenerator(urls),
     async (url) => {
       try {
-        await scrapeUrl(url)
+        await scrapeUrl(url);
       } catch (error) {
         if (error.status === 429) {
-          lastRateLimit = Date.now()
+          lastRateLimit = Date.now();
         }
-        throw error
+        throw error;
       }
     },
     controller,
-    adaptiveConcurrency
-  )
+    adaptiveConcurrency,
+  );
 }
 ```
 
@@ -436,28 +431,28 @@ async function webScrapingExample() {
 
 ```typescript
 async function databaseMigrationExample() {
-  const controller = new ConcurrencyController(10)
+  const controller = new ConcurrencyController(10);
 
   // Monitor database connection pool
   const dbAwareConcurrency = async () => {
-    const poolStats = await db.getPoolStats()
-    const utilization = poolStats.used / poolStats.total
+    const poolStats = await db.getPoolStats();
+    const utilization = poolStats.used / poolStats.total;
 
     if (utilization > 0.8) {
-      return 3 // High database load
+      return 3; // High database load
     } else if (utilization > 0.5) {
-      return 7 // Medium load
+      return 7; // Medium load
     } else {
-      return 15 // Low load
+      return 15; // Low load
     }
-  }
+  };
 
   await processWithDynamicConcurrency(
     iterateRecords(),
     migrateRecord,
     controller,
-    dbAwareConcurrency
-  )
+    dbAwareConcurrency,
+  );
 }
 ```
 
@@ -465,56 +460,56 @@ async function databaseMigrationExample() {
 
 ```typescript
 class CircuitBreaker {
-  private failures = 0
-  private lastFailureTime = 0
-  private state: 'CLOSED' | 'OPEN' | 'HALF_OPEN' = 'CLOSED'
+  private failures = 0;
+  private lastFailureTime = 0;
+  private state: "CLOSED" | "OPEN" | "HALF_OPEN" = "CLOSED";
 
   constructor(
     private failureThreshold = 5,
-    private timeout = 60000 // 1 minute
+    private timeout = 60000, // 1 minute
   ) {}
 
   async execute<T>(fn: () => Promise<T>): Promise<T> {
-    if (this.state === 'OPEN') {
+    if (this.state === "OPEN") {
       if (Date.now() - this.lastFailureTime > this.timeout) {
-        this.state = 'HALF_OPEN'
+        this.state = "HALF_OPEN";
       } else {
-        throw new Error('Circuit breaker is OPEN')
+        throw new Error("Circuit breaker is OPEN");
       }
     }
 
     try {
-      const result = await fn()
-      this.onSuccess()
-      return result
+      const result = await fn();
+      this.onSuccess();
+      return result;
     } catch (error) {
-      this.onFailure()
-      throw error
+      this.onFailure();
+      throw error;
     }
   }
 
   private onSuccess() {
-    this.failures = 0
-    this.state = 'CLOSED'
+    this.failures = 0;
+    this.state = "CLOSED";
   }
 
   private onFailure() {
-    this.failures++
-    this.lastFailureTime = Date.now()
+    this.failures++;
+    this.lastFailureTime = Date.now();
 
     if (this.failures >= this.failureThreshold) {
-      this.state = 'OPEN'
+      this.state = "OPEN";
     }
   }
 
   getConcurrency(): number {
     switch (this.state) {
-      case 'OPEN':
-        return 0
-      case 'HALF_OPEN':
-        return 1
-      case 'CLOSED':
-        return 10
+      case "OPEN":
+        return 0;
+      case "HALF_OPEN":
+        return 1;
+      case "CLOSED":
+        return 10;
     }
   }
 }

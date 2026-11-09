@@ -1,26 +1,41 @@
 ---
-import Base from '../layouts/Base.astro';
-import ChartBand from '../components/ChartBand.astro';
-import { certifications } from '../data/site';
+import Base from "../layouts/Base.astro";
+import ChartBand from "../components/ChartBand.astro";
+import { certifications } from "../data/site";
 
 const groups = [...new Set(certifications.map((c) => c.group))];
 ---
-<Base title="Certifications" description="Sankalp Mukim’s certifications: AWS Certified Solutions Architect – Associate (SAA-C03), networking fundamentals and NGINX fundamentals.">
-  <ChartBand slot="header" title="Certifications" intro="The paperwork. Pilot licence still pending." seed={21} />
-  <section class="section wrap" data-pelican="wheelie" data-pelican-says="I am certified. Certified pelican.">
+
+<Base
+  title="Certifications"
+  description="Sankalp Mukim’s certifications: AWS Certified Solutions Architect – Associate (SAA-C03), networking fundamentals and NGINX fundamentals."
+>
+  <ChartBand
+    slot="header"
+    title="Certifications"
+    intro="The paperwork. Pilot licence still pending."
+    seed={21}
+  />
+  <section
+    class="section wrap"
+    data-pelican="wheelie"
+    data-pelican-says="I am certified. Certified pelican."
+  >
     {groups.map((g) => (
       <>
         <h2 class="cert-group">{g}</h2>
         <ul class="certs">
-          {certifications.filter((c) => c.group === g).map((c) => (
-            <li class="cert">
-              <span class="cert-code">{c.code}</span>
-              <h2>{c.title}</h2>
-              <p class="cert-issuer">{c.issuer}</p>
-              <p class="cert-desc">{c.description}</p>
-              <a href={c.href}>View certificate (PDF)</a>
-            </li>
-          ))}
+          {certifications
+            .filter((c) => c.group === g)
+            .map((c) => (
+              <li class="cert">
+                <span class="cert-code">{c.code}</span>
+                <h2>{c.title}</h2>
+                <p class="cert-issuer">{c.issuer}</p>
+                <p class="cert-desc">{c.description}</p>
+                <a href={c.href}>View certificate (PDF)</a>
+              </li>
+            ))}
         </ul>
       </>
     ))}

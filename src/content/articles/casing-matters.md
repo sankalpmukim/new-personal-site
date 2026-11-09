@@ -39,7 +39,7 @@ const UserDashboard = () => { ... }
 ```typescript
 // Often used for constants
 const MAX_LOGIN_ATTEMPTS = 3;
-const API_BASE_URL = 'https://api.example.com';
+const API_BASE_URL = "https://api.example.com";
 ```
 
 ## Why Consistency Matters

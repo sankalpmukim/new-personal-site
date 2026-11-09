@@ -1,51 +1,90 @@
 ---
-import { getCollection } from 'astro:content';
-import Base from '../layouts/Base.astro';
-import Nav from '../components/Nav.astro';
-import FlightStrip from '../components/FlightStrip.astro';
-import StripKey from '../components/StripKey.astro';
-import Logbook from '../components/Logbook.astro';
-import ArticleList from '../components/ArticleList.astro';
-import { person, links, projects, peaks } from '../data/site';
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import Nav from "../components/Nav.astro";
+import FlightStrip from "../components/FlightStrip.astro";
+import StripKey from "../components/StripKey.astro";
+import Logbook from "../components/Logbook.astro";
+import ArticleList from "../components/ArticleList.astro";
+import { person, links, projects, peaks } from "../data/site";
 
-const articles = (await getCollection('articles', (a) => !a.data.draft))
+const articles = (await getCollection("articles", (a) => !a.data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 4);
 
 const featured = projects.filter((p) => p.featured);
 ---
+
 <Base>
-  <section class="hero" slot="header" data-atc data-peaks={JSON.stringify(peaks)} aria-label="Introduction and approach control game">
-    <canvas class="hero-canvas" data-atc-canvas aria-label="Animated aeronautical chart with planes on approach. Drag planes to the runway to play." role="img"></canvas>
+  <section
+    class="hero"
+    slot="header"
+    data-atc
+    data-peaks={JSON.stringify(peaks)}
+    aria-label="Introduction and approach control game"
+  >
+    <canvas
+      class="hero-canvas"
+      data-atc-canvas
+      aria-label="Animated aeronautical chart with planes on approach. Drag planes to the runway to play."
+      role="img"
+    ></canvas>
     <Nav />
     <div class="hero-copy">
-      <h1><span class="halo">Sankalp Mukim</span></h1>
-      <p class="hero-lede"><span class="halo">Mostly-TypeScript full-stack generalist at IBM Cloud, building the platform its production AI agents run on. Usually somewhere near a mountain or an airport.</span></p>
+      <h1>
+        <span class="halo">Sankalp Mukim</span>
+      </h1>
+      <p class="hero-lede">
+        <span class="halo">
+          Mostly-TypeScript full-stack generalist at IBM Cloud, building the platform its production
+          AI agents run on. Usually somewhere near a mountain or an airport.
+        </span>
+      </p>
       <div class="hero-actions">
-        <button class="btn" type="button" data-atc-start>Take the controls</button>
-        <a class="btn btn--ghost" href="/projects">See projects</a>
-        <span class="hero-hint"><span class="halo">Or drag any plane onto the runway.</span></span>
+        <button class="btn" type="button" data-atc-start>
+          Take the controls
+        </button>
+        <a class="btn btn--ghost" href="/projects">
+          See projects
+        </a>
+        <span class="hero-hint">
+          <span class="halo">Or drag any plane onto the runway.</span>
+        </span>
       </div>
     </div>
     <aside class="legend" aria-label="Approach control">
       <h2>Approach control</h2>
       <div class="legend-score">
-        <div>Landed<b data-atc-score>0</b></div>
-        <div>Best<b data-atc-best>0</b></div>
+        <div>
+          Landed<b data-atc-score>0</b>
+        </div>
+        <div>
+          Best<b data-atc-best>0</b>
+        </div>
       </div>
       <ul>
-        <li><i style="background: var(--blue)"></i>Prop, slow</li>
-        <li><i style="background: var(--magenta)"></i>Jet, fast</li>
-        <li><i style="background: var(--beak)"></i>Heavy, big turns</li>
+        <li>
+          <i style="background: var(--blue)"></i>Prop, slow
+        </li>
+        <li>
+          <i style="background: var(--magenta)"></i>Jet, fast
+        </li>
+        <li>
+          <i style="background: var(--beak)"></i>Heavy, big turns
+        </li>
       </ul>
       <p data-atc-status aria-live="polite"></p>
-      <button class="btn btn--ghost" type="button" data-atc-stop hidden>Hand back controls</button>
+      <button class="btn btn--ghost" type="button" data-atc-stop hidden>
+        Hand back controls
+      </button>
     </aside>
     <div class="atc-over" data-atc-over hidden>
       <div class="atc-over-card" role="alertdialog" aria-labelledby="atc-over-title">
         <h2 id="atc-over-title">Separation lost</h2>
         <p data-atc-final></p>
-        <button class="btn" type="button" data-atc-start>Try again</button>
+        <button class="btn" type="button" data-atc-start>
+          Try again
+        </button>
       </div>
     </div>
   </section>
@@ -53,18 +92,33 @@ const featured = projects.filter((p) => p.featured);
   <section class="section wrap" data-pelican="cross" data-pelican-says="Hi. I live here now.">
     <div class="intro-grid">
       <div>
-        <p class="intro-big">I’m a mostly-TypeScript full-stack generalist who likes digging into things until they stop feeling like magic.</p>
-        <p>At IBM Cloud I’m the main author of the AIOps Bot Platform — the harness, inference, observability and analytics that production incident agents run on — and of ask-iaas, a chatbot L1 support engineers use to debug incidents. Outside work I ship browser extensions with real users, write about infrastructure, fly in a simulator with real procedures, and trek in the Himalaya whenever the calendar allows.</p>
+        <p class="intro-big">
+          I’m a mostly-TypeScript full-stack generalist who likes digging into things until they
+          stop feeling like magic.
+        </p>
+        <p>
+          At IBM Cloud I’m the main author of the AIOps Bot Platform — the harness, inference,
+          observability and analytics that production incident agents run on — and of ask-iaas, a
+          chatbot L1 support engineers use to debug incidents. Outside work I ship browser
+          extensions with real users, write about infrastructure, fly in a simulator with real
+          procedures, and trek in the Himalaya whenever the calendar allows.
+        </p>
       </div>
       <aside class="facts" aria-label="Quick facts">
         <h3>Position report</h3>
         <dl>
-          <dt>Now</dt><dd>{person.role}</dd>
-          <dt>Based</dt><dd>{person.home}</dd>
-          <dt>Building</dt><dd>Agent platform, ask-iaas, MCP servers</dd>
-          <dt>Flying</dt><dd>X-Plane and VATSIM, real licence one day</dd>
-          <dt>Trekking</dt><dd>Kuari Pass, Hampta &amp; Bhrigu done; Gaumukh approach so far</dd>
-          <dt>Travelling</dt><dd>Coorg, Bali, and 33-hour trains</dd>
+          <dt>Now</dt>
+          <dd>{person.role}</dd>
+          <dt>Based</dt>
+          <dd>{person.home}</dd>
+          <dt>Building</dt>
+          <dd>Agent platform, ask-iaas, MCP servers</dd>
+          <dt>Flying</dt>
+          <dd>X-Plane and VATSIM, real licence one day</dd>
+          <dt>Trekking</dt>
+          <dd>Kuari Pass, Hampta &amp; Bhrigu done; Gaumukh approach so far</dd>
+          <dt>Travelling</dt>
+          <dd>Coorg, Bali, and 33-hour trains</dd>
         </dl>
         <div class="links">
           <a href={links.github}>GitHub</a>
@@ -76,21 +130,32 @@ const featured = projects.filter((p) => p.featured);
     </div>
   </section>
 
-  <section class="section wrap" data-pelican="peek" data-pelican-says="Ooh, browser extensions." aria-labelledby="projects-title">
+  <section
+    class="section wrap"
+    data-pelican="peek"
+    data-pelican-says="Ooh, browser extensions."
+    aria-labelledby="projects-title"
+  >
     <div class="section-head">
       <h2 id="projects-title">Things I’ve built</h2>
-      <a class="more-link" href="/projects">All projects and contributions</a>
+      <a class="more-link" href="/projects">
+        All projects and contributions
+      </a>
     </div>
-    <StripKey kinds={['tool', 'learning']} />
+    <StripKey kinds={["tool", "learning"]} />
     <ul class="strip-board">
-      {featured.map((p) => <FlightStrip p={p} />)}
+      {featured.map((p) => (
+        <FlightStrip p={p} />
+      ))}
     </ul>
   </section>
 
   <section class="section wrap" data-pelican="wheelie" aria-labelledby="log-title">
     <div class="section-head">
       <h2 id="log-title">Logbook</h2>
-      <a class="more-link" href={links.resume}>Download résumé (PDF)</a>
+      <a class="more-link" href={links.resume}>
+        Download résumé (PDF)
+      </a>
     </div>
     <Logbook />
   </section>
@@ -98,19 +163,21 @@ const featured = projects.filter((p) => p.featured);
   <section class="section wrap" data-pelican="tumble" aria-labelledby="writing-title">
     <div class="section-head">
       <h2 id="writing-title">Recent writing</h2>
-      <a class="more-link" href="/articles">All articles</a>
+      <a class="more-link" href="/articles">
+        All articles
+      </a>
     </div>
     <ArticleList articles={articles} />
   </section>
 </Base>
 
 <script>
-  import { initAtc } from '../scripts/atc';
+  import { initAtc } from "../scripts/atc";
 
-  const root = document.querySelector<HTMLElement>('[data-atc]');
+  const root = document.querySelector<HTMLElement>("[data-atc]");
 
   if (root) {
-    const start = () => initAtc(root, JSON.parse(root.dataset.peaks || '[]'));
+    const start = () => initAtc(root, JSON.parse(root.dataset.peaks || "[]"));
     // wait briefly for Archivo so chart labels render in the right face, but never block on it
     const ready = document.fonts?.ready ?? Promise.resolve();
     Promise.race([ready, new Promise((r) => setTimeout(r, 700))]).then(start);

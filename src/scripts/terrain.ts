@@ -16,14 +16,14 @@ export function readColors(el: Element = document.documentElement): ChartColors 
   const v = (n: string) => cs.getPropertyValue(n).trim();
 
   return {
-    paper: v('--paper'),
-    paper2: v('--paper-2'),
-    tan: v('--tan'),
-    tan2: v('--tan-2'),
-    ink: v('--ink'),
-    water: v('--water'),
-    magenta: v('--magenta'),
-    blue: v('--blue'),
+    paper: v("--paper"),
+    paper2: v("--paper-2"),
+    tan: v("--tan"),
+    tan2: v("--tan-2"),
+    ink: v("--ink"),
+    water: v("--water"),
+    magenta: v("--magenta"),
+    blue: v("--blue"),
   };
 }
 
@@ -98,7 +98,7 @@ export function drawTerrain(
   w: number,
   h: number,
   colors: ChartColors,
-  opts: TerrainOptions = {}
+  opts: TerrainOptions = {},
 ): Terrain {
   const seed = opts.seed ?? 7;
   const relief = opts.relief ?? 1;
@@ -215,14 +215,38 @@ export function drawTerrain(
         };
 
         switch (code) {
-          case 1: case 14: seg(left, bottom); break;
-          case 2: case 13: seg(bottom, right); break;
-          case 3: case 12: seg(left, right); break;
-          case 4: case 11: seg(top, right); break;
-          case 5: seg(left, top); seg(bottom, right); break;
-          case 6: case 9: seg(top, bottom); break;
-          case 7: case 8: seg(left, top); break;
-          case 10: seg(left, bottom); seg(top, right); break;
+          case 1:
+          case 14:
+            seg(left, bottom);
+            break;
+          case 2:
+          case 13:
+            seg(bottom, right);
+            break;
+          case 3:
+          case 12:
+            seg(left, right);
+            break;
+          case 4:
+          case 11:
+            seg(top, right);
+            break;
+          case 5:
+            seg(left, top);
+            seg(bottom, right);
+            break;
+          case 6:
+          case 9:
+            seg(top, bottom);
+            break;
+          case 7:
+          case 8:
+            seg(left, top);
+            break;
+          case 10:
+            seg(left, bottom);
+            seg(top, right);
+            break;
         }
       }
     }
@@ -254,14 +278,17 @@ export function drawTerrain(
 
       for (let dj = -R; dj <= R && isMax; dj++)
         for (let di = -R; di <= R; di++)
-          if ((di || dj) && field[(j + dj) * cols + i + di] > v) { isMax = false; break; }
+          if ((di || dj) && field[(j + dj) * cols + i + di] > v) {
+            isMax = false;
+            break;
+          }
 
       if (isMax) candidates.push({ x: i * cell, y: j * cell, h: v });
     }
   }
 
   candidates.sort((a, b) => b.h - a.h);
-  const peaks: Terrain['peaks'] = [];
+  const peaks: Terrain["peaks"] = [];
 
   for (const c of candidates) {
     if (peaks.length >= (opts.maxPeaks ?? 6)) break;
@@ -278,7 +305,11 @@ export function drawTerrain(
   return { peaks };
 }
 
-export function drawPeaks(ctx: CanvasRenderingContext2D, peaks: Terrain['peaks'], colors: ChartColors) {
+export function drawPeaks(
+  ctx: CanvasRenderingContext2D,
+  peaks: Terrain["peaks"],
+  colors: ChartColors,
+) {
   ctx.save();
 
   for (const p of peaks) {
@@ -292,7 +323,7 @@ export function drawPeaks(ctx: CanvasRenderingContext2D, peaks: Terrain['peaks']
 
     if (p.name) {
       ctx.font = '600 11px "Archivo Variable", Archivo, sans-serif';
-      ctx.fontStretch = 'condensed';
+      ctx.fontStretch = "condensed";
       ctx.globalAlpha = 0.85;
       ctx.fillText(p.name, p.x + 8, p.y + 1);
       ctx.globalAlpha = 1;
@@ -301,7 +332,7 @@ export function drawPeaks(ctx: CanvasRenderingContext2D, peaks: Terrain['peaks']
     if (p.elevation != null) {
       ctx.font = '500 10px "Archivo Variable", Archivo, sans-serif';
       ctx.globalAlpha = 0.6;
-      ctx.fillText(`${p.elevation.toLocaleString('en-US')} m`, p.x + 8, p.y + 13);
+      ctx.fillText(`${p.elevation.toLocaleString("en-US")} m`, p.x + 8, p.y + 13);
       ctx.globalAlpha = 1;
     }
   }
@@ -317,7 +348,7 @@ export function fitCanvas(canvas: HTMLCanvasElement) {
   const h = Math.max(1, Math.round(rect.height));
   canvas.width = Math.round(w * dpr);
   canvas.height = Math.round(h * dpr);
-  const ctx = canvas.getContext('2d')!;
+  const ctx = canvas.getContext("2d")!;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
   return { ctx, w, h, dpr };

@@ -9,7 +9,7 @@ Just to be clear, I am and enjoy being a Software Engineer. My pursuit of becomi
 
 ## Background?
 
-As I have a full time job in Software Engineering, I have to balance my time between work, and my pilot training. 
+As I have a full time job in Software Engineering, I have to balance my time between work, and my pilot training.
 And realistically, as of now, I don't have the funds either to pursue this dream right away. So, I am taking it slow, and steady.
 
 ## Plan
@@ -36,7 +36,7 @@ As part of this phase, I'll focus deeply on Flight Sim Enthusiast stuff:
 - Picking one between Boeing 737 and Airbus A320 and start learning about it.
 - Then fly this aircraft seriously on VATSIM.
 
-There's roughly two kinds of people in the Flight Sim community. The ones who just want to fly and have fun, these focus too much on computers, and autopilot, and maybe where what buttons are. 
+There's roughly two kinds of people in the Flight Sim community. The ones who just want to fly and have fun, these focus too much on computers, and autopilot, and maybe where what buttons are.
 
 The other is who while learning the same things as the previous kind, also focus on the real-world procedures, and the real-world way of flying. I want to be the latter. I will be focusing on the theory as well. Understanding each aircraft I pick closely before I move on from it to the next one.
 

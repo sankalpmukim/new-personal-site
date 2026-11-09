@@ -26,7 +26,7 @@
   --kind-client: var(--beak);
   --kind-upstream: #1e6b5c;
 
-  --font: 'Archivo Variable', 'Archivo', ui-sans-serif, system-ui, sans-serif;
+  --font: "Archivo Variable", "Archivo", ui-sans-serif, system-ui, sans-serif;
   --fs-xs: 0.8125rem;
   --fs-sm: 0.875rem;
   --fs-base: 1.0625rem;
@@ -188,7 +188,9 @@ p {
   cursor: pointer;
   text-decoration: none;
   border-radius: 999px;
-  transition: transform 120ms ease, background-color 120ms ease;
+  transition:
+    transform 120ms ease,
+    background-color 120ms ease;
 }
 .btn:hover {
   color: var(--paper);
@@ -255,7 +257,7 @@ p {
   flex: none;
 }
 .route li:not(:last-child)::after {
-  content: '';
+  content: "";
   width: clamp(0.75rem, 2.2vw, 2rem);
   height: 2px;
   background: var(--magenta);
@@ -273,7 +275,7 @@ p {
   white-space: nowrap;
 }
 .route a::before {
-  content: '';
+  content: "";
   width: 9px;
   height: 9px;
   border: 2px solid var(--magenta);
@@ -281,10 +283,10 @@ p {
   transform: rotate(45deg);
   flex: none;
 }
-.route a[aria-current='page']::before {
+.route a[aria-current="page"]::before {
   background: var(--magenta);
 }
-.route a[aria-current='page'] {
+.route a[aria-current="page"] {
   color: var(--magenta);
 }
 .nav-end {
@@ -684,10 +686,18 @@ p {
 .strip > * + * {
   border-left: 1px solid var(--rule);
 }
-.strip[data-kind='tool'] { --kind: var(--kind-tool); }
-.strip[data-kind='learning'] { --kind: var(--kind-learning); }
-.strip[data-kind='client'] { --kind: var(--kind-client); }
-.strip[data-kind='upstream'] { --kind: var(--kind-upstream); }
+.strip[data-kind="tool"] {
+  --kind: var(--kind-tool);
+}
+.strip[data-kind="learning"] {
+  --kind: var(--kind-learning);
+}
+.strip[data-kind="client"] {
+  --kind: var(--kind-client);
+}
+.strip[data-kind="upstream"] {
+  --kind: var(--kind-upstream);
+}
 
 .strip-call {
   font-stretch: 70%;
@@ -713,7 +723,7 @@ p {
   text-decoration: none;
 }
 .strip-main h3 a::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
 }
@@ -1106,7 +1116,7 @@ p {
   z-index: 40;
   overflow: hidden;
 }
-html[data-pelicans='off'] #pelican-layer {
+html[data-pelicans="off"] #pelican-layer {
   display: none;
 }
 .pelican-actor,
@@ -1150,7 +1160,9 @@ html[data-pelicans='off'] #pelican-layer {
   border-radius: 14px 14px 14px 2px;
   opacity: 0;
   transform: translateY(6px);
-  transition: opacity 150ms ease, transform 150ms ease;
+  transition:
+    opacity 150ms ease,
+    transform 150ms ease;
 }
 .pelican-rider .pelican-bubble {
   font-size: 1.4rem;

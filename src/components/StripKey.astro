@@ -1,10 +1,18 @@
 ---
-import { kindLabels, stripKinds, type StripKind } from '../data/site';
+import { kindLabels, stripKinds, type StripKind } from "../data/site";
 
-interface Props { kinds?: readonly StripKind[] }
+interface Props {
+  kinds?: readonly StripKind[];
+}
 
 const kinds = Astro.props.kinds ?? stripKinds;
 ---
+
 <ul class="strip-key" aria-label="Strip colours">
-  {kinds.map((k) => <li style={`--kind: var(--kind-${k})`}><i aria-hidden="true"></i>{kindLabels[k]}</li>)}
+  {kinds.map((k) => (
+    <li style={`--kind: var(--kind-${k})`}>
+      <i aria-hidden="true"></i>
+      {kindLabels[k]}
+    </li>
+  ))}
 </ul>
