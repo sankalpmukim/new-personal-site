@@ -1,5 +1,37 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/articles/adapter_pattern_article",
+      "destination": "/articles/adapter-pattern-article",
+      "permanent": true
+    },
+    {
+      "source": "/articles/concurrency_control_guide",
+      "destination": "/articles/concurrency-control-guide",
+      "permanent": true
+    },
+    {
+      "source": "/articles/million-dolllar-tech-stack",
+      "destination": "/articles/million-dollar-tech-stack",
+      "permanent": true
+    },
+    {
+      "source": "/rss/feed.json",
+      "destination": "/rss.xml",
+      "permanent": true
+    },
+    {
+      "source": "/feed.xml",
+      "destination": "/rss.xml",
+      "permanent": true
+    },
+    {
+      "source": "/cdn-cgi/l/email-protection",
+      "destination": "/about",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     { "source": "/relay/static/(.*)", "destination": "https://us-assets.i.posthog.com/static/$1" },
     { "source": "/relay/array/(.*)", "destination": "https://us-assets.i.posthog.com/array/$1" },
