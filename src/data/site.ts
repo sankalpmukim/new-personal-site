@@ -17,8 +17,8 @@ export const links = {
   instagram: "https://www.instagram.com/sankalpmukim/",
   email: "mailto:sankalpmukim@gmail.com",
   resume: "/resume.pdf",
-  privacy: "/privacy-policy.pdf",
-  terms: "/terms-of-use.pdf",
+  privacy: "/privacy",
+  terms: "/terms",
   rss: "/rss.xml",
 };
 
