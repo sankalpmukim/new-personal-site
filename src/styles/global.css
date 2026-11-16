@@ -514,8 +514,8 @@ p {
 }
 .atc-over-card {
   pointer-events: auto;
-  background: var(--strip);
-  border: 2px solid var(--ink);
+  background: color-mix(in srgb, var(--paper) 52%, transparent);
+  border: 2px solid color-mix(in srgb, var(--ink) 34%, transparent);
   padding: 1.5rem 1.75rem;
   max-width: 26rem;
 }
