@@ -1,0 +1,25 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "new-personal-site",
+  "main": "./worker/index.ts",
+  "compatibility_date": "2026-11-16",
+  "upload_source_maps": true,
+  "observability": { "enabled": true },
+  // Apex routes to the Worker on the sankalpmukim.dev zone. The DNS record is
+  // an orange-clouded CNAME (origin content is inert — the route intercepts
+  // all traffic). Rollback: remove the route and/or grey-cloud the record.
+  "routes": [{ "pattern": "sankalpmukim.dev/*", "zone_id": "d6a5c623fb749d42541ce2054138402f" }],
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    // The site builds directory-format pages (dist/about/index.html) and its
+    // canonical URLs have no trailing slash (astro.config.mjs: trailingSlash
+    // "never"). The default "auto-trailing-slash" would 307 /about to /about/,
+    // so drop the slash instead.
+    "html_handling": "drop-trailing-slash",
+    // Every page is a static asset and is served without invoking this Worker.
+    // Only the PostHog relay (worker/index.ts) runs code.
+    "run_worker_first": ["/relay/*"],
+  },
+}

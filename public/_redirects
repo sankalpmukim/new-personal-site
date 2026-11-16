@@ -1,0 +1,9 @@
+# Ports of the permanent redirects that used to live in vercel.json.
+# Note: /cdn-cgi/* paths are intercepted by Cloudflare's edge itself, so the
+# old /cdn-cgi/l/email-protection -> /about rule is intentionally not ported.
+
+/articles/adapter_pattern_article /articles/adapter-pattern-article 301
+/articles/concurrency_control_guide /articles/concurrency-control-guide 301
+/articles/million-dolllar-tech-stack /articles/million-dollar-tech-stack 301
+/rss/feed.json /rss.xml 301
+/feed.xml /rss.xml 301
