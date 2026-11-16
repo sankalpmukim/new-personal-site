@@ -3,7 +3,7 @@
 export const person = {
   name: "Sankalp Mukim",
   role: "Software engineer at IBM Cloud",
-  home: "Delhi NCR",
+  home: "Delhi",
   homeIcao: "VIDP",
   email: "sankalpmukim@gmail.com",
   intro:
@@ -582,7 +582,7 @@ export const photos: Photo[] = [
     src: "/photos/gallery-night-bike.jpg",
     alt: "A mountain bike after a dusty evening ride",
     caption: "The bike, after a dusty ride",
-    place: "Delhi NCR",
+    place: "Delhi",
     tall: true,
   },
   {
@@ -607,16 +607,17 @@ export const photos: Photo[] = [
 ];
 
 // Labels painted on the hero chart. Names are feed- and highlight-evidenced
-// trek places, not summits logged. The one elevation is taken from the
-// IndiaHikes DONE! banner at Hampta Pass (~14,100 ft / 4,287 m); the rest stay
-// name-only until a sign or banner puts a number on them.
-export type Peak = { name: string; elevation?: number };
+// trek places, not summits logged. Elevations are in feet: Hampta Pass comes
+// from the IndiaHikes DONE! banner (~14,100 ft); the rest are the operator's
+// published highs — Kuari Pass 12,516 ft, Bhrigu Lake 14,009 ft, Tapovan
+// 14,202 ft at the top of the Gaumukh Tapovan trek.
+export type Peak = { name: string; elevationFt?: number };
 
 export const peaks: Peak[] = [
-  { name: "Kuari Pass" },
-  { name: "Hampta Pass", elevation: 4287 },
-  { name: "Bhrigu Lake" },
-  { name: "Gaumukh Tapovan" },
+  { name: "Kuari Pass", elevationFt: 12516 },
+  { name: "Hampta Pass", elevationFt: 14100 },
+  { name: "Bhrigu Lake", elevationFt: 14009 },
+  { name: "Gaumukh Tapovan", elevationFt: 14202 },
 ];
 
 // Obstacles in the pelican game. Drop a real logo at `img` (e.g. /ai-logos/openai.svg)

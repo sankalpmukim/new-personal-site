@@ -409,72 +409,95 @@ p {
   opacity: 0.25;
   pointer-events: none;
 }
-.hero.is-playing .legend {
-  pointer-events: none;
-}
-.hero.is-playing .legend [data-atc-stop] {
-  pointer-events: auto;
-}
 .hero.is-playing .hero-copy > *,
 .hero.is-over .hero-copy > * {
   pointer-events: none;
 }
 
-/* legend box, bottom right, doubles as the game HUD */
+/* score pill, top centre over the chart; see-through and click-through.
+   Only shown once a game is running, not on the attract screen. */
+.hud {
+  display: none;
+  align-self: center;
+  align-items: baseline;
+  gap: 0.85rem;
+  padding: 0.3rem 1rem 0.35rem;
+  border: 1px solid color-mix(in srgb, var(--ink) 42%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--paper) 66%, transparent);
+  font-stretch: 80%;
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  line-height: 1.2;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.hero.is-playing .hud,
+.hero.is-over .hud {
+  display: inline-flex;
+}
+.hud b {
+  margin-left: 0.15rem;
+  font-size: var(--fs-md);
+  font-weight: 900;
+  font-stretch: 100%;
+  font-variant-numeric: tabular-nums;
+}
+.hud-sep {
+  width: 1px;
+  height: 0.8em;
+  align-self: center;
+  background: color-mix(in srgb, var(--ink) 32%, transparent);
+}
+
+/* chart key plus hand-back control, bottom right; deliberately see-through
+   and click-through so planes stay visible and draggable behind it */
 .legend {
   position: absolute;
   right: var(--gutter);
   bottom: clamp(1.5rem, 5vh, 3.5rem);
-  width: 15.5rem;
-  background: var(--strip);
-  border: 2px solid var(--ink);
-  padding: 0.85rem 1rem 0.9rem;
-  font-stretch: 78%;
-  font-size: var(--fs-sm);
-  line-height: 1.35;
-}
-.legend h2 {
-  font-size: var(--fs-base);
-  font-stretch: 100%;
-  font-weight: 800;
-  margin-bottom: 0.5rem;
-}
-.legend-score {
   display: flex;
-  gap: 1.25rem;
-  font-variant-numeric: tabular-nums;
-}
-.legend-score b {
-  display: block;
-  font-size: var(--fs-xl);
-  font-stretch: 100%;
-  line-height: 1;
-  font-weight: 900;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.4rem;
+  max-width: 15rem;
+  padding: 0.35rem 0.6rem 0.45rem;
+  border: 1px solid color-mix(in srgb, var(--ink) 34%, transparent);
+  border-radius: 0.55rem;
+  background: color-mix(in srgb, var(--paper) 52%, transparent);
+  font-stretch: 78%;
+  font-size: var(--fs-xs);
+  line-height: 1.3;
+  pointer-events: none;
 }
 .legend ul {
   list-style: none;
   padding: 0;
-  margin: 0.75rem 0 0;
-  display: grid;
-  gap: 0.2rem;
+  margin: 0;
+  display: flex;
+  gap: 0.85rem;
 }
 .legend li {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.35rem;
+  white-space: nowrap;
 }
 .legend li i {
-  width: 18px;
-  height: 4px;
+  width: 14px;
+  height: 3px;
   display: inline-block;
 }
 .legend [data-atc-status]:not(:empty) {
-  margin-top: 0.6rem;
-  padding-top: 0.6rem;
-  border-top: 1px solid var(--rule);
+  font-size: 0.78rem;
+  line-height: 1.25;
+  text-align: right;
+  color: var(--ink-2);
 }
 .legend [data-atc-stop] {
-  margin-top: 0.75rem;
+  pointer-events: auto;
+  padding: 0.45rem 0.9rem;
+  font-size: var(--fs-xs);
 }
 .atc-over {
   position: absolute;
@@ -514,14 +537,14 @@ p {
   }
   .hero.is-playing .legend,
   .hero.is-over .legend {
-    display: block;
-    top: 7.5rem;
-    bottom: auto;
+    display: flex;
+    bottom: 1rem;
     right: 0.75rem;
-    width: auto;
-    padding: 0.5rem 0.75rem;
   }
   .hero.is-playing .legend ul,
+  .hero.is-over .legend ul {
+    display: none;
+  }
   .hero.is-playing .legend [data-atc-status] {
     display: none;
   }
