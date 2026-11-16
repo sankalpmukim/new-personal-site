@@ -4,9 +4,9 @@
 // undefined and the track() helpers in scripts/analytics.ts do nothing.
 const token = import.meta.env.PUBLIC_POSTHOG_PROJECT_TOKEN;
 
-// In production this is the same-origin proxy path from vercel.json (/relay), so tracker
-// blockers leave it alone. Locally it is https://us.i.posthog.com, because vercel.json
-// rewrites do not run under astro dev or preview.
+// In production this is the same-origin proxy path served by worker/index.ts (/relay), so
+// tracker blockers leave it alone. Locally it is https://us.i.posthog.com, because the relay
+// Worker does not run under astro dev or preview (it does under `wrangler dev`).
 const apiHost = import.meta.env.PUBLIC_POSTHOG_HOST;
 
 // The PostHog app itself, used for toolbar and replay links when apiHost is a proxy path.
@@ -14,8 +14,9 @@ const uiHost = import.meta.env.PUBLIC_POSTHOG_UI_HOST || "https://us.posthog.com
 
 const isDevelopment = import.meta.env.DEV;
 
-// Vercel sets this at build time. Local and preview builds leave it empty.
-const release = import.meta.env.VERCEL_GIT_COMMIT_SHA || "";
+// GitHub Actions sets GITHUB_SHA for Cloudflare builds; Vercel still injects its own SHA for
+// the www fallback host. Local and preview builds leave it empty.
+const release = import.meta.env.GITHUB_SHA || import.meta.env.VERCEL_GIT_COMMIT_SHA || "";
 ---
 
 <script is:inline define:vars={{ token, apiHost, uiHost, isDevelopment, release }}>
