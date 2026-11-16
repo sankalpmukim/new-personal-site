@@ -414,10 +414,11 @@ p {
   pointer-events: none;
 }
 
-/* score pill, top centre over the chart; see-through and click-through */
+/* score pill, top centre over the chart; see-through and click-through.
+   Only shown once a game is running, not on the attract screen. */
 .hud {
+  display: none;
   align-self: center;
-  display: inline-flex;
   align-items: baseline;
   gap: 0.85rem;
   padding: 0.3rem 1rem 0.35rem;
@@ -430,6 +431,10 @@ p {
   line-height: 1.2;
   white-space: nowrap;
   pointer-events: none;
+}
+.hero.is-playing .hud,
+.hero.is-over .hud {
+  display: inline-flex;
 }
 .hud b {
   margin-left: 0.15rem;

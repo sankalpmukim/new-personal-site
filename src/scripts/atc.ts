@@ -310,18 +310,31 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevationF
 
     b.restore();
 
-    // airport data block
+    // airport data block (VIDP's real field elevation is 777 ft). Each line is
+    // haloed in paper, like .halo text, so the compass rose behind stays legible
+    // without swallowing the labels.
     b.save();
-    b.font = '800 13px "Archivo Variable", Archivo, sans-serif';
     b.fontStretch = "condensed";
     b.fillStyle = colors.blue;
+    b.strokeStyle = colors.paper;
+    b.lineWidth = 3;
+    b.lineJoin = "round";
+
     const lx = rc.x + rLen * 0.32;
     const ly = rc.y + rLen * 0.42;
-    b.fillText("HOME BASE (VIDP)", lx, ly);
+
+    const line = (text: string, y: number) => {
+      b.strokeText(text, lx, y);
+      b.fillText(text, lx, y);
+    };
+
+    b.font = '800 13px "Archivo Variable", Archivo, sans-serif';
+    line("HOME BASE (VIDP)", ly);
     b.font = '600 11px "Archivo Variable", Archivo, sans-serif';
     b.globalAlpha = 0.85;
-
-    b.fillText(`118.10  ELEV 777  RWY ${designators[0]}/${designators[1]}`, lx, ly + 15);
+    line("ELEV 777 ft", ly + 15);
+    b.globalAlpha = 0.7;
+    line(`118.10 · RWY ${designators[0]}/${designators[1]}`, ly + 29);
     b.restore();
   }
 
