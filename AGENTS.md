@@ -1,12 +1,12 @@
 # AGENTS.md
 
-Personal site (sankalpmukim.dev): fully static Astro 7 site, TypeScript, pnpm. No UI framework — all interactivity is vanilla TypeScript drawing on `<canvas>`. Production deploys to Cloudflare Workers static assets (`wrangler.jsonc`): push to `main` triggers the GitHub Actions workflow in `.github/workflows/deploy.yml`, or run `pnpm deploy` locally. `www.sankalpmukim.dev` stays on Vercel as a live fallback (`.vercel/` link + `vercel.json` are kept for it). Lint with Oxlint plus the vendored anti-slop plugin. Format with Oxfmt. `CLAUDE.md` carries the same guidance for Claude Code — keep both in sync when changing conventions.
+Personal site (sankalpmukim.dev): fully static Astro 7 site, TypeScript, pnpm. No UI framework — all interactivity is vanilla TypeScript drawing on `<canvas>`. Deploys to Cloudflare Workers static assets (`wrangler.jsonc`): push to `main` triggers the GitHub Actions workflow in `.github/workflows/deploy.yml`, or run `pnpm deploy` locally. `www.sankalpmukim.dev` 308-redirects to the apex via a Cloudflare Redirect Rule. Lint with Oxlint plus the vendored anti-slop plugin. Format with Oxfmt. `CLAUDE.md` carries the same guidance for Claude Code — keep both in sync when changing conventions.
 
 ## Deployment (Cloudflare)
 
 - `wrangler.jsonc` serves `dist/` as static assets: `not_found_handling: "404-page"`, `html_handling: "drop-trailing-slash"` (must match Astro's `trailingSlash: 'never'` — the default `auto-trailing-slash` would 301 `/about` to `/about/`), and `run_worker_first: ["/relay/*"]` so only the PostHog relay ever runs code. `public/_headers` gives `/_astro/*` a one-year immutable cache (Cloudflare defaults assets to `must-revalidate`); `public/_redirects` holds the legacy 301s.
-- `worker/index.ts` is the `/relay` proxy to PostHog US (formerly `vercel.json` rewrites).
-- The apex `sankalpmukim.dev` is an orange-clouded CNAME with a Workers route `sankalpmukim.dev/*` → `new-personal-site`. Rollback to Vercel: remove the route (or grey-cloud the DNS record).
+- `worker/index.ts` is the `/relay` proxy to PostHog US.
+- Both DNS records (`sankalpmukim.dev`, `www.sankalpmukim.dev`) are orange-clouded CNAMEs to `new-personal-site.sankalpmukim.workers.dev`; the apex has the Workers route `sankalpmukim.dev/*` → `new-personal-site`, and `www` is handled by the zone's Redirect Rule (308 to apex, path and query preserved). Rollback to a previous deployment: `npx wrangler versions rollback` (or deploy any commit — CI keeps every version).
 - Production builds need the PostHog env vars: locally they live in gitignored `.env.production.local`; CI gets them from GitHub secrets (`PUBLIC_POSTHOG_PROJECT_TOKEN`, `CLOUDFLARE_API_TOKEN`).
 - `pnpm deploy` = `astro build && wrangler deploy`.
 
@@ -23,7 +23,7 @@ Personal site (sankalpmukim.dev): fully static Astro 7 site, TypeScript, pnpm. N
 
 ## Official documentation
 
-No official agent skills exist for the core stack, so consult the makers' docs when unsure about an API instead of improvising: Astro — https://docs.astro.build; TypeScript — https://www.typescriptlang.org/docs/; MDX — https://mdxjs.com; pnpm — https://pnpm.io; Shiki — https://shiki.style; sharp — https://sharp.pixelplumbing.com; Oxlint — https://oxc.rs/docs/guide/usage/linter.html; Oxfmt — https://oxc.rs/docs/guide/usage/formatter.html. (Vercel is covered by the `deploy-to-vercel` and `web-design-guidelines` skills in `.agents/skills/`.)
+No official agent skills exist for the core stack, so consult the makers' docs when unsure about an API instead of improvising: Astro — https://docs.astro.build; TypeScript — https://www.typescriptlang.org/docs/; MDX — https://mdxjs.com; pnpm — https://pnpm.io; Shiki — https://shiki.style; sharp — https://sharp.pixelplumbing.com; Oxlint — https://oxc.rs/docs/guide/usage/linter.html; Oxfmt — https://oxc.rs/docs/guide/usage/formatter.html. (Vercel is no longer used; the `deploy-to-vercel` skill in `.agents/skills/` covers it if it ever comes back.)
 
 ## Do not "clean up" pnpm-workspace.yaml
 
@@ -58,7 +58,7 @@ The whole site imitates an aeronautical sectional chart — new pages and sectio
 
 - `src/components/PostHog.astro` holds the official inline snippet and `posthog.init` config, rendered in the `<head>` of `Base.astro`. It covers product and web analytics, session replay (canvas recording on, because most of the site is canvas), heatmaps, dead clicks, web vitals, copy events and exception autocapture. Super properties `color_scheme`, `reduced_motion` and `pelicans` are registered in `loaded`, so they are on every event, including the first `$pageview`.
 - Env vars: `PUBLIC_POSTHOG_PROJECT_TOKEN`, `PUBLIC_POSTHOG_HOST` and the optional `PUBLIC_POSTHOG_UI_HOST` (see `.env.example`). With no token the snippet is skipped and nothing is sent. Production values reach the build via GitHub secrets (CI) or `.env.production.local` (local `pnpm deploy`).
-- `worker/index.ts` proxies `/relay/*` to PostHog US so tracker blockers leave it alone, and production uses `PUBLIC_POSTHOG_HOST=/relay`. `vercel.json` keeps the equivalent rewrites for the Vercel fallback host (`www`); the rewrites use the regex `(.*)` form on purpose: `:path*` does not match the trailing-slash endpoints (`/e/`, `/flags/`, `/s/`) that posthog-js calls.
+- `worker/index.ts` proxies `/relay/*` to PostHog US so tracker blockers leave it alone, and production uses `PUBLIC_POSTHOG_HOST=/relay`.
 - Custom events go through `track()` / `registerProps()` / `captureException()` / `addExceptionStep()` in `src/scripts/analytics.ts`, never `window.posthog` directly. The wrappers are no-ops without PostHog and swallow errors. Event names are snake_case `object_verb`: `atc_game_started|stopped|ended`, `pelican_run_started|ended`, `pelican_display_toggled`, `article_finished`, `page_not_found`, and the delegated link events `resume_downloaded`, `contact_link_clicked`, `project_link_clicked`, `outbound_link_clicked`, `rss_link_clicked`. When you add a feature, add its event the same way. Canvas and game boot goes through `runGuarded()` so handled throws still become `$exception` events with a `surface` property. Game starts also call `addExceptionStep()`. Production builds emit JS source maps (`vite.build.sourcemap`) so PostHog can unminify stack traces from the live site.
 
 ## Conventions

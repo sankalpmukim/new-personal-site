@@ -14,9 +14,8 @@ const uiHost = import.meta.env.PUBLIC_POSTHOG_UI_HOST || "https://us.posthog.com
 
 const isDevelopment = import.meta.env.DEV;
 
-// GitHub Actions sets GITHUB_SHA for Cloudflare builds; Vercel still injects its own SHA for
-// the www fallback host. Local and preview builds leave it empty.
-const release = import.meta.env.GITHUB_SHA || import.meta.env.VERCEL_GIT_COMMIT_SHA || "";
+// GitHub Actions sets GITHUB_SHA for CI builds. Local and preview builds leave it empty.
+const release = import.meta.env.GITHUB_SHA || "";
 ---
 
 <script is:inline define:vars={{ token, apiHost, uiHost, isDevelopment, release }}>

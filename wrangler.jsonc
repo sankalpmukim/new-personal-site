@@ -5,9 +5,10 @@
   "compatibility_date": "2026-11-16",
   "upload_source_maps": true,
   "observability": { "enabled": true },
-  // Apex routes to the Worker on the sankalpmukim.dev zone. The DNS record is
-  // an orange-clouded CNAME (origin content is inert — the route intercepts
-  // all traffic). Rollback: remove the route and/or grey-cloud the record.
+  // Apex routes to the Worker on the sankalpmukim.dev zone. The DNS records are
+  // orange-clouded CNAMEs to the workers.dev host (origin content is inert —
+  // the route intercepts all traffic). www is 308-redirected to the apex by a
+  // zone Redirect Rule. Roll back a bad deploy with `wrangler versions rollback`.
   "routes": [{ "pattern": "sankalpmukim.dev/*", "zone_id": "d6a5c623fb749d42541ce2054138402f" }],
   "assets": {
     "directory": "./dist",
