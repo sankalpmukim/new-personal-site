@@ -418,11 +418,15 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevationF
 
         if (Math.hypot(p.x - e.x, p.y - e.y) >= 10 * S) continue;
 
-        if (Math.abs(angDiff(p.drawHdg, rw.dirs[end])) >= 0.9) continue;
-
         const clearedHere = p.cleared?.rw === rw && p.cleared.end === end;
 
-        if (clearedHere || p.path.length === 0) return { rw, end };
+        // if cleared to this runway, accept it even if heading hasn't fully aligned yet
+        // (the snapped path guarantees proper approach); otherwise require alignment
+        if (
+          clearedHere ||
+          (Math.abs(angDiff(p.drawHdg, rw.dirs[end])) < 0.9 && p.path.length === 0)
+        )
+          return { rw, end };
       }
     }
 
