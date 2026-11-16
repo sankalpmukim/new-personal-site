@@ -30,6 +30,15 @@ const featured = projects.filter((p) => p.featured);
       role="img"
     ></canvas>
     <Nav />
+    <div class="hud" role="group" aria-label="Approach control score">
+      <span>
+        Landed <b data-atc-score>0</b>
+      </span>
+      <span class="hud-sep" aria-hidden="true"></span>
+      <span>
+        Best <b data-atc-best>0</b>
+      </span>
+    </div>
     <div class="hero-copy">
       <h1>
         <span class="halo">Sankalp Mukim</span>
@@ -52,25 +61,19 @@ const featured = projects.filter((p) => p.featured);
         </span>
       </div>
     </div>
-    <aside class="legend" aria-label="Approach control">
-      <h2>Approach control</h2>
-      <div class="legend-score">
-        <div>
-          Landed<b data-atc-score>0</b>
-        </div>
-        <div>
-          Best<b data-atc-best>0</b>
-        </div>
-      </div>
-      <ul>
+    <aside class="legend" aria-label="Approach control key and controls">
+      <ul class="legend-key">
         <li>
-          <i style="background: var(--blue)"></i>Prop, slow
+          <i style="background: var(--blue)"></i>
+          <span class="halo">Prop</span>
         </li>
         <li>
-          <i style="background: var(--magenta)"></i>Jet, fast
+          <i style="background: var(--magenta)"></i>
+          <span class="halo">Jet</span>
         </li>
         <li>
-          <i style="background: var(--beak)"></i>Heavy, big turns
+          <i style="background: var(--beak)"></i>
+          <span class="halo">Heavy</span>
         </li>
       </ul>
       <p data-atc-status aria-live="polite"></p>
@@ -130,6 +133,16 @@ const featured = projects.filter((p) => p.featured);
     </div>
   </section>
 
+  <section class="section wrap" data-pelican="tumble" aria-labelledby="writing-title">
+    <div class="section-head">
+      <h2 id="writing-title">Recent writing</h2>
+      <a class="more-link" href="/articles">
+        All articles
+      </a>
+    </div>
+    <ArticleList articles={articles} />
+  </section>
+
   <section
     class="section wrap"
     data-pelican="peek"
@@ -158,16 +171,6 @@ const featured = projects.filter((p) => p.featured);
       </a>
     </div>
     <Logbook />
-  </section>
-
-  <section class="section wrap" data-pelican="tumble" aria-labelledby="writing-title">
-    <div class="section-head">
-      <h2 id="writing-title">Recent writing</h2>
-      <a class="more-link" href="/articles">
-        All articles
-      </a>
-    </div>
-    <ArticleList articles={articles} />
   </section>
 </Base>
 

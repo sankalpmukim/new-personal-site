@@ -83,13 +83,13 @@ export type TerrainOptions = {
   valleys?: { x: number; y: number; r: number }[];
   /** 0..1 how mountainous */
   relief?: number;
-  peakNames?: { name: string; elevation?: number }[];
+  peakNames?: { name: string; elevationFt?: number }[];
   maxPeaks?: number;
   cell?: number;
 };
 
 export type Terrain = {
-  peaks: { x: number; y: number; h: number; name?: string; elevation?: number }[];
+  peaks: { x: number; y: number; h: number; name?: string; elevationFt?: number }[];
 };
 
 /** Draws terrain into ctx (already scaled for DPR) over a w×h css-px area. */
@@ -297,7 +297,7 @@ export function drawTerrain(
 
     if (peaks.some((p) => Math.hypot(p.x - c.x, p.y - c.y) < 180)) continue;
     const named = opts.peakNames?.[peaks.length];
-    peaks.push({ ...c, name: named?.name, elevation: named?.elevation });
+    peaks.push({ ...c, name: named?.name, elevationFt: named?.elevationFt });
   }
 
   ctx.restore();
@@ -329,10 +329,10 @@ export function drawPeaks(
       ctx.globalAlpha = 1;
     }
 
-    if (p.elevation != null) {
+    if (p.elevationFt != null) {
       ctx.font = '500 10px "Archivo Variable", Archivo, sans-serif';
       ctx.globalAlpha = 0.6;
-      ctx.fillText(`${p.elevation.toLocaleString("en-US")} m`, p.x + 8, p.y + 13);
+      ctx.fillText(`${p.elevationFt.toLocaleString("en-US")} ft`, p.x + 8, p.y + 13);
       ctx.globalAlpha = 1;
     }
   }
