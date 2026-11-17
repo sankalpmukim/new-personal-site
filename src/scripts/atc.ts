@@ -1300,8 +1300,13 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevationF
     return false;
   }
 
+  canvas.addEventListener("contextmenu", (e) => {
+    // a right-click menu interrupts a drag, so swallow it during a run
+    if (mode === "play") e.preventDefault();
+  });
+
   canvas.addEventListener("pointerdown", (e) => {
-    if (mode === "over") return;
+    if (mode === "over" || e.button !== 0) return;
     const pt = local(e);
     let hit: Plane | null = null;
     let hd = 30 * S;
