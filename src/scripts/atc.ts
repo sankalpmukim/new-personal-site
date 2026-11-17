@@ -158,6 +158,8 @@ function angDiff(a: number, b: number) {
 
 export function initAtc(root: HTMLElement, peakNames: { name: string; elevationFt?: number }[]) {
   const canvas = root.querySelector<HTMLCanvasElement>("[data-atc-canvas]")!;
+  // second canvas above the "Separation lost" card, for the crash marker only
+  const fx = root.querySelector<HTMLCanvasElement>("[data-atc-fx]");
   const scoreEl = root.querySelector<HTMLElement>("[data-atc-score]")!;
   const bestEl = root.querySelector<HTMLElement>("[data-atc-best]")!;
   const statusEl = root.querySelector<HTMLElement>("[data-atc-status]")!;
@@ -169,6 +171,8 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevationF
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const bg = document.createElement("canvas");
   let ctx: CanvasRenderingContext2D;
+  let fxCtx: CanvasRenderingContext2D | null = null;
+  let fxDrawn = false;
 
   let W = 0,
     H = 0,
@@ -219,6 +223,12 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevationF
     W = fit.w;
     H = fit.h;
     DPR = fit.dpr;
+
+    if (fx) {
+      fxCtx = fitCanvas(fx).ctx;
+      fxDrawn = false;
+    }
+
     S = Math.max(0.75, Math.min(1.25, Math.min(W, H) / 760));
     dense = W >= 700;
     const wide = W > 860;
@@ -1132,6 +1142,40 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevationF
     ctx.restore();
   }
 
+  // drawn on its own canvas above the overlay card, so the impact point stays
+  // visible even when the collision happens behind the "Separation lost" panel
+  function renderCrash() {
+    if (!fxCtx) return;
+
+    if (!crash) {
+      if (fxDrawn) {
+        fxCtx.clearRect(0, 0, W, H);
+        fxDrawn = false;
+      }
+
+      return;
+    }
+
+    fxCtx.clearRect(0, 0, W, H);
+    fxDrawn = true;
+
+    const t = reduced ? 1 : crash.t;
+
+    fxCtx.save();
+    fxCtx.strokeStyle = "#D02A2A";
+    fxCtx.fillStyle = "#D02A2A";
+    fxCtx.lineWidth = 3;
+    fxCtx.globalAlpha = reduced ? 1 : Math.max(0, 1 - crash.t / 1.2);
+    fxCtx.beginPath();
+    fxCtx.arc(crash.x, crash.y, 10 + t * 90, 0, Math.PI * 2);
+    fxCtx.stroke();
+    // exact impact point, so the ring's expanding centre still reads as a place
+    fxCtx.beginPath();
+    fxCtx.arc(crash.x, crash.y, 3, 0, Math.PI * 2);
+    fxCtx.fill();
+    fxCtx.restore();
+  }
+
   function render() {
     ctx.clearRect(0, 0, W, H);
     ctx.drawImage(bg, 0, 0, W, H);
@@ -1196,17 +1240,7 @@ export function initAtc(root: HTMLElement, peakNames: { name: string; elevationF
       ctx.restore();
     }
 
-    if (crash) {
-      ctx.save();
-      const r = 10 + crash.t * 90;
-      ctx.strokeStyle = "#D02A2A";
-      ctx.lineWidth = 3;
-      ctx.globalAlpha = Math.max(0, 1 - crash.t / 1.2);
-      ctx.beginPath();
-      ctx.arc(crash.x, crash.y, r, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.restore();
-    }
+    renderCrash();
   }
 
   function loop(now: number) {

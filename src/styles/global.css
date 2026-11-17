@@ -352,6 +352,15 @@ p {
   z-index: -1;
   touch-action: pan-y;
 }
+/* crash marker goes above the overlay card so the impact point is never covered */
+.hero-fx {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 6;
+  pointer-events: none;
+}
 .hero-copy {
   margin-top: auto;
   padding: 0 var(--gutter) clamp(1.5rem, 5vh, 3.5rem);
