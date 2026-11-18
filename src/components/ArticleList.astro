@@ -6,7 +6,9 @@ interface Props {
   level?: "h2" | "h3";
 }
 
-const { articles } = Astro.props;
+const { articles, level = "h3" } = Astro.props;
+
+const Heading = level;
 
 const fmt = (d: Date) =>
   d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
@@ -17,9 +19,9 @@ const fmt = (d: Date) =>
     <li>
       <time datetime={a.data.date.toISOString()}>{fmt(a.data.date)}</time>
       <div>
-        <h3>
+        <Heading>
           <a href={`/articles/${a.id}`}>{a.data.title}</a>
-        </h3>
+        </Heading>
         <p>{a.data.description}</p>
       </div>
     </li>

@@ -967,16 +967,16 @@ p {
   padding-top: 0.25rem;
   font-variant-numeric: tabular-nums;
 }
-.article-list h3 {
+.article-list :is(h2, h3) {
   font-size: var(--fs-md);
   font-weight: 750;
   line-height: 1.25;
   max-width: 40ch;
 }
-.article-list h3 a {
+.article-list :is(h2, h3) a {
   text-decoration: none;
 }
-.article-list h3 a:hover {
+.article-list :is(h2, h3) a:hover {
   text-decoration: underline;
   text-decoration-color: var(--magenta);
 }

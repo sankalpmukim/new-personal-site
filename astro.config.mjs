@@ -59,8 +59,13 @@ export default defineConfig({
       wrap: false,
     },
   },
-  // Client bundles are minified. PostHog error tracking fetches these maps from the
-  // live site (the source is already public on GitHub) so stack traces unminify.
+  // Inline the site CSS (one ~6 KB render-blocking file) so first paint does not
+  // wait on a second request. Client bundles stay minified. PostHog error tracking
+  // fetches these maps from the live site (the source is already public on GitHub)
+  // so stack traces unminify.
+  build: {
+    inlineStylesheets: "always",
+  },
   vite: {
     build: {
       sourcemap: true,

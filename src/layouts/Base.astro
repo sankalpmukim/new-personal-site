@@ -1,5 +1,6 @@
 ---
 import "@fontsource-variable/archivo/wdth.css";
+import archivoLatin from "@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2?url";
 import "../styles/global.css";
 import Footer from "../components/Footer.astro";
 import PostHog from "../components/PostHog.astro";
@@ -84,6 +85,7 @@ const graph = [
     {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
     <meta name="author" content={person.name} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href={archivoLatin} as="font" type="font/woff2" crossorigin />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link
       rel="alternate"

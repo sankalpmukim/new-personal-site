@@ -99,7 +99,14 @@ import { links, person } from "../data/site";
       </div>
       <aside class="about-aside">
         <figure class="portrait">
-          <img src="/portrait.jpg" alt="Portrait of Sankalp Mukim" width="400" height="400" />
+          <img
+            src="/portrait.jpg"
+            alt="Portrait of Sankalp Mukim"
+            width="400"
+            height="400"
+            decoding="async"
+            fetchpriority="high"
+          />
         </figure>
         <div class="facts">
           <h3>Contact</h3>

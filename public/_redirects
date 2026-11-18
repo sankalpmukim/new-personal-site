@@ -19,5 +19,6 @@
 /articles/million-dolllar-tech-stack /articles/million-dollar-tech-stack 301
 /rss/feed.json /rss.xml 301
 /feed.xml /rss.xml 301
+/sitemap.xml /sitemap-index.xml 301
 
 /articles/:slug/ /articles/:slug 308

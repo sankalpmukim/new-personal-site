@@ -20,6 +20,6 @@ const articles = (await getCollection("articles", (a) => !a.data.draft)).sort(
     seed={14}
   />
   <section class="section wrap" data-pelican="peek" data-pelican-says="Any articles about fish?">
-    <ArticleList articles={articles} />
+    <ArticleList articles={articles} level="h2" />
   </section>
 </Base>

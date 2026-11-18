@@ -51,6 +51,25 @@ export default {
     // POSTs batches and arraybuffer payloads here).
     const target = new URL(origin + path + url.search);
 
-    return fetch(new Request(target, request));
+    const response = await fetch(new Request(target, request));
+
+    // Versioned recorder/web-vitals chunks never change. array.js is the
+    // unversioned loader — cache it for a day so repeat visits skip the 5-minute
+    // PostHog default without pinning a broken SDK forever.
+    if (request.method !== "GET" || !url.pathname.startsWith(STATIC_PREFIX)) return response;
+
+    const headers = new Headers(response.headers);
+
+    if (/\/relay\/static\/\d+\.\d+\.\d+\//.test(url.pathname)) {
+      headers.set("Cache-Control", "public, max-age=31536000, immutable");
+    } else {
+      headers.set("Cache-Control", "public, max-age=86400");
+    }
+
+    return new Response(response.body, {
+      status: response.status,
+      statusText: response.statusText,
+      headers,
+    });
   },
 };

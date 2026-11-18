@@ -72,15 +72,33 @@ import { aiObstacles, links, person } from "../data/site";
 
 <script>
   import { runGuarded } from "../scripts/analytics";
-  import { initPelicanRun } from "../scripts/pelican-run";
 
   const root = document.querySelector<HTMLElement>("[data-run]");
 
   const stage = document.querySelector<HTMLElement>("[data-run-stage]");
 
   if (root && stage) {
-    runGuarded("pelican_run", () =>
-      initPelicanRun(stage, JSON.parse(root.dataset.obstacles || "[]")),
-    );
+    const start = () => {
+      void import("../scripts/pelican-run").then(({ initPelicanRun }) => {
+        runGuarded("pelican_run", () =>
+          initPelicanRun(stage, JSON.parse(root.dataset.obstacles || "[]")),
+        );
+      });
+    };
+
+    // The game sits in the footer. Load its chunk when it is close, not on first paint.
+    if (typeof IntersectionObserver === "undefined") start();
+    else {
+      const io = new IntersectionObserver(
+        ([entry]) => {
+          if (!entry.isIntersecting) return;
+          io.disconnect();
+          start();
+        },
+        { rootMargin: "400px 0px" },
+      );
+
+      io.observe(stage);
+    }
   }
 </script>
