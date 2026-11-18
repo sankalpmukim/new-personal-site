@@ -9,6 +9,13 @@ import { links, person } from "../data/site";
   title="About"
   description="Sankalp Mukim is a mostly-TypeScript full-stack generalist and software engineer at IBM Cloud, main author of its AI Ops agent platform. Background, work history and contact."
   type="profile"
+  jsonLd={{
+    "@type": "ProfilePage",
+    "@id": `${new URL("/about", Astro.site).href}#profile`,
+    url: new URL("/about", Astro.site).href,
+    name: "About Sankalp Mukim",
+    mainEntity: { "@id": new URL("/#person", Astro.site).href },
+  }}
 >
   <ChartBand
     slot="header"

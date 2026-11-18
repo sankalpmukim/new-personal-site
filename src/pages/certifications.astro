@@ -30,7 +30,7 @@ const groups = [...new Set(certifications.map((c) => c.group))];
             .map((c) => (
               <li class="cert">
                 <span class="cert-code">{c.code}</span>
-                <h2>{c.title}</h2>
+                <h3>{c.title}</h3>
                 <p class="cert-issuer">{c.issuer}</p>
                 <p class="cert-desc">{c.description}</p>
                 <a href={c.href}>View certificate (PDF)</a>

@@ -1,9 +1,23 @@
 # Ports of the permanent redirects that used to live in vercel.json.
 # Note: /cdn-cgi/* paths are intercepted by Cloudflare's edge itself, so the
 # old /cdn-cgi/l/email-protection -> /about rule is intentionally not ported.
+#
+# html_handling "drop-trailing-slash" 307s /about/ → /about. These 308s make
+# that permanent for the routes Google actually crawls.
+
+/about/ /about 308
+/articles/ /articles 308
+/projects/ /projects 308
+/certifications/ /certifications 308
+/uses/ /uses 308
+/gallery/ /gallery 308
+/privacy/ /privacy 308
+/terms/ /terms 308
 
 /articles/adapter_pattern_article /articles/adapter-pattern-article 301
 /articles/concurrency_control_guide /articles/concurrency-control-guide 301
 /articles/million-dolllar-tech-stack /articles/million-dollar-tech-stack 301
 /rss/feed.json /rss.xml 301
 /feed.xml /rss.xml 301
+
+/articles/:slug/ /articles/:slug 308

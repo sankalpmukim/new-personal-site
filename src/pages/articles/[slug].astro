@@ -2,6 +2,7 @@
 import { getCollection, render } from "astro:content";
 import Base from "../../layouts/Base.astro";
 import ChartBand from "../../components/ChartBand.astro";
+import ArticleList from "../../components/ArticleList.astro";
 import fs from "node:fs";
 
 export async function getStaticPaths() {
@@ -24,18 +25,24 @@ const image = fs.existsSync(`public${ogPath}`) ? ogPath : "/og/default.png";
 
 const url = new URL(`/articles/${article.id}`, Astro.site).href;
 
+const related = (await getCollection("articles", (a) => !a.data.draft && a.id !== article.id))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
 const jsonLd = {
   "@type": "BlogPosting",
   "@id": `${url}#article`,
   headline: article.data.title,
   description: article.data.description,
   datePublished: article.data.date.toISOString(),
+  inLanguage: "en-IN",
   url,
   mainEntityOfPage: url,
   image: new URL(image, Astro.site).href,
   wordCount: words,
   author: { "@id": new URL("/#person", Astro.site).href },
   publisher: { "@id": new URL("/#person", Astro.site).href },
+  isPartOf: { "@id": new URL("/#website", Astro.site).href },
 };
 
 const date = article.data.date.toLocaleDateString("en-GB", {
@@ -76,6 +83,17 @@ const date = article.data.date.toLocaleDateString("en-GB", {
       <Content />
     </div>
     <div data-article-end aria-hidden="true"></div>
+    {related.length > 0 && (
+      <section class="more-writing" aria-labelledby="more-writing">
+        <div class="section-head">
+          <h2 id="more-writing">Also on the chart</h2>
+          <a class="more-link" href="/articles">
+            All articles
+          </a>
+        </div>
+        <ArticleList articles={related} />
+      </section>
+    )}
   </article>
 </Base>
 
